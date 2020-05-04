@@ -1,8 +1,10 @@
-package com.albertkhang.tunedaily;
+package com.albertkhang.tunedaily.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+
+import com.albertkhang.tunedaily.R;
 
 public class MainActivity extends AppCompatActivity {
 
