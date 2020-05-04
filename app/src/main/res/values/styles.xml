@@ -8,4 +8,17 @@
         <item name="android:textColor">@color/colorLight1</item>
         <item name="android:textStyle">bold</item>
     </style>
+
+    <style name="TitleText">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+    <style name="DescriptionText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorLight5</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 </resources>

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="dimenTopBackgroundHeight">88dp</dimen>
+    <dimen name="dimenMarginUnderListHeader">12dp</dimen>
+    <dimen name="dimenPaddingBottomEnd">40dp</dimen>
 </resources>

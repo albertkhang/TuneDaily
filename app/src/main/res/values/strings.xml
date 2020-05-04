@@ -3,4 +3,6 @@
 
     <!-- MainActivity-->
     <string name="top_chart">TOP CHART</string>
+    <string name="popular_albums">POPULAR ALBUMS</string>
+    <string name="best_of_artists">BEST OF ARTISTS</string>
 </resources>
