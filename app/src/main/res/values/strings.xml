@@ -5,4 +5,8 @@
     <string name="top_chart">TOP CHART</string>
     <string name="popular_albums">POPULAR ALBUMS</string>
     <string name="best_of_artists">BEST OF ARTISTS</string>
+
+    <!-- Settings-->
+    <string name="settings">SETTINGS</string>
+    <string name="theme">Theme</string>
 </resources>
