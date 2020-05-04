@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,10 +9,14 @@
     android:background="@color/colorDark1">
 
     <RelativeLayout
+        android:id="@+id/top_frame"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimenTopBackgroundHeight"
+        android:background="@color/colorDark2"
 
-        android:background="@color/colorDark2">
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,8 +53,14 @@
     </RelativeLayout>
 
     <ScrollView
+        android:id="@+id/scrollView_frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_frame"
+        app:layout_constraintBottom_toTopOf="@id/miniPlayer_frame">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -146,4 +156,17 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/miniPlayer_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:visibility="visible"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <include layout="@layout/mini_player"/>
+    </FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

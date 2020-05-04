@@ -15,6 +15,7 @@
         <item name="android:maxLines">1</item>
         <item name="android:ellipsize">end</item>
     </style>
+
     <style name="DescriptionText">
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/colorLight5</item>
