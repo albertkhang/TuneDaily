@@ -5,6 +5,10 @@
     <color name="colorAccent">#03DAC5</color>
     
     <color name="colorTransparent">#00000000</color>
+    <color name="colorSt1">#4EAEFF</color>
+    <color name="colorSt2">#2ECC71</color>
+    <color name="colorSt3">#E74C3C</color>
+
 
     <!-- Dark -->
     <color name="colorDark1">#1E1E1E</color>
@@ -12,7 +16,6 @@
     <color name="colorDark3">#4B4B4B</color>
     <color name="colorDark4">#626262</color>
     <color name="colorDark5">#787878</color>
-    <color name="colorDark6">#8F8F8F</color>
 
     <!-- Light -->
     <color name="colorLight1">#FBFBFB</color>
@@ -20,7 +23,6 @@
     <color name="colorLight3">#C9C9C9</color>
     <color name="colorLight4">#B0B0B0</color>
     <color name="colorLight5">#979797</color>
-    <color name="colorLight6">#7E7E7E</color>
 
     <!-- Main Color-->
     <color name="colorMain1">#4EAEFF</color>
