@@ -30,6 +30,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, "run");
                 Intent intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
             }
         }, SHOWING_INTERVAL);
     }
