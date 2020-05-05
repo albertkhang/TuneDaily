@@ -16,13 +16,13 @@ import com.albertkhang.tunedaily.activities.SettingsActivity;
 
 import java.util.Objects;
 
-public class HomeFragment extends Fragment {
+public class DiscoverFragment extends Fragment {
     private ImageView imgSettings;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_discover, container, false);
     }
 
     @Override

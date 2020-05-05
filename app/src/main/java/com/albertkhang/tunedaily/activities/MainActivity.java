@@ -2,18 +2,17 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
-import com.albertkhang.tunedaily.fragments.HomeFragment;
+import com.albertkhang.tunedaily.fragments.DiscoverFragment;
 import com.albertkhang.tunedaily.fragments.LibraryFragment;
+import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.SearchFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -26,11 +25,11 @@ public class MainActivity extends AppCompatActivity {
     public static final int BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT = 1;
 
     //Fragments
-    HomeFragment homeFragment;
+    DiscoverFragment discoverFragment;
     SearchFragment searchFragment;
     LibraryFragment libraryFragment;
 
-    MenuItem prevMenuItem;
+    MenuItem menuItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +43,17 @@ public class MainActivity extends AppCompatActivity {
     private void addControl() {
         viewPager = findViewById(R.id.viewpager);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+
+        addMiniPlayer();
+    }
+
+    private void addMiniPlayer() {
+        MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.miniPlayer_frame, miniPlayerFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
     private void addEvent() {
@@ -51,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.fragment_home:
+                    case R.id.fragment_discover:
                         viewPager.setCurrentItem(0);
                         break;
                     case R.id.fragment_search:
@@ -73,14 +83,14 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                if (prevMenuItem != null) {
-                    prevMenuItem.setChecked(false);
+                if (menuItem != null) {
+                    menuItem.setChecked(false);
                 } else {
                     bottomNavigationView.getMenu().getItem(0).setChecked(false);
                 }
 
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
-                prevMenuItem = bottomNavigationView.getMenu().getItem(position);
+                menuItem = bottomNavigationView.getMenu().getItem(position);
             }
 
             @Override
@@ -94,11 +104,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        homeFragment = new HomeFragment();
+        discoverFragment = new DiscoverFragment();
         searchFragment = new SearchFragment();
         libraryFragment = new LibraryFragment();
 
-        adapter.addFragment(homeFragment);
+        adapter.addFragment(discoverFragment);
         adapter.addFragment(searchFragment);
         adapter.addFragment(libraryFragment);
         viewPager.setAdapter(adapter);
