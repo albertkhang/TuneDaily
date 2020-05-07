@@ -5,6 +5,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
@@ -23,6 +24,8 @@ public class FullPlayerActivity extends AppCompatActivity {
     private FragmentFullPlayer fragmentFullPlayer;
     private FragmentDetail fragmentDetail;
     private FragmentLyric fragmentLyric;
+
+    private ImageView imgCollapse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class FullPlayerActivity extends AppCompatActivity {
 
 //        pageIndicatorView.setCount(3);
 //        pageIndicatorView.setSelection(1);
+
+        imgCollapse = findViewById(R.id.imgCollapse);
     }
 
     private void addEvent() {
@@ -70,5 +75,12 @@ public class FullPlayerActivity extends AppCompatActivity {
 //
 //            }
 //        });
+
+        imgCollapse.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
     }
 }

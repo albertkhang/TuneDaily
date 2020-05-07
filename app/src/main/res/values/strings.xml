@@ -27,6 +27,57 @@
     <string name="library_header">LIBRARY</string>
     <string name="liked_songs">Liked Songs</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--LyricFragment-->
+    <string name="song">Song: </string>
+    <string name="singer">Singer: </string>
+    <string name="fake_lyric">Nơi tin yêu nhiệm màu\n
+Từng nụ hôn trao như tình đầu\n
+Anh đưa tay nguyện cầu\n
+Gửi về em tiếng ca chân thành.\n
+(rất chân thành)\n
+Xa, em như cây lìa cành\n
+Thương, em nắng mưa cũng đành\n
+Dù chỉ là ngày chờ đêm trông\n
+Baby can you feel me?\n
+\n
+Có ước muốn thân ta tan theo gió\n
+Kéo bước theo anh rong chơi\n
+Có ước muốn ngôi sao trong đêm tối\n
+Rẽ lối bên anh khắp nơi\n
+Có ước muốn\n
+Anh chôn sâu\n
+Những nỗi nhớ\n
+Tan đi đâu\n
+Tàn theo những giấc mơ hững hờ\n
+(Cần gì hơn khi đã có em\n
+Cần gì hơn, babe\n
+Cần gì hơn) x 4\n
+I see you there, I see you everywhere\n
+In my mind even in my dreams\n
+Who loves you, sorry i dont care\n
+Cause I know who is in your heart.\n
+Chim muông bay, tìm ngọt ngào từ mưa giông\n
+Cho đêm nay, đừng dài hơn những nhớ mong\n
+Giữ lấy ngón tay đan vào nhau, ai biết mai về sau,\n
+anh với em còn không?\n
+Có ước muốn thân ta tan theo gió\n
+Kéo bước theo anh rong chơi\n
+Có ước muốn ngôi sao trong đêm tối\n
+Rẽ lối bên anh khắp nơi\n
+Có ước muốn\n
+Anh chôn sâu\n
+Những nỗi nhớ\n
+Tan đi đâu\n
+Tàn theo những giấc mơ hững hờ\n
+(Cần gì hơn khi đã có em\n
+Cần gì hơn, babe\n
+Cần gì hơn) x 4\n
+\n
+Đã có anh cần gì hơn\n
+Đã có em cần gì hơn\n
+Đã có nhau ta cần gì hơn?\n
+..... x2\n
+(Cần gì hơn khi đã có em\n
+Cần gì hơn, babe\n
+Cần gì hơn) x 4\n</string>
 </resources>
