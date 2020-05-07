@@ -5,20 +5,20 @@
         android:id="@+id/fragment_discover"
         android:checked="true"
         android:icon="@drawable/ic_discover"
-        android:title="@string/discover"
+        android:title="@string/discover_menu"
         app:showAsAction="ifRoom"/>
 
     <item
         android:id="@+id/fragment_search"
         android:checked="false"
         android:icon="@drawable/ic_search"
-        android:title="@string/search"
+        android:title="@string/search_menu"
         app:showAsAction="always"/>
 
     <item
         android:id="@+id/fragment_library"
         android:checked="false"
         android:icon="@drawable/ic_library"
-        android:title="@string/library"
+        android:title="@string/library_menu"
         app:showAsAction="always"/>
 </menu>

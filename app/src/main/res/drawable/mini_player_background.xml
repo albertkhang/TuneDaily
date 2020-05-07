@@ -5,7 +5,6 @@
             <solid android:color="@color/colorDark3"/>
             <corners android:topLeftRadius="10dp"
                 android:topRightRadius="10dp"/>
-
         </shape>
     </item>
 
@@ -14,7 +13,6 @@
             <solid android:color="@color/colorDark2"/>
             <corners android:topLeftRadius="10dp"
                 android:topRightRadius="10dp"/>
-
         </shape>
     </item>
 </layer-list>

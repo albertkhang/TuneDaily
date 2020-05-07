@@ -14,10 +14,16 @@
     <string name="english">English</string>
 
     <!--BottomNavigationIcon-->
-    <string name="discover">Discover</string>
-    <string name="search">Search</string>
-    <string name="library">Library</string>
+    <string name="discover_menu">Discover</string>
+    <string name="search_menu">Search</string>
+    <string name="library_menu">Library</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--SearchActivity-->
+    <string name="artist_songs_or_album">Artist, songs or Album</string>
+    <string name="random_artist">RANDOM ARTIST</string>
+    <string name="random_songs">RANDOM SONGS</string>
+
+    <!--LibraryActivity-->
+    <string name="library_header">LIBRARY</string>
+    <string name="liked_songs">Liked Songs</string>
 </resources>
