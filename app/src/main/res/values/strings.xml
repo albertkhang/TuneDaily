@@ -28,8 +28,8 @@
     <string name="liked_songs">Liked Songs</string>
 
     <!--LyricFragment-->
-    <string name="song">Song: </string>
-    <string name="singer">Singer: </string>
+    <string name="song_lyric">Song: </string>
+    <string name="singer_lyric">Singer: </string>
     <string name="fake_lyric">Nơi tin yêu nhiệm màu\n
 Từng nụ hôn trao như tình đầu\n
 Anh đưa tay nguyện cầu\n
@@ -80,4 +80,12 @@ Cần gì hơn) x 4\n
 (Cần gì hơn khi đã có em\n
 Cần gì hơn, babe\n
 Cần gì hơn) x 4\n</string>
+
+    <!--DetailFragment-->
+    <string name="song_detail">Song</string>
+    <string name="album_detail">Album</string>
+    <string name="artist_detail">Artist</string>
+    <string name="genre_detail">Genre</string>
+    <string name="composer_detail">Composer</string>
+    <string name="similar_songs">SIMILAR SONGS</string>
 </resources>

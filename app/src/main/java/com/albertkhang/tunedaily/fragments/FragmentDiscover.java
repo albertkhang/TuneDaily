@@ -16,7 +16,7 @@ import com.albertkhang.tunedaily.activities.SettingsActivity;
 
 import java.util.Objects;
 
-public class DiscoverFragment extends Fragment {
+public class FragmentDiscover extends Fragment {
     private ImageView imgSettings;
 
     @Override

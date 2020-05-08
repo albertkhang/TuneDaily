@@ -10,10 +10,10 @@ import android.view.MenuItem;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
-import com.albertkhang.tunedaily.fragments.DiscoverFragment;
-import com.albertkhang.tunedaily.fragments.LibraryFragment;
-import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
-import com.albertkhang.tunedaily.fragments.SearchFragment;
+import com.albertkhang.tunedaily.fragments.FragmentDiscover;
+import com.albertkhang.tunedaily.fragments.FragmentLibrary;
+import com.albertkhang.tunedaily.fragments.FragmentMiniPlayer;
+import com.albertkhang.tunedaily.fragments.FragmentSearch;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -25,9 +25,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT = 1;
 
     //Fragments
-    DiscoverFragment discoverFragment;
-    SearchFragment searchFragment;
-    LibraryFragment libraryFragment;
+    FragmentDiscover fragmentDiscover;
+    FragmentSearch fragmentSearch;
+    FragmentLibrary fragmentLibrary;
 
     MenuItem menuItem;
 
@@ -48,10 +48,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addMiniPlayer() {
-        MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment();
+        FragmentMiniPlayer fragmentMiniPlayer = new FragmentMiniPlayer();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.miniPlayer_frame, miniPlayerFragment);
+        transaction.replace(R.id.miniPlayer_frame, fragmentMiniPlayer);
         transaction.addToBackStack(null);
         transaction.commit();
     }
@@ -104,13 +104,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        discoverFragment = new DiscoverFragment();
-        searchFragment = new SearchFragment();
-        libraryFragment = new LibraryFragment();
+        fragmentDiscover = new FragmentDiscover();
+        fragmentSearch = new FragmentSearch();
+        fragmentLibrary = new FragmentLibrary();
 
-        adapter.addFragment(discoverFragment);
-        adapter.addFragment(searchFragment);
-        adapter.addFragment(libraryFragment);
+        adapter.addFragment(fragmentDiscover);
+        adapter.addFragment(fragmentSearch);
+        adapter.addFragment(fragmentLibrary);
         viewPager.setAdapter(adapter);
     }
 }

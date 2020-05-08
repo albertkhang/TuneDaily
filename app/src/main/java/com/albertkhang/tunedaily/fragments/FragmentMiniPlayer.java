@@ -17,7 +17,7 @@ import android.widget.ImageView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
 
-public class MiniPlayerFragment extends Fragment {
+public class FragmentMiniPlayer extends Fragment {
     private static final String LOG_TAG = "MiniPlayerFragment";
 
     private ConstraintLayout miniPlayer_background;

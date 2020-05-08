@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.albertkhang.tunedaily.R;
 
-public class SearchFragment extends Fragment {
+public class FragmentSearch extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
