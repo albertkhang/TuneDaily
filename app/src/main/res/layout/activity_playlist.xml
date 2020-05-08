@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorDark1"
+    tools:context=".activities.PlaylistActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_frame"
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:background="@color/colorDark2"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingBottom="20dp"
+        android:paddingTop="32dp">
+
+        <ImageView
+            android:id="@+id/imgCollapse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+
+            android:src="@drawable/ic_collapse"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="@string/liked_songs_uppercase"
+            style="@style/ListHeader"
+
+            app:layout_constraintBottom_toBottomOf="@id/imgCollapse"
+            app:layout_constraintLeft_toRightOf="@id/imgCollapse"
+            app:layout_constraintTop_toTopOf="@id/imgCollapse" />
+
+        <ImageView
+            android:id="@+id/imgMore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="7dp"
+            android:src="@drawable/ic_not_favourite"
+
+            app:layout_constraintBottom_toBottomOf="@id/imgCollapse"
+            app:layout_constraintTop_toTopOf="@id/imgCollapse"
+            app:layout_constraintRight_toRightOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:layout_marginTop="20dp"
+        app:layout_constraintBottom_toTopOf="@id/miniPlayer_frame"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/play_button_frame">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:paddingBottom="@dimen/dimenPaddingBottomEnd">
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_random_songs"
+                shimmer_duration="@integer/integerShimmerDuration"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/item_shimmer_list" />
+
+                    <include layout="@layout/item_shimmer_list" />
+
+                    <include layout="@layout/item_shimmer_list" />
+
+                    <include layout="@layout/item_shimmer_list" />
+
+                    <include layout="@layout/item_shimmer_list" />
+
+                    <include layout="@layout/item_shimmer_list" />
+
+                    <include layout="@layout/item_shimmer_list" />
+
+                    <include layout="@layout/item_shimmer_list" />
+
+                    <include layout="@layout/item_shimmer_list" />
+
+                    <include layout="@layout/item_shimmer_list" />
+
+                    <include layout="@layout/item_shimmer_list" />
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+        </FrameLayout>
+    </ScrollView>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@drawable/lyric_hidden_top_gradient"
+
+        android:layout_marginTop="20dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/play_button_frame"/>
+
+    <FrameLayout
+        android:id="@+id/play_button_frame"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:background="@drawable/button_play_background"
+
+        app:layout_constraintBottom_toBottomOf="@id/top_frame"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_frame">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/play"
+            android:textColor="@color/colorLight1"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/miniPlayer_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <include layout="@layout/fragment_mini_player" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@drawable/lyric_hidden_bottom_gradient"
+        app:layout_constraintBottom_toTopOf="@id/miniPlayer_frame"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

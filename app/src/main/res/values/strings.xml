@@ -18,14 +18,16 @@
     <string name="search_menu">Search</string>
     <string name="library_menu">Library</string>
 
-    <!--SearchActivity-->
+    <!--SearchFragment-->
     <string name="artist_songs_or_album">Artist, songs or Album</string>
     <string name="random_artist">RANDOM ARTIST</string>
     <string name="random_songs">RANDOM SONGS</string>
+    <string name="search">Search</string>
 
     <!--LibraryActivity-->
     <string name="library_header">LIBRARY</string>
     <string name="liked_songs">Liked Songs</string>
+    <string name="liked_songs_uppercase">LIKED SONGS</string>
 
     <!--LyricFragment-->
     <string name="song_lyric">Song: </string>
@@ -88,4 +90,10 @@ Cần gì hơn) x 4\n</string>
     <string name="genre_detail">Genre</string>
     <string name="composer_detail">Composer</string>
     <string name="similar_songs">SIMILAR SONGS</string>
+    <string name="play">PLAY</string>
+
+    <!--SearchActivity-->
+    <string name="search_here">Search here</string>
+    <string name="artists">ARTISTS</string>
+    <string name="songs">SONGS</string>
 </resources>

@@ -9,7 +9,10 @@
         android:roundIcon="@mipmap/ic_app_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.FullPlayerActivity"></activity>
+        <activity android:name=".activities.InSearchActivity"
+            android:windowSoftInputMode="stateVisible"/>
+        <activity android:name=".activities.PlaylistActivity" />
+        <activity android:name=".activities.FullPlayerActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.SplashScreenActivity">
