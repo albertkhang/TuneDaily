@@ -52,30 +52,10 @@ public class FullPlayerActivity extends AppCompatActivity {
         vpFullPlayer.setAdapter(adapter);
         vpFullPlayer.setCurrentItem(1);
 
-//        pageIndicatorView.setCount(3);
-//        pageIndicatorView.setSelection(1);
-
         imgCollapse = findViewById(R.id.imgCollapse);
     }
 
     private void addEvent() {
-//        vpFullPlayer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                pageIndicatorView.setSelected(position);
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
-//        });
-
         imgCollapse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
