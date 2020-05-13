@@ -28,6 +28,7 @@ public class SettingsActivity extends AppCompatActivity {
         imgBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                imgBack.setImageResource(R.drawable.ic_previous);
                 finish();
             }
         });

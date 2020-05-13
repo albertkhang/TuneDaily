@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.albertkhang.tunedaily">
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -12,11 +13,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".activities.InSearchActivity"
-            android:windowSoftInputMode="stateVisible"/>
-        <activity android:name=".activities.PlaylistActivity" />
-        <activity android:name=".activities.FullPlayerActivity" />
-        <activity android:name=".activities.SettingsActivity" />
-        <activity android:name=".activities.MainActivity" />
+            android:windowSoftInputMode="stateVisible"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".activities.PlaylistActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".activities.FullPlayerActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+
+        <activity android:name=".activities.SettingsActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity"/>
+        
+        <activity android:name=".activities.MainActivity"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+
         <activity android:name=".activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
