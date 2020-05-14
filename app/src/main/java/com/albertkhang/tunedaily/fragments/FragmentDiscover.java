@@ -2,6 +2,7 @@ package com.albertkhang.tunedaily.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,14 +11,21 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
+import com.albertkhang.tunedaily.utils.FirebaseManager;
+import com.albertkhang.tunedaily.utils.TopTrack;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class FragmentDiscover extends Fragment {
     private ImageView imgSettings;
+    private ShimmerFrameLayout shimmer_top_chart;
+    private RecyclerView rvTopChart;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,6 +43,23 @@ public class FragmentDiscover extends Fragment {
 
     private void addControl(View view) {
         imgSettings = view.findViewById(R.id.imgSettings);
+
+        shimmer_top_chart = view.findViewById(R.id.shimmer_top_chart);
+        rvTopChart = view.findViewById(R.id.rvTopChart);
+
+        FirebaseManager firebaseManager = FirebaseManager.getInstance();
+        firebaseManager.setUpdateTopTrackIds(new FirebaseManager.UpdateTopTrackIds() {
+            @Override
+            public void updateTopTrack(ArrayList<TopTrack> topChartIdsOrdered) {
+                for (TopTrack track : topChartIdsOrdered) {
+                    Log.d("firebaseManager", "id: " + track.getId());
+                    Log.d("firebaseManager", "value: " + track.getValue());
+
+
+                }
+            }
+        });
+        firebaseManager.getTopTrack();
     }
 
     private void addEvent(View view) {

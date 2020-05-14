@@ -68,13 +68,14 @@
                 android:layout_marginLeft="20dp"
                 android:text="@string/top_chart" />
 
-            <!--            top_chart-->
+            <!--top_chart-->
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmer_top_chart"
                 shimmer_duration="@integer/integerShimmerDuration"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimenMarginUnderListHeader">
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -94,6 +95,13 @@
 
             </com.facebook.shimmer.ShimmerFrameLayout>
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTopChart"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                android:visibility="gone"/>
+
             <TextView
                 style="@style/ListHeader"
                 android:layout_width="wrap_content"
@@ -102,6 +110,7 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/popular_albums" />
 
+            <!--popular_albums-->
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmer_popular_albums"
                 shimmer_duration="@integer/integerShimmerDuration"
@@ -134,6 +143,7 @@
                 android:layout_marginTop="20dp"
                 android:text="@string/best_of_artists" />
 
+            <!--best_of_artists-->
             <com.facebook.shimmer.ShimmerFrameLayout
                 android:id="@+id/shimmer_best_of_artists"
                 shimmer_duration="@integer/integerShimmerDuration"
