@@ -11,10 +11,12 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
+import com.albertkhang.tunedaily.adapters.TopChartAdapter;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.TopTrack;
 import com.albertkhang.tunedaily.utils.Track;
@@ -27,6 +29,7 @@ public class FragmentDiscover extends Fragment {
     private ImageView imgSettings;
     private ShimmerFrameLayout shimmer_top_chart;
     private RecyclerView rvTopChart;
+    private TopChartAdapter topChartAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,6 +50,11 @@ public class FragmentDiscover extends Fragment {
 
         shimmer_top_chart = view.findViewById(R.id.shimmer_top_chart);
         rvTopChart = view.findViewById(R.id.rvTopChart);
+        topChartAdapter = new TopChartAdapter(getContext());
+        rvTopChart.setAdapter(topChartAdapter);
+        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        manager.setOrientation(RecyclerView.VERTICAL);
+        rvTopChart.setLayoutManager(manager);
 
         final ArrayList ids = new ArrayList();
 
@@ -69,10 +77,20 @@ public class FragmentDiscover extends Fragment {
                 for (Track track : tracks) {
                     Log.d("firebaseManager", track.toString());
                 }
+
+                shimmer_top_chart.setVisibility(View.GONE);
+                rvTopChart.setVisibility(View.VISIBLE);
+                topChartAdapter.updateTopTracks(tracks);
             }
         });
 
         firebaseManager.getTopTrack();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        topChartAdapter.notifyDataSetChanged();
     }
 
     private void addEvent(View view) {
@@ -81,7 +99,7 @@ public class FragmentDiscover extends Fragment {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), SettingsActivity.class);
                 startActivity(intent);
-                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.animation_start_enter, R.anim.animation_start_leave);
+                requireActivity().overridePendingTransition(R.anim.animation_start_enter, R.anim.animation_start_leave);
             }
         });
     }

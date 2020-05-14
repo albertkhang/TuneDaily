@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.views.RoundImageView;
 
 public class SettingsActivity extends AppCompatActivity {
@@ -27,6 +28,8 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView txtLanguageTitle;
     private TextView txtEnglish;
     private TextView txtVietnamese;
+
+    private SettingManager settingManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +54,8 @@ public class SettingsActivity extends AppCompatActivity {
         txtEnglish = findViewById(R.id.txtEnglish);
         txtVietnamese = findViewById(R.id.txtVietnamese);
 
+        settingManager = new SettingManager(this);
+
         changeTheme();
     }
 
@@ -66,7 +71,7 @@ public class SettingsActivity extends AppCompatActivity {
         imgDarkTheme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setTheme(true);
+                settingManager.setTheme(true);
                 changeTheme();
             }
         });
@@ -74,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity {
         imgLightTheme.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setTheme(false);
+                settingManager.setTheme(false);
                 changeTheme();
             }
         });
@@ -82,7 +87,7 @@ public class SettingsActivity extends AppCompatActivity {
         txtEnglish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setLanguage(true);
+                settingManager.setLanguage(true);
                 changeTheme();
             }
         });
@@ -90,14 +95,14 @@ public class SettingsActivity extends AppCompatActivity {
         txtVietnamese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                setLanguage(false);
+                settingManager.setLanguage(false);
                 changeTheme();
             }
         });
     }
 
     private void changeTheme() {
-        if (isDarkTheme()) {
+        if (settingManager.isDarkTheme()) {
             imgDarkChecked.setVisibility(View.VISIBLE);
             imgLightChecked.setVisibility(View.INVISIBLE);
 
@@ -140,49 +145,13 @@ public class SettingsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.animation_finish_enter, R.anim.animation_finish_leave);
     }
 
-    private boolean isDarkTheme() {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.getBoolean(getString(R.string.isDarkTheme), true);
-    }
-
-    private void setTheme(boolean isDarkTheme) {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-
-        if (isDarkTheme) {
-            editor.putBoolean(getString(R.string.isDarkTheme), true);
-        } else {
-            editor.putBoolean(getString(R.string.isDarkTheme), false);
-        }
-
-        editor.apply();
-    }
-
     private void changeLanguage(int notSelectId) {
-        if (isEnglish()) {
+        if (settingManager.isEnglish()) {
             txtEnglish.setTextColor(getResources().getColor(R.color.colorMain3));
             txtVietnamese.setTextColor(getResources().getColor(notSelectId));
         } else {
             txtEnglish.setTextColor(getResources().getColor(notSelectId));
             txtVietnamese.setTextColor(getResources().getColor(R.color.colorMain3));
         }
-    }
-
-    private boolean isEnglish() {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        return sharedPref.getBoolean(getString(R.string.isEnglish), true);
-    }
-
-    private void setLanguage(boolean isEnglish) {
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-
-        if (isEnglish) {
-            editor.putBoolean(getString(R.string.isEnglish), true);
-        } else {
-            editor.putBoolean(getString(R.string.isEnglish), false);
-        }
-
-        editor.apply();
     }
 }
