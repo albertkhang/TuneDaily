@@ -17,10 +17,11 @@
 
         <TextView
             android:id="@+id/txtPosition"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="01"
-            android:textColor="@color/colorSt1" />
+            android:textColor="@color/colorSt1"
+            android:textStyle=""/>
 
         <ImageView
             android:layout_width="match_parent"

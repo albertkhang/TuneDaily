@@ -19,6 +19,7 @@ import com.albertkhang.tunedaily.fragments.FragmentLibrary;
 import com.albertkhang.tunedaily.fragments.FragmentMiniPlayer;
 import com.albertkhang.tunedaily.fragments.FragmentSearch;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         splash_screen = findViewById(R.id.splash_screen);
 
         addMiniPlayer();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     private void addMiniPlayer() {

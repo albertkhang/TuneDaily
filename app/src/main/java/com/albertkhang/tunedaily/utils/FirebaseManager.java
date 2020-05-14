@@ -56,8 +56,9 @@ public class FirebaseManager {
     }
 
     public void getTopTrack() {
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("top_chart");
+        ref.keepSynced(true);
         Log.d("getTopTrackIds", ref.toString());
 
         ref.orderByChild("value").limitToLast(LIMIT_TOP_CHART)

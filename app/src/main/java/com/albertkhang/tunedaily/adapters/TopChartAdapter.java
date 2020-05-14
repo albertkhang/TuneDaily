@@ -1,6 +1,7 @@
 package com.albertkhang.tunedaily.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,14 +89,17 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
         switch (position) {
             case 1:
                 txtPosition.setTextColor(context.getResources().getColor(R.color.colorSt1));
+                txtPosition.setTypeface(Typeface.DEFAULT_BOLD);
                 break;
 
             case 2:
                 txtPosition.setTextColor(context.getResources().getColor(R.color.colorSt2));
+                txtPosition.setTypeface(Typeface.DEFAULT_BOLD);
                 break;
 
             case 3:
                 txtPosition.setTextColor(context.getResources().getColor(R.color.colorSt3));
+                txtPosition.setTypeface(Typeface.DEFAULT_BOLD);
                 break;
         }
     }
