@@ -12,6 +12,8 @@
     <string name="language">Language</string>
     <string name="vietnamese">Vietnamese</string>
     <string name="english">English</string>
+    <string name="isDarkTheme">isDarkTheme</string>
+    <string name="isEnglish">isEnglish</string>
 
     <!--BottomNavigationIcon-->
     <string name="discover_menu">Discover</string>

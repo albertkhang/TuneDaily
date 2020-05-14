@@ -2,11 +2,15 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
@@ -17,9 +21,9 @@ import com.albertkhang.tunedaily.fragments.FragmentSearch;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
-
-    BottomNavigationView bottomNavigationView;
-
+    private BottomNavigationView bottomNavigationView;
+    private ConstraintLayout splash_screen;
+    private static final int SHOWING_INTERVAL = 2000;
     //This is our viewPager
     private ViewPager viewPager;
     public static final int BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT = 1;
@@ -43,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private void addControl() {
         viewPager = findViewById(R.id.viewpager);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
+        splash_screen = findViewById(R.id.splash_screen);
 
         addMiniPlayer();
     }
@@ -100,6 +105,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setupViewPager(viewPager);
+
+        runSplashScreen();
+    }
+
+    private void runSplashScreen() {
+        Log.d("runSplashScreen", "openMainActivity");
+
+        splash_screen.setVisibility(View.VISIBLE);
+        bottomNavigationView.setVisibility(View.GONE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Log.d("runSplashScreen", "run");
+
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                splash_screen.setVisibility(View.GONE);
+
+            }
+        }, SHOWING_INTERVAL);
     }
 
     private void setupViewPager(ViewPager viewPager) {

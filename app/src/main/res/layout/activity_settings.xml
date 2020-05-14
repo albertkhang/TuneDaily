@@ -6,9 +6,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.SettingsActivity"
-    android:background="@color/colorDark1">
+    android:background="@color/colorDark1"
+    android:id="@+id/root_view">
 
     <RelativeLayout
+        android:id="@+id/top_frame"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimenTopBackgroundHeight"
         android:background="@color/colorDark2">
@@ -23,6 +25,7 @@
             android:layout_marginBottom="3dp"/>
 
         <TextView
+            android:id="@+id/txtTopBarHeader"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/settings"
@@ -41,6 +44,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp">
         <TextView
+            android:id="@+id/txtThemeTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/theme"
@@ -104,6 +108,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="20dp">
         <TextView
+            android:id="@+id/txtLanguageTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/language"
@@ -120,6 +125,8 @@
             android:text="@string/vietnamese"
             style="@style/SettingsTitleText"
             android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="@color/colorDark5"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
