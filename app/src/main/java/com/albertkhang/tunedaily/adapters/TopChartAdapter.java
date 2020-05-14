@@ -34,6 +34,16 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public interface OnItemClickListener {
+        void onItemClickListener(View view, int position);
+    }
+
+    private OnItemClickListener onItemClickListener;
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,12 +54,18 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         handlePositionTextColor(holder.txtPosition, position + 1);
         holder.txtSongName.setText(tracks.get(position).getTitle());
         holder.txtSingerName.setText(tracks.get(position).getArtist());
 
         handleCoverPlaceholderColor(holder.imgCover, position);
+        holder.imgMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemClickListener(holder.itemView, position);
+            }
+        });
     }
 
     private void handleCoverPlaceholderColor(RoundImageView imgCover, int position) {
@@ -101,8 +117,8 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
 
             txtPosition = itemView.findViewById(R.id.txtPosition);
             imgCover = itemView.findViewById(R.id.imgCover);
-            txtSongName = itemView.findViewById(R.id.txtSongName);
-            txtSingerName = itemView.findViewById(R.id.txtSingerName);
+            txtSongName = itemView.findViewById(R.id.txtTitle);
+            txtSingerName = itemView.findViewById(R.id.txtArtist);
             imgMore = itemView.findViewById(R.id.imgMore);
         }
     }

@@ -23,10 +23,10 @@ import com.albertkhang.tunedaily.utils.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class FragmentDiscover extends Fragment {
     private ImageView imgSettings;
+    private ImageView imgUser;
     private ShimmerFrameLayout shimmer_top_chart;
     private RecyclerView rvTopChart;
     private TopChartAdapter topChartAdapter;
@@ -47,21 +47,27 @@ public class FragmentDiscover extends Fragment {
 
     private void addControl(View view) {
         imgSettings = view.findViewById(R.id.imgSettings);
+        imgUser = view.findViewById(R.id.imgUser);
 
         shimmer_top_chart = view.findViewById(R.id.shimmer_top_chart);
         rvTopChart = view.findViewById(R.id.rvTopChart);
         topChartAdapter = new TopChartAdapter(getContext());
         rvTopChart.setAdapter(topChartAdapter);
-        LinearLayoutManager manager = new LinearLayoutManager(getContext());
+        LinearLayoutManager manager = new LinearLayoutManager(getContext()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         manager.setOrientation(RecyclerView.VERTICAL);
         rvTopChart.setLayoutManager(manager);
 
         final ArrayList ids = new ArrayList();
 
         final FirebaseManager firebaseManager = FirebaseManager.getInstance();
-        firebaseManager.setUpdateTopTrackIds(new FirebaseManager.UpdateTopTrackIds() {
+        firebaseManager.setUpdateTopTrackIdsListener(new FirebaseManager.UpdateTopTrackIdsListener() {
             @Override
-            public void updateTopTrack(ArrayList<TopTrack> topChartIdsOrdered) {
+            public void updateTopTrackListener(ArrayList<TopTrack> topChartIdsOrdered) {
                 for (TopTrack track : topChartIdsOrdered) {
                     ids.add(track.getId());
                 }
@@ -71,12 +77,19 @@ public class FragmentDiscover extends Fragment {
             }
         });
 
-        firebaseManager.setReadTrackFromIds(new FirebaseManager.ReadTrackFromIds() {
+        firebaseManager.setReadTrackFromIdsListener(new FirebaseManager.ReadTrackFromIdsListener() {
             @Override
-            public void readTrackFromIds(ArrayList<Track> tracks) {
+            public void readTrackFromIdsListener(final ArrayList<Track> tracks) {
                 for (Track track : tracks) {
                     Log.d("firebaseManager", track.toString());
                 }
+
+                topChartAdapter.setOnItemClickListener(new TopChartAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClickListener(View view, int position) {
+                        showMoreItem(tracks.get(position));
+                    }
+                });
 
                 shimmer_top_chart.setVisibility(View.GONE);
                 rvTopChart.setVisibility(View.VISIBLE);
@@ -102,5 +115,18 @@ public class FragmentDiscover extends Fragment {
                 requireActivity().overridePendingTransition(R.anim.animation_start_enter, R.anim.animation_start_leave);
             }
         });
+
+//        imgUser.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FragmentTrackMore fragmentTrackMore = new FragmentTrackMore();
+//                fragmentTrackMore.show(requireActivity().getSupportFragmentManager(), "FragmentTrackMore");
+//            }
+//        });
+    }
+
+    private void showMoreItem(Track track) {
+        FragmentTrackMore fragmentTrackMore = new FragmentTrackMore(track);
+        fragmentTrackMore.show(requireActivity().getSupportFragmentManager(), "FragmentTrackMore");
     }
 }

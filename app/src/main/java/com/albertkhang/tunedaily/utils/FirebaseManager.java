@@ -35,24 +35,24 @@ public class FirebaseManager {
         return instance;
     }
 
-    public interface UpdateTopTrackIds {
-        void updateTopTrack(ArrayList<TopTrack> topChartIdsOrdered);
+    public interface UpdateTopTrackIdsListener {
+        void updateTopTrackListener(ArrayList<TopTrack> topChartIdsOrdered);
     }
 
-    private UpdateTopTrackIds updateTopTrackIds;
+    private UpdateTopTrackIdsListener updateTopTrackIdsListener;
 
-    public void setUpdateTopTrackIds(UpdateTopTrackIds updateTopTrackIds) {
-        this.updateTopTrackIds = updateTopTrackIds;
+    public void setUpdateTopTrackIdsListener(UpdateTopTrackIdsListener updateTopTrackIdsListener) {
+        this.updateTopTrackIdsListener = updateTopTrackIdsListener;
     }
 
-    public interface ReadTrackFromIds {
-        void readTrackFromIds(ArrayList<Track> tracks);
+    public interface ReadTrackFromIdsListener {
+        void readTrackFromIdsListener(ArrayList<Track> tracks);
     }
 
-    private ReadTrackFromIds readTrackFromIds;
+    private ReadTrackFromIdsListener readTrackFromIdsListener;
 
-    public void setReadTrackFromIds(ReadTrackFromIds readTrackFromIds) {
-        this.readTrackFromIds = readTrackFromIds;
+    public void setReadTrackFromIdsListener(ReadTrackFromIdsListener readTrackFromIdsListener) {
+        this.readTrackFromIdsListener = readTrackFromIdsListener;
     }
 
     public void getTopTrack() {
@@ -81,7 +81,7 @@ public class FirebaseManager {
                         }
 
                         Collections.sort(topChartsOrdered);
-                        updateTopTrackIds.updateTopTrack(topChartsOrdered);
+                        updateTopTrackIdsListener.updateTopTrackListener(topChartsOrdered);
                     }
 
                     @Override
@@ -135,7 +135,7 @@ public class FirebaseManager {
                             ));
                         }
 
-                        readTrackFromIds.readTrackFromIds(topTracks);
+                        readTrackFromIdsListener.readTrackFromIdsListener(topTracks);
 
                         for (Track topTrack : topTracks) {
                             Log.d("getTrackFromIds", "data: " + topTrack.toString());

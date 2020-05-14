@@ -8,7 +8,7 @@
         android:id="@+id/miniPlayer_background"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/mini_player_background"
+        android:background="@drawable/round_corner_top_background"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

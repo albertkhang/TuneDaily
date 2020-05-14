@@ -17,9 +17,6 @@ public class SettingManager {
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }
 
-    public SettingManager() {
-    }
-
     public static SettingManager getInstance(Context context) {
         if (instance == null) {
             synchronized (SettingManager.class) {

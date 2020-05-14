@@ -28,14 +28,14 @@
         app:layout_constraintTop_toTopOf="@id/imgCover">
 
         <TextView
-            android:id="@+id/txtSongName"
+            android:id="@+id/txtTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="songName"
             style="@style/TitleText"/>
 
         <TextView
-            android:id="@+id/txtSingerName"
+            android:id="@+id/txtArtist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="singerName"
