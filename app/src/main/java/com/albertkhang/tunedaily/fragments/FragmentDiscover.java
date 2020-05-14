@@ -17,6 +17,7 @@ import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.TopTrack;
+import com.albertkhang.tunedaily.utils.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import java.util.ArrayList;
@@ -47,18 +48,30 @@ public class FragmentDiscover extends Fragment {
         shimmer_top_chart = view.findViewById(R.id.shimmer_top_chart);
         rvTopChart = view.findViewById(R.id.rvTopChart);
 
-        FirebaseManager firebaseManager = FirebaseManager.getInstance();
+        final ArrayList ids = new ArrayList();
+
+        final FirebaseManager firebaseManager = FirebaseManager.getInstance();
         firebaseManager.setUpdateTopTrackIds(new FirebaseManager.UpdateTopTrackIds() {
             @Override
             public void updateTopTrack(ArrayList<TopTrack> topChartIdsOrdered) {
                 for (TopTrack track : topChartIdsOrdered) {
-                    Log.d("firebaseManager", "id: " + track.getId());
-                    Log.d("firebaseManager", "value: " + track.getValue());
+                    ids.add(track.getId());
+                }
 
+                firebaseManager.getTrackFromIds(ids);
+                Log.d("firebaseManager", "ids: " + ids.toString());
+            }
+        });
 
+        firebaseManager.setReadTrackFromIds(new FirebaseManager.ReadTrackFromIds() {
+            @Override
+            public void readTrackFromIds(ArrayList<Track> tracks) {
+                for (Track track : tracks) {
+                    Log.d("firebaseManager", track.toString());
                 }
             }
         });
+
         firebaseManager.getTopTrack();
     }
 
