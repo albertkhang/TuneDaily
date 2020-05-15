@@ -2,8 +2,6 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -56,7 +54,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         settingManager = new SettingManager(this);
 
-        changeTheme();
+        updateTheme();
     }
 
     private void addEvent() {
@@ -72,7 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 settingManager.setTheme(true);
-                changeTheme();
+                updateTheme();
             }
         });
 
@@ -80,7 +78,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 settingManager.setTheme(false);
-                changeTheme();
+                updateTheme();
             }
         });
 
@@ -88,7 +86,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 settingManager.setLanguage(true);
-                changeTheme();
+                updateTheme();
             }
         });
 
@@ -96,12 +94,12 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 settingManager.setLanguage(false);
-                changeTheme();
+                updateTheme();
             }
         });
     }
 
-    private void changeTheme() {
+    private void updateTheme() {
         if (settingManager.isDarkTheme()) {
             imgDarkChecked.setVisibility(View.VISIBLE);
             imgLightChecked.setVisibility(View.INVISIBLE);

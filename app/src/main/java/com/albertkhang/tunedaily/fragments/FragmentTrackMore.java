@@ -19,8 +19,6 @@ import com.albertkhang.tunedaily.views.RoundImageView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-import java.util.Objects;
-
 public class FragmentTrackMore extends BottomSheetDialogFragment {
     private Track track;
     private SettingManager settingManager;
@@ -72,10 +70,10 @@ public class FragmentTrackMore extends BottomSheetDialogFragment {
         txtTitle.setText(track.getTitle());
         txtArtist.setText(track.getArtist());
 
-        applyTheme();
+        updateTheme();
     }
 
-    private void applyTheme() {
+    private void updateTheme() {
         SettingManager settingManager = new SettingManager(getContext());
         if (settingManager.isDarkTheme()) {
             root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));

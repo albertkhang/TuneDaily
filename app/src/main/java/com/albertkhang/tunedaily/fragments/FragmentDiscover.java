@@ -7,6 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +21,7 @@ import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
 import com.albertkhang.tunedaily.adapters.TopChartAdapter;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
+import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.TopTrack;
 import com.albertkhang.tunedaily.utils.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -30,6 +34,12 @@ public class FragmentDiscover extends Fragment {
     private ShimmerFrameLayout shimmer_top_chart;
     private RecyclerView rvTopChart;
     private TopChartAdapter topChartAdapter;
+    private LinearLayout root_view;
+    private RelativeLayout top_frame;
+    private TextView txtTopChart;
+    private TextView txtPopularAlbum;
+    private TextView txtBestOfArtist;
+    private ImageView imgTopLogo;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,6 +58,12 @@ public class FragmentDiscover extends Fragment {
     private void addControl(View view) {
         imgSettings = view.findViewById(R.id.imgSettings);
         imgUser = view.findViewById(R.id.imgUser);
+        root_view = view.findViewById(R.id.root_view);
+        top_frame = view.findViewById(R.id.top_frame);
+        txtTopChart = view.findViewById(R.id.txtTopChart);
+        txtPopularAlbum = view.findViewById(R.id.txtPopularAlbum);
+        txtBestOfArtist = view.findViewById(R.id.txtBestOfArtist);
+        imgTopLogo = view.findViewById(R.id.imgTopLogo);
 
         shimmer_top_chart = view.findViewById(R.id.shimmer_top_chart);
         rvTopChart = view.findViewById(R.id.rvTopChart);
@@ -100,10 +116,38 @@ public class FragmentDiscover extends Fragment {
         firebaseManager.getTopTrack();
     }
 
+    private void updateTheme() {
+        SettingManager manager = new SettingManager(getContext());
+        if (manager.isDarkTheme()) {
+            root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
+
+            top_frame.setBackgroundColor(getResources().getColor(R.color.colorDark2));
+            imgTopLogo.setImageResource(R.drawable.ic_logo_and_text_dark);
+            imgUser.setColorFilter(getResources().getColor(R.color.colorLight3));
+            imgSettings.setColorFilter(getResources().getColor(R.color.colorLight3));
+
+            txtTopChart.setTextColor(getResources().getColor(R.color.colorLight1));
+            txtPopularAlbum.setTextColor(getResources().getColor(R.color.colorLight1));
+            txtBestOfArtist.setTextColor(getResources().getColor(R.color.colorLight1));
+        } else {
+            root_view.setBackgroundColor(getResources().getColor(R.color.colorLight1));
+
+            top_frame.setBackgroundColor(getResources().getColor(R.color.colorLight2));
+            imgTopLogo.setImageResource(R.drawable.ic_logo_and_text_light);
+            imgUser.setColorFilter(getResources().getColor(R.color.colorDark3));
+            imgSettings.setColorFilter(getResources().getColor(R.color.colorDark3));
+
+            txtTopChart.setTextColor(getResources().getColor(R.color.colorDark1));
+            txtPopularAlbum.setTextColor(getResources().getColor(R.color.colorDark1));
+            txtBestOfArtist.setTextColor(getResources().getColor(R.color.colorDark1));
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         topChartAdapter.notifyDataSetChanged();
+        updateTheme();
     }
 
     private void addEvent(View view) {

@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".fragments.FragmentDiscover">
+    tools:context=".fragments.FragmentDiscover"
+    android:id="@+id/root_view">
 
     <RelativeLayout
         android:id="@+id/top_frame"
@@ -37,6 +38,7 @@
             android:src="@drawable/ic_settings" />
 
         <ImageView
+            android:id="@+id/imgTopLogo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
@@ -45,7 +47,7 @@
             android:layout_toLeftOf="@id/imgSettings"
 
             android:layout_toRightOf="@id/imgUser"
-            android:src="@drawable/ic_logo_and_text" />
+            android:src="@drawable/ic_logo_and_text_dark" />
 
     </RelativeLayout>
 
@@ -62,6 +64,7 @@
             android:paddingBottom="@dimen/dimenPaddingBottomEnd">
 
             <TextView
+                android:id="@+id/txtTopChart"
                 style="@style/ListHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -103,6 +106,7 @@
                 android:visibility="gone"/>
 
             <TextView
+                android:id="@+id/txtPopularAlbum"
                 style="@style/ListHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -136,6 +140,7 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <TextView
+                android:id="@+id/txtBestOfArtist"
                 style="@style/ListHeader"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

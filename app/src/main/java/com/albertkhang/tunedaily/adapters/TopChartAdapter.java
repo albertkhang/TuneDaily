@@ -57,8 +57,12 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         handlePositionTextColor(holder.txtPosition, position + 1);
-        holder.txtSongName.setText(tracks.get(position).getTitle());
-        holder.txtSingerName.setText(tracks.get(position).getArtist());
+
+        holder.txtTitle.setText(tracks.get(position).getTitle());
+        handleTitleColor(holder.txtTitle);
+
+        holder.txtArtist.setText(tracks.get(position).getArtist());
+        handleArtistColor(holder.txtArtist);
 
         handleCoverPlaceholderColor(holder.imgCover, position);
         holder.imgMore.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +71,32 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
                 onItemClickListener.onItemClickListener(holder.itemView, position);
             }
         });
+
+        handleMoreIconColor(holder.imgMore);
+    }
+
+    private void handleMoreIconColor(ImageView imageView) {
+        if (settingManager.isDarkTheme()) {
+            imageView.setColorFilter(context.getResources().getColor(R.color.colorLight5));
+        } else {
+            imageView.setColorFilter(context.getResources().getColor(R.color.colorDark5));
+        }
+    }
+
+    private void handleArtistColor(TextView textView) {
+        if (settingManager.isDarkTheme()) {
+            textView.setTextColor(context.getResources().getColor(R.color.colorLight4));
+        } else {
+            textView.setTextColor(context.getResources().getColor(R.color.colorDark4));
+        }
+    }
+
+    private void handleTitleColor(TextView textView) {
+        if (settingManager.isDarkTheme()) {
+            textView.setTextColor(context.getResources().getColor(R.color.colorLight1));
+        } else {
+            textView.setTextColor(context.getResources().getColor(R.color.colorDark1));
+        }
     }
 
     private void handleCoverPlaceholderColor(RoundImageView imgCover, int position) {
@@ -112,8 +142,8 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
     public class ViewHolder extends RecyclerView.ViewHolder {
         private TextView txtPosition;
         private RoundImageView imgCover;
-        private TextView txtSongName;
-        private TextView txtSingerName;
+        private TextView txtTitle;
+        private TextView txtArtist;
         private ImageView imgMore;
 
         public ViewHolder(@NonNull View itemView) {
@@ -121,8 +151,8 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
 
             txtPosition = itemView.findViewById(R.id.txtPosition);
             imgCover = itemView.findViewById(R.id.imgCover);
-            txtSongName = itemView.findViewById(R.id.txtTitle);
-            txtSingerName = itemView.findViewById(R.id.txtArtist);
+            txtTitle = itemView.findViewById(R.id.txtTitle);
+            txtArtist = itemView.findViewById(R.id.txtArtist);
             imgMore = itemView.findViewById(R.id.imgMore);
         }
     }
