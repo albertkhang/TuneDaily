@@ -56,7 +56,7 @@ public class FragmentLibrary extends Fragment {
     }
 
     private void addControl(View view) {
-        settingManager = new SettingManager(getContext());
+        settingManager = SettingManager.getInstance(getContext());
 
         liked_songs_frame = view.findViewById(R.id.liked_songs_frame);
         root_view = view.findViewById(R.id.root_view);

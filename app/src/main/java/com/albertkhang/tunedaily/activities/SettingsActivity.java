@@ -58,7 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
         txtEnglish = findViewById(R.id.txtEnglish);
         txtVietnamese = findViewById(R.id.txtVietnamese);
 
-        settingManager = new SettingManager(this);
+        settingManager = SettingManager.getInstance(this);
 
         updateTheme();
     }

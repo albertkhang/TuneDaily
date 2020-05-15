@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         splash_screen = findViewById(R.id.splash_screen);
         bottom_gradient_frame = findViewById(R.id.bottom_gradient_frame);
 
-        settingManager = new SettingManager(this);
+        settingManager = SettingManager.getInstance(this);
 
         addMiniPlayer();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);

@@ -15,10 +15,13 @@ import android.widget.ImageView;
 import android.widget.ScrollView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.utils.SettingManager;
 
 import java.util.Objects;
 
 public class InSearchActivity extends AppCompatActivity {
+    private SettingManager settingManager;
+
     private EditText txtSearchText;
     private ScrollView scroll_view;
     private ImageView imgCollapse;

@@ -33,7 +33,7 @@ public class PlaylistActivity extends AppCompatActivity {
     }
 
     private void addControl() {
-        settingManager = new SettingManager(this);
+        settingManager = SettingManager.getInstance(this);
 
         root_view = findViewById(R.id.root_view);
         top_frame = findViewById(R.id.top_frame);

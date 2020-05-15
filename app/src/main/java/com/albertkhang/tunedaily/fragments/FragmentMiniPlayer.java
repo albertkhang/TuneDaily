@@ -60,7 +60,7 @@ public class FragmentMiniPlayer extends Fragment {
         txtArtist = view.findViewById(R.id.txtArtist);
 
         miniPlayer_background = view.findViewById(R.id.miniPlayer_background);
-        settingManager = new SettingManager(getContext());
+        settingManager = SettingManager.getInstance(getContext());
     }
 
     private void addEvent() {

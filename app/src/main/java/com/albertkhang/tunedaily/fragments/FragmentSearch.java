@@ -71,7 +71,7 @@ public class FragmentSearch extends Fragment {
         txtRandomArtist = view.findViewById(R.id.txtRandomArtist);
         txtRandomTracks = view.findViewById(R.id.txtRandomTracks);
 
-        settingManager = new SettingManager(getContext());
+        settingManager = SettingManager.getInstance(getContext());
 
         updateTheme();
     }

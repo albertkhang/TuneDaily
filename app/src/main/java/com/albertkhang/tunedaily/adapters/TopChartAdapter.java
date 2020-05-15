@@ -26,7 +26,7 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
 
     public TopChartAdapter(Context context) {
         this.context = context;
-        this.settingManager = new SettingManager(context);
+        this.settingManager = SettingManager.getInstance(context);
     }
 
     public void updateTopTracks(ArrayList<Track> tracks) {

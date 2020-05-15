@@ -12,7 +12,7 @@ public class SettingManager {
     private Context context;
     private SharedPreferences prefs;
 
-    public SettingManager(Context context) {
+    private SettingManager(Context context) {
         this.context = context;
         this.prefs = PreferenceManager.getDefaultSharedPreferences(context);
     }

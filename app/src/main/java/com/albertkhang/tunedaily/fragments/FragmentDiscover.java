@@ -132,7 +132,7 @@ public class FragmentDiscover extends Fragment {
     }
 
     private void updateTheme() {
-        SettingManager manager = new SettingManager(getContext());
+        SettingManager manager = SettingManager.getInstance(getContext());
         if (manager.isDarkTheme()) {
             root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
 

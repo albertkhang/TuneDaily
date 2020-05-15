@@ -54,7 +54,7 @@ public class FragmentTrackMore extends BottomSheetDialogFragment {
     }
 
     private void addControl(View view) {
-        settingManager = new SettingManager(getContext());
+        settingManager = SettingManager.getInstance(getContext());
         imgCover = view.findViewById(R.id.imgCover);
         txtTitle = view.findViewById(R.id.txtTitle);
         txtArtist = view.findViewById(R.id.txtArtist);
@@ -74,7 +74,7 @@ public class FragmentTrackMore extends BottomSheetDialogFragment {
     }
 
     private void updateTheme() {
-        SettingManager settingManager = new SettingManager(getContext());
+        SettingManager settingManager = SettingManager.getInstance(getContext());
         if (settingManager.isDarkTheme()) {
             root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
 
