@@ -64,9 +64,9 @@ public class PlaylistActivity extends AppCompatActivity {
             root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
 
             top_frame.setBackgroundColor(getResources().getColor(R.color.colorDark2));
-            imgCollapse.setColorFilter(getResources().getColor(R.color.colorLight1));
+            imgCollapse.setColorFilter(getResources().getColor(R.color.colorLight5));
             txtLikedSongs.setTextColor(getResources().getColor(R.color.colorLight1));
-            imgMore.setColorFilter(getResources().getColor(R.color.colorLight1));
+            imgMore.setColorFilter(getResources().getColor(R.color.colorLight5));
 
             top_gradient_frame.setBackground(getResources().getDrawable(R.drawable.lyric_hidden_top_gradient_dark));
             bottom_gradient_frame.setBackground(getResources().getDrawable(R.drawable.lyric_hidden_bottom_gradient_dark));
@@ -74,9 +74,9 @@ public class PlaylistActivity extends AppCompatActivity {
             root_view.setBackgroundColor(getResources().getColor(R.color.colorLight1));
 
             top_frame.setBackgroundColor(getResources().getColor(R.color.colorLight2));
-            imgCollapse.setColorFilter(getResources().getColor(R.color.colorDark1));
+            imgCollapse.setColorFilter(getResources().getColor(R.color.colorDark5));
             txtLikedSongs.setTextColor(getResources().getColor(R.color.colorDark1));
-            imgMore.setColorFilter(getResources().getColor(R.color.colorDark1));
+            imgMore.setColorFilter(getResources().getColor(R.color.colorDark5));
 
             top_gradient_frame.setBackground(getResources().getDrawable(R.drawable.lyric_hidden_top_gradient_light));
             bottom_gradient_frame.setBackground(getResources().getDrawable(R.drawable.lyric_hidden_bottom_gradient_light));

@@ -138,8 +138,8 @@ public class FragmentDiscover extends Fragment {
 
             top_frame.setBackgroundColor(getResources().getColor(R.color.colorDark2));
             imgTopLogo.setImageResource(R.drawable.ic_logo_and_text_dark);
-            imgUser.setColorFilter(getResources().getColor(R.color.colorLight3));
-            imgSettings.setColorFilter(getResources().getColor(R.color.colorLight3));
+            imgUser.setColorFilter(getResources().getColor(R.color.colorLight5));
+            imgSettings.setColorFilter(getResources().getColor(R.color.colorLight5));
 
             txtTopChart.setTextColor(getResources().getColor(R.color.colorLight1));
             txtPopularAlbum.setTextColor(getResources().getColor(R.color.colorLight1));
@@ -149,8 +149,8 @@ public class FragmentDiscover extends Fragment {
 
             top_frame.setBackgroundColor(getResources().getColor(R.color.colorLight2));
             imgTopLogo.setImageResource(R.drawable.ic_logo_and_text_light);
-            imgUser.setColorFilter(getResources().getColor(R.color.colorDark3));
-            imgSettings.setColorFilter(getResources().getColor(R.color.colorDark3));
+            imgUser.setColorFilter(getResources().getColor(R.color.colorDark5));
+            imgSettings.setColorFilter(getResources().getColor(R.color.colorDark5));
 
             txtTopChart.setTextColor(getResources().getColor(R.color.colorDark1));
             txtPopularAlbum.setTextColor(getResources().getColor(R.color.colorDark1));

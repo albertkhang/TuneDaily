@@ -127,9 +127,9 @@ public class FragmentMiniPlayer extends Fragment {
             txtTitle.setTextColor(getResources().getColor(R.color.colorDark1));
             txtArtist.setTextColor(getResources().getColor(R.color.colorDark4));
 
-            imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark3));
-            imgPlayPause.setColorFilter(getResources().getColor(R.color.colorDark3));
-            imgSkipNext.setColorFilter(getResources().getColor(R.color.colorDark3));
+            imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark2));
+            imgPlayPause.setColorFilter(getResources().getColor(R.color.colorDark2));
+            imgSkipNext.setColorFilter(getResources().getColor(R.color.colorDark2));
 
             imgCover.setImageResource(R.color.colorLight5);
         }
