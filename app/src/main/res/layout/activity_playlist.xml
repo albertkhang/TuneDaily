@@ -152,7 +152,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:background="@drawable/lyric_hidden_bottom_gradient"
+        android:background="@drawable/lyric_hidden_bottom_gradient_dark"
         app:layout_constraintBottom_toTopOf="@id/miniPlayer_frame"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

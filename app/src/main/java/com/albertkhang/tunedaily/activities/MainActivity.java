@@ -11,6 +11,8 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
@@ -18,6 +20,7 @@ import com.albertkhang.tunedaily.fragments.FragmentDiscover;
 import com.albertkhang.tunedaily.fragments.FragmentLibrary;
 import com.albertkhang.tunedaily.fragments.FragmentMiniPlayer;
 import com.albertkhang.tunedaily.fragments.FragmentSearch;
+import com.albertkhang.tunedaily.utils.SettingManager;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,16 +28,20 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private ConstraintLayout splash_screen;
     private static final int SHOWING_INTERVAL = 2000;
+
     //This is our viewPager
     private ViewPager viewPager;
     public static final int BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT = 1;
 
     //Fragments
-    FragmentDiscover fragmentDiscover;
-    FragmentSearch fragmentSearch;
-    FragmentLibrary fragmentLibrary;
+    private FragmentDiscover fragmentDiscover;
+    private FragmentSearch fragmentSearch;
+    private FragmentLibrary fragmentLibrary;
 
-    MenuItem menuItem;
+    private MenuItem menuItem;
+
+    private SettingManager settingManager;
+    private FrameLayout bottom_gradient_frame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         viewPager = findViewById(R.id.viewpager);
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         splash_screen = findViewById(R.id.splash_screen);
+        bottom_gradient_frame = findViewById(R.id.bottom_gradient_frame);
+
+        settingManager = new SettingManager(this);
 
         addMiniPlayer();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
@@ -68,13 +78,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
-                    case R.id.fragment_discover:
+                    case R.id.discover_item:
                         viewPager.setCurrentItem(0);
                         break;
-                    case R.id.fragment_search:
+                    case R.id.search_item:
                         viewPager.setCurrentItem(1);
                         break;
-                    case R.id.fragment_library:
+                    case R.id.library_item:
                         viewPager.setCurrentItem(2);
                         break;
                 }
@@ -93,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 if (menuItem != null) {
                     menuItem.setChecked(false);
                 } else {
-                    bottomNavigationView.getMenu().getItem(0).setChecked(false);
+                    bottomNavigationView.getMenu().getItem(position).setChecked(false);
                 }
 
                 bottomNavigationView.getMenu().getItem(position).setChecked(true);
@@ -138,5 +148,23 @@ public class MainActivity extends AppCompatActivity {
         adapter.addFragment(fragmentSearch);
         adapter.addFragment(fragmentLibrary);
         viewPager.setAdapter(adapter);
+
+        viewPager.setOffscreenPageLimit(adapter.getCount());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateTheme();
+    }
+
+    private void updateTheme() {
+        if (settingManager.isDarkTheme()) {
+            bottomNavigationView.setItemBackgroundResource(R.color.colorDark2);
+            bottom_gradient_frame.setBackgroundResource(R.drawable.lyric_hidden_bottom_gradient_dark);
+        } else {
+            bottomNavigationView.setItemBackgroundResource(R.color.colorLight2);
+            bottom_gradient_frame.setBackgroundResource(R.drawable.lyric_hidden_bottom_gradient_light);
+        }
     }
 }

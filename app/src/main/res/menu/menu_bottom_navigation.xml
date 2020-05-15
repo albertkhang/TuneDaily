@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/fragment_discover"
+        android:id="@+id/discover_item"
         android:checked="true"
         android:icon="@drawable/ic_discover"
         android:title="@string/discover_menu"
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/fragment_search"
+        android:id="@+id/search_item"
         android:checked="false"
         android:icon="@drawable/ic_search"
         android:title="@string/search_menu"
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/fragment_library"
+        android:id="@+id/library_item"
         android:checked="false"
         android:icon="@drawable/ic_library"
         android:title="@string/library_menu"

@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
 import com.albertkhang.tunedaily.adapters.TopChartAdapter;
+import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.TopTrack;
@@ -114,6 +115,8 @@ public class FragmentDiscover extends Fragment {
         });
 
         firebaseManager.getTopTrack();
+
+        updateTheme();
     }
 
     private void updateTheme() {

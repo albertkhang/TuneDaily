@@ -30,10 +30,11 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/bottom_gradient_frame"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_above="@id/miniPlayer_frame"
-        android:background="@drawable/lyric_hidden_bottom_gradient" />
+        android:background="@drawable/lyric_hidden_bottom_gradient_dark" />
     
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

@@ -1,6 +1,7 @@
 package com.albertkhang.tunedaily.fragments;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,12 +14,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.InSearchActivity;
+import com.albertkhang.tunedaily.utils.SettingManager;
 
 public class FragmentSearch extends Fragment {
     private FrameLayout search_frame;
+    private ConstraintLayout root_view;
+    private SettingManager settingManager;
+    private TextView txtSearchTitle;
+    private ImageView imgSearch;
+    private TextView txtSearchText;
+    private TextView txtRandomArtist;
+    private TextView txtRandomTracks;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,8 +45,24 @@ public class FragmentSearch extends Fragment {
         addEvent();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateTheme();
+    }
+
     private void addControl(View view) {
         search_frame = view.findViewById(R.id.search_frame);
+        root_view = view.findViewById(R.id.root_view);
+        txtSearchTitle = view.findViewById(R.id.txtSearchTitle);
+        imgSearch = view.findViewById(R.id.imgSearch);
+        txtSearchText = view.findViewById(R.id.txtSearchText);
+        txtRandomArtist = view.findViewById(R.id.txtRandomArtist);
+        txtRandomTracks = view.findViewById(R.id.txtRandomTracks);
+
+        settingManager = new SettingManager(getContext());
+
+        updateTheme();
     }
 
     private void addEvent() {
@@ -46,5 +73,35 @@ public class FragmentSearch extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+    public void updateTheme() {
+        if (settingManager.isDarkTheme()) {
+            root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
+            txtSearchTitle.setTextColor(getResources().getColor(R.color.colorLight1));
+
+            setSearchBackground(R.color.colorLight1);
+            imgSearch.setColorFilter(getResources().getColor(R.color.colorDark1));
+            txtSearchText.setTextColor(getResources().getColor(R.color.colorDark1));
+
+            txtRandomArtist.setTextColor(getResources().getColor(R.color.colorLight1));
+            txtRandomTracks.setTextColor(getResources().getColor(R.color.colorLight1));
+        } else {
+            root_view.setBackgroundColor(getResources().getColor(R.color.colorLight1));
+            txtSearchTitle.setTextColor(getResources().getColor(R.color.colorDark1));
+
+            setSearchBackground(R.color.colorDark1);
+            imgSearch.setColorFilter(getResources().getColor(R.color.colorLight1));
+            txtSearchText.setTextColor(getResources().getColor(R.color.colorLight1));
+
+            txtRandomArtist.setTextColor(getResources().getColor(R.color.colorDark1));
+            txtRandomTracks.setTextColor(getResources().getColor(R.color.colorDark1));
+        }
+    }
+
+    private void setSearchBackground(int color) {
+        Drawable drawable = getResources().getDrawable(R.drawable.search_background);
+        drawable.setTint(getResources().getColor(color));
+        search_frame.setBackground(drawable);
     }
 }

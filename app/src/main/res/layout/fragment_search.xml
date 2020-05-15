@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.FragmentSearch"
-    android:background="@color/colorDark1">
+    android:background="@color/colorDark1"
+    android:id="@+id/root_view">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,6 +19,7 @@
             android:paddingBottom="@dimen/dimenPaddingBottomEnd">
 
             <TextView
+                android:id="@+id/txtSearchTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -45,6 +47,7 @@
                     android:layout_gravity="center"
                     android:orientation="horizontal">
                     <ImageView
+                        android:id="@+id/imgSearch"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
@@ -53,6 +56,7 @@
                         android:layout_marginRight="10dp"/>
 
                     <TextView
+                        android:id="@+id/txtSearchText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
 
@@ -64,6 +68,7 @@
             </FrameLayout>
 
             <TextView
+                android:id="@+id/txtRandomArtist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -94,10 +99,11 @@
             </com.facebook.shimmer.ShimmerFrameLayout>
 
             <TextView
+                android:id="@+id/txtRandomTracks"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="@string/random_songs"
+                android:text="@string/random_tracks"
                 style="@style/ListHeader"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"/>
