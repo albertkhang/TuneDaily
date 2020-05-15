@@ -220,7 +220,7 @@ tools:context=".fragments.FragmentDetail">
     android:layout_width="match_parent"
     android:layout_height="30dp"
     android:layout_alignParentTop="true"
-    android:background="@drawable/lyric_hidden_top_gradient"
+    android:background="@drawable/lyric_hidden_top_gradient_dark"
 
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintLeft_toLeftOf="parent"

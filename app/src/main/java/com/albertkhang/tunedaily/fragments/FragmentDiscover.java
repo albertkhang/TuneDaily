@@ -25,9 +25,15 @@ import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.TopTrack;
 import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FragmentDiscover extends Fragment {
     private ImageView imgSettings;
@@ -54,6 +60,12 @@ public class FragmentDiscover extends Fragment {
 
         addControl(view);
         addEvent(view);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+//        updateTheme();
     }
 
     private void addControl(View view) {
@@ -144,6 +156,23 @@ public class FragmentDiscover extends Fragment {
             txtPopularAlbum.setTextColor(getResources().getColor(R.color.colorDark1));
             txtBestOfArtist.setTextColor(getResources().getColor(R.color.colorDark1));
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateThemeEvent(UpdateThemeEvent updateThemeEvent) {
+            updateTheme();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override

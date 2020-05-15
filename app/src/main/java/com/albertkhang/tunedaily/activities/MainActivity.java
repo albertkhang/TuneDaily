@@ -21,8 +21,15 @@ import com.albertkhang.tunedaily.fragments.FragmentLibrary;
 import com.albertkhang.tunedaily.fragments.FragmentMiniPlayer;
 import com.albertkhang.tunedaily.fragments.FragmentSearch;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import io.opencensus.trace.MessageEvent;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
@@ -95,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+//                Log.d("viewPager", "onPageScrolled: position: " + position + ", positionOffset: " + positionOffset + ", positionOffsetPixels: " + positionOffsetPixels);
             }
 
             @Override
@@ -112,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                Log.d("viewPager", "onPageScrollStateChanged: " + state);
             }
         });
 
@@ -159,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateTheme() {
+        Log.d("updateTheme", "updated");
         if (settingManager.isDarkTheme()) {
             bottomNavigationView.setItemBackgroundResource(R.color.colorDark2);
             bottom_gradient_frame.setBackgroundResource(R.drawable.lyric_hidden_bottom_gradient_dark);
@@ -166,5 +174,11 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setItemBackgroundResource(R.color.colorLight2);
             bottom_gradient_frame.setBackgroundResource(R.drawable.lyric_hidden_bottom_gradient_light);
         }
+
+        sendUpdateThemeEvent();
+    }
+
+    private void sendUpdateThemeEvent() {
+        EventBus.getDefault().post(new UpdateThemeEvent());
     }
 }

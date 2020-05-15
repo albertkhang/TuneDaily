@@ -10,8 +10,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
 import com.albertkhang.tunedaily.views.RoundImageView;
+
+import org.greenrobot.eventbus.EventBus;
+
+import io.opencensus.trace.MessageEvent;
 
 public class SettingsActivity extends AppCompatActivity {
     private ImageView imgBack;
@@ -71,6 +77,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 settingManager.setTheme(true);
                 updateTheme();
+//                sendUpdateThemeEvent();
             }
         });
 
@@ -79,6 +86,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 settingManager.setTheme(false);
                 updateTheme();
+//                sendUpdateThemeEvent();
             }
         });
 
@@ -98,6 +106,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void updateTheme() {
         if (settingManager.isDarkTheme()) {

@@ -20,7 +20,12 @@ import android.widget.TextView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
 import com.albertkhang.tunedaily.views.RoundImageView;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class FragmentLibrary extends Fragment {
 
@@ -84,7 +89,7 @@ public class FragmentLibrary extends Fragment {
         updateTheme();
     }
 
-    public void updateTheme() {
+    private void updateTheme() {
         if (settingManager.isDarkTheme()) {
             root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
             top_frame.setBackgroundColor(getResources().getColor(R.color.colorDark2));
@@ -113,5 +118,22 @@ public class FragmentLibrary extends Fragment {
 
             txtPlaylist.setTextColor(getResources().getColor(R.color.colorDark1));
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateThemeEvent(UpdateThemeEvent updateThemeEvent) {
+        updateTheme();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

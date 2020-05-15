@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorDark1"
-    tools:context=".activities.PlaylistActivity">
+    tools:context=".activities.PlaylistActivity"
+    android:id="@+id/root_view">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_frame"
@@ -30,6 +31,7 @@
             app:layout_constraintLeft_toLeftOf="parent"/>
 
         <TextView
+            android:id="@+id/txtLikedSongs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
@@ -108,9 +110,10 @@
     </ScrollView>
 
     <FrameLayout
+        android:id="@+id/top_gradient_frame"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:background="@drawable/lyric_hidden_top_gradient"
+        android:background="@drawable/lyric_hidden_top_gradient_dark"
 
         android:layout_marginTop="20dp"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -150,6 +153,7 @@
     </FrameLayout>
 
     <FrameLayout
+        android:id="@+id/bottom_gradient_frame"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/lyric_hidden_bottom_gradient_dark"

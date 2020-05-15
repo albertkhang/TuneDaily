@@ -72,7 +72,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="@string/random_artist"
+                android:text="@string/random_artists"
                 style="@style/ListHeader"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="40dp"/>
@@ -103,7 +103,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
-                android:text="@string/random_tracks"
+                android:text="@string/random_songs"
                 style="@style/ListHeader"
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"/>

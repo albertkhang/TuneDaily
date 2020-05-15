@@ -22,8 +22,8 @@
 
     <!--SearchFragment-->
     <string name="artist_songs_or_album">Artist, songs or Album</string>
-    <string name="random_artist">RANDOM ARTIST</string>
-    <string name="random_tracks">RANDOM TRACKS</string>
+    <string name="random_artists">RANDOM ARTISTS</string>
+    <string name="random_songs">RANDOM SONGS</string>
     <string name="search">Search</string>
 
     <!--LibraryActivity-->

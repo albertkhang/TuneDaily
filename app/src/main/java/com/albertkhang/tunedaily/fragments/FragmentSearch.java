@@ -20,6 +20,11 @@ import android.widget.TextView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.InSearchActivity;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 public class FragmentSearch extends Fragment {
     private FrameLayout search_frame;
@@ -43,6 +48,12 @@ public class FragmentSearch extends Fragment {
 
         addControl(view);
         addEvent();
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        updateTheme();
     }
 
     @Override
@@ -75,7 +86,7 @@ public class FragmentSearch extends Fragment {
         });
     }
 
-    public void updateTheme() {
+    private void updateTheme() {
         if (settingManager.isDarkTheme()) {
             root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
             txtSearchTitle.setTextColor(getResources().getColor(R.color.colorLight1));
@@ -103,5 +114,22 @@ public class FragmentSearch extends Fragment {
         Drawable drawable = getResources().getDrawable(R.drawable.search_background);
         drawable.setTint(getResources().getColor(color));
         search_frame.setBackground(drawable);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onUpdateThemeEvent(UpdateThemeEvent updateThemeEvent) {
+        updateTheme();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

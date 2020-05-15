@@ -102,7 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentTop="true"
-        android:background="@drawable/lyric_hidden_top_gradient" />
+        android:background="@drawable/lyric_hidden_top_gradient_dark" />
 
     <FrameLayout
         android:layout_width="match_parent"
