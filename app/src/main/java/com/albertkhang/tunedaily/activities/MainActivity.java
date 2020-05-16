@@ -1,5 +1,6 @@
 package com.albertkhang.tunedaily.activities;
 
+import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -56,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         addControl();
+        addMiniPlayer(savedInstanceState);
         addEvent();
     }
 
@@ -67,17 +69,21 @@ public class MainActivity extends AppCompatActivity {
 
         settingManager = SettingManager.getInstance(this);
 
-        addMiniPlayer();
+//        addMiniPlayer();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
-    private void addMiniPlayer() {
-        FragmentMiniPlayer fragmentMiniPlayer = new FragmentMiniPlayer();
+    private void addMiniPlayer(Bundle savedInstanceState) {
+        if (findViewById(R.id.miniPlayer_frame) != null) {
+            if (savedInstanceState != null) {
+                return;
+            }
+        }
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.miniPlayer_frame, fragmentMiniPlayer);
-        transaction.addToBackStack(null);
-        transaction.commit();
+        FragmentMiniPlayer fragmentMiniPlayer = new FragmentMiniPlayer();
+        fragmentMiniPlayer.setArguments(getIntent().getExtras());
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.miniPlayer_frame, fragmentMiniPlayer).commit();
     }
 
     private void addEvent() {
