@@ -41,10 +41,13 @@ public class FragmentDiscover extends Fragment {
     private ImageView imgUser;
     private ShimmerFrameLayout shimmer_top_chart;
     private ShimmerFrameLayout shimmer_popular_albums;
+    private ShimmerFrameLayout shimmer_best_of_artists;
     private RecyclerView rvTopChart;
     private RecyclerView rvPopularAlbums;
+    private RecyclerView rvBestOfArtists;
     private TopChartAdapter topChartAdapter;
-    private AlbumAdapter albumAdapter;
+    private AlbumAdapter popularAlbumAdapter;
+    private AlbumAdapter bestOfArtistAlbumAdapter;
     private LinearLayout root_view;
     private RelativeLayout top_frame;
     private TextView txtTopChart;
@@ -82,9 +85,12 @@ public class FragmentDiscover extends Fragment {
 
         shimmer_top_chart = view.findViewById(R.id.shimmer_top_chart);
         shimmer_popular_albums = view.findViewById(R.id.shimmer_popular_albums);
+        shimmer_best_of_artists = view.findViewById(R.id.shimmer_best_of_artists);
         rvTopChart = view.findViewById(R.id.rvTopChart);
         rvPopularAlbums = view.findViewById(R.id.rvPopularAlbums);
+        rvBestOfArtists = view.findViewById(R.id.rvBestOfArtists);
 
+        //TopChart
         topChartAdapter = new TopChartAdapter(getContext());
         rvTopChart.setAdapter(topChartAdapter);
 
@@ -97,31 +103,59 @@ public class FragmentDiscover extends Fragment {
         managerTopChart.setOrientation(RecyclerView.VERTICAL);
         rvTopChart.setLayoutManager(managerTopChart);
 
-        albumAdapter = new AlbumAdapter(getContext());
-        rvPopularAlbums.setAdapter(albumAdapter);
+        //Popular Albums
+        popularAlbumAdapter = new AlbumAdapter(getContext());
+        rvPopularAlbums.setAdapter(popularAlbumAdapter);
 
-        LinearLayoutManager managerAlbums = new LinearLayoutManager(getContext()) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
+        LinearLayoutManager managerAlbums = new LinearLayoutManager(getContext());
         managerAlbums.setOrientation(RecyclerView.HORIZONTAL);
         rvPopularAlbums.setLayoutManager(managerAlbums);
 
-        updateTopChart();
-        updatePopularAlbum();
+        //BestOfArtists
+        bestOfArtistAlbumAdapter = new AlbumAdapter(getContext());
+        rvBestOfArtists.setAdapter(bestOfArtistAlbumAdapter);
 
+        LinearLayoutManager managerArtist = new LinearLayoutManager(getContext());
+        managerArtist.setOrientation(RecyclerView.HORIZONTAL);
+        rvBestOfArtists.setLayoutManager(managerArtist);
+
+        updateList();
         updateTheme();
 
         swipe_frame.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                updateTopChart();
-                updatePopularAlbum();
+                updateList();
                 swipe_frame.setRefreshing(false);
             }
         });
+    }
+
+    private void updateList() {
+        updateTopChart();
+        updatePopularAlbum();
+        rvPopularAlbums.scrollToPosition(0);
+        updateBestOfArtist();
+        rvBestOfArtists.scrollToPosition(0);
+    }
+
+    private void updateBestOfArtist() {
+        shimmer_best_of_artists.setVisibility(View.VISIBLE);
+        rvBestOfArtists.setVisibility(View.GONE);
+
+        FirebaseManager firebaseManager = FirebaseManager.getInstance();
+
+        firebaseManager.setReadBestOfArtistListener(new FirebaseManager.ReadBestOfArtistListener() {
+            @Override
+            public void readBestOfArtistListener(ArrayList<Album> albums) {
+                shimmer_best_of_artists.setVisibility(View.GONE);
+                rvBestOfArtists.setVisibility(View.VISIBLE);
+
+                bestOfArtistAlbumAdapter.update(albums);
+            }
+        });
+
+        firebaseManager.getBestOfArtist();
     }
 
     private void updatePopularAlbum() {
@@ -130,18 +164,18 @@ public class FragmentDiscover extends Fragment {
 
         FirebaseManager firebaseManager = FirebaseManager.getInstance();
 
-        firebaseManager.setReadRandomAlbumListener(new FirebaseManager.ReadRandomAlbumListener() {
+        firebaseManager.setReadPopularAlbumsListener(new FirebaseManager.ReadPopularAlbumsListener() {
             @Override
-            public void readRandomAlbumListener(ArrayList<Album> albums) {
+            public void readPopularAlbumsListener(ArrayList<Album> albums) {
 
                 shimmer_popular_albums.setVisibility(View.GONE);
                 rvPopularAlbums.setVisibility(View.VISIBLE);
 
-                albumAdapter.updateTopTracks(albums);
+                popularAlbumAdapter.update(albums);
             }
         });
 
-        firebaseManager.getRandomAlbum();
+        firebaseManager.getPopularAlbums();
     }
 
     private void updateTopChart() {
@@ -180,7 +214,7 @@ public class FragmentDiscover extends Fragment {
                 shimmer_top_chart.setVisibility(View.GONE);
                 rvTopChart.setVisibility(View.VISIBLE);
 
-                topChartAdapter.updateTopTracks(tracks);
+                topChartAdapter.update(tracks);
             }
         });
 

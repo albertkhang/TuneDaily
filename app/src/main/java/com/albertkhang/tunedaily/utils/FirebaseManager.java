@@ -67,6 +67,26 @@ public class FirebaseManager {
         this.readRandomAlbumListener = readRandomAlbumListener;
     }
 
+    public interface ReadPopularAlbumsListener {
+        void readPopularAlbumsListener(ArrayList<Album> albums);
+    }
+
+    private ReadPopularAlbumsListener readPopularAlbumsListener;
+
+    public void setReadPopularAlbumsListener(ReadPopularAlbumsListener readPopularAlbumsListener) {
+        this.readPopularAlbumsListener = readPopularAlbumsListener;
+    }
+
+    public interface ReadBestOfArtistListener {
+        void readBestOfArtistListener(ArrayList<Album> albums);
+    }
+
+    private ReadBestOfArtistListener readBestOfArtistListener;
+
+    public void setReadBestOfArtistListener(ReadBestOfArtistListener readBestOfArtistListener) {
+        this.readBestOfArtistListener = readBestOfArtistListener;
+    }
+
     public void getTopTrack() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("top_chart");
@@ -202,5 +222,95 @@ public class FirebaseManager {
                     }
                 });
 
+    }
+
+    public void getPopularAlbums() {
+        final List<Integer> ids = new ArrayList<>();
+        final ArrayList<Album> results = new ArrayList<>();
+
+        for (int i = 0; i < LIMIT_RANDOM_ALBUM; i++) {
+            Random rn = new Random();
+            ids.add(rn.nextInt(30 + 1));
+        }
+
+        Log.d("getPopularAlbums", "ids: " + ids);
+
+        db.collection("TuneDaily/albums/album")
+                .whereIn("id", ids)
+                .get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("getPopularAlbums", "Failure: ", e);
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Log.d("getRandomAlbum", document.getId());
+
+//                            Log.d("getRandomAlbum", "id: " + document.get("id"));
+//                            Log.d("getRandomAlbum", "title: " + document.get("title"));
+//                            Log.d("getRandomAlbum", "tracks: " + document.get("tracks"));
+//                            Log.d("getRandomAlbum", "cover: " + document.get("cover"));
+
+                            int id = (int) (long) document.get("id");
+                            String title = (String) document.get("title");
+                            List<Integer> tracks = (List<Integer>) document.get("tracks");
+                            String cover = (String) document.get("cover");
+
+                            results.add(new Album(id, title, cover, tracks));
+                        }
+
+                        readPopularAlbumsListener.readPopularAlbumsListener(results);
+                        Log.d("getPopularAlbums", results.toString());
+                    }
+                });
+    }
+
+    public void getBestOfArtist() {
+        final List<Integer> ids = new ArrayList<>();
+        final ArrayList<Album> results = new ArrayList<>();
+
+        for (int i = 0; i < LIMIT_RANDOM_ALBUM; i++) {
+            Random rn = new Random();
+            ids.add(rn.nextInt(30 + 1));
+        }
+
+        Log.d("getBestOfArtist", "ids: " + ids);
+
+        db.collection("TuneDaily/albums/album")
+                .whereIn("id", ids)
+                .get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("getBestOfArtist", "Failure: ", e);
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Log.d("getRandomAlbum", document.getId());
+
+//                            Log.d("getRandomAlbum", "id: " + document.get("id"));
+//                            Log.d("getRandomAlbum", "title: " + document.get("title"));
+//                            Log.d("getRandomAlbum", "tracks: " + document.get("tracks"));
+//                            Log.d("getRandomAlbum", "cover: " + document.get("cover"));
+
+                            int id = (int) (long) document.get("id");
+                            String title = (String) document.get("title");
+                            List<Integer> tracks = (List<Integer>) document.get("tracks");
+                            String cover = (String) document.get("cover");
+
+                            results.add(new Album(id, title, cover, tracks));
+                        }
+
+                        readBestOfArtistListener.readBestOfArtistListener(results);
+                        Log.d("getBestOfArtist", results.toString());
+                    }
+                });
     }
 }

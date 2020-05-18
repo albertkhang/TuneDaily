@@ -30,7 +30,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         this.settingManager = SettingManager.getInstance(context);
     }
 
-    public void updateTopTracks(ArrayList<Album> albums) {
+    public void update(ArrayList<Album> albums) {
         this.albums.clear();
         this.albums.addAll(albums);
         notifyDataSetChanged();

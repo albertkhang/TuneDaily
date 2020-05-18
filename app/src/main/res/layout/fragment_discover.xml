@@ -125,7 +125,7 @@
                     shimmer_duration="@integer/integerShimmerDuration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
                     android:visibility="visible">
 
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
                     android:visibility="gone"
-                    android:paddingLeft="20dp"/>
+                    android:paddingLeft="10dp"/>
 
                 <TextView
                     android:id="@+id/txtBestOfArtist"
@@ -168,7 +168,7 @@
                     shimmer_duration="@integer/integerShimmerDuration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="@dimen/dimenMarginUnderListHeader">
 
                     <LinearLayout
@@ -186,6 +186,14 @@
                     </LinearLayout>
 
                 </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvBestOfArtists"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                    android:visibility="gone"
+                    android:paddingLeft="10dp"/>
             </LinearLayout>
         </ScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
