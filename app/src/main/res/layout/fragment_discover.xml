@@ -51,128 +51,134 @@
 
     </RelativeLayout>
 
-    <ScrollView
-        android:id="@+id/scrollView_frame"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_frame"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <ScrollView
+            android:id="@+id/scrollView_frame"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="30dp"
-            android:paddingBottom="@dimen/dimenPaddingBottomEnd">
+            android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/txtTopChart"
-                style="@style/ListHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:text="@string/top_chart" />
-
-            <!--top_chart-->
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmer_top_chart"
-                shimmer_duration="@integer/integerShimmerDuration"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
-                android:visibility="visible">
+                android:orientation="vertical"
+                android:paddingTop="30dp"
+                android:paddingBottom="@dimen/dimenPaddingBottomEnd">
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/txtTopChart"
+                    style="@style/ListHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:text="@string/top_chart" />
+
+                <!--top_chart-->
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_top_chart"
+                    shimmer_duration="@integer/integerShimmerDuration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                    android:visibility="visible">
 
-                    <include layout="@layout/item_shimmer_top_chart" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                    <include layout="@layout/item_shimmer_top_chart" />
+                        <include layout="@layout/item_shimmer_top_chart" />
 
-                    <include layout="@layout/item_shimmer_top_chart" />
+                        <include layout="@layout/item_shimmer_top_chart" />
 
-                    <include layout="@layout/item_shimmer_top_chart" />
+                        <include layout="@layout/item_shimmer_top_chart" />
 
-                    <include layout="@layout/item_shimmer_top_chart" />
-                </LinearLayout>
+                        <include layout="@layout/item_shimmer_top_chart" />
 
-            </com.facebook.shimmer.ShimmerFrameLayout>
+                        <include layout="@layout/item_shimmer_top_chart" />
+                    </LinearLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTopChart"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
-                android:visibility="gone"/>
+                </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <TextView
-                android:id="@+id/txtPopularAlbum"
-                style="@style/ListHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/popular_albums" />
-
-            <!--popular_albums-->
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmer_popular_albums"
-                shimmer_duration="@integer/integerShimmerDuration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="@dimen/dimenMarginUnderListHeader">
-
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvTopChart"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                    android:visibility="gone"/>
 
-                    <include layout="@layout/item_shimmer_album" />
+                <TextView
+                    android:id="@+id/txtPopularAlbum"
+                    style="@style/ListHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/popular_albums" />
 
-                    <include layout="@layout/item_shimmer_album" />
-
-                    <include layout="@layout/item_shimmer_album" />
-
-                    <include layout="@layout/item_shimmer_album" />
-                </LinearLayout>
-
-            </com.facebook.shimmer.ShimmerFrameLayout>
-
-            <TextView
-                android:id="@+id/txtBestOfArtist"
-                style="@style/ListHeader"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-                android:text="@string/best_of_artists" />
-
-            <!--best_of_artists-->
-            <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmer_best_of_artists"
-                shimmer_duration="@integer/integerShimmerDuration"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="@dimen/dimenMarginUnderListHeader">
-
-                <LinearLayout
+                <!--popular_albums-->
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_popular_albums"
+                    shimmer_duration="@integer/integerShimmerDuration"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="@dimen/dimenMarginUnderListHeader">
 
-                    <include layout="@layout/item_shimmer_album" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
 
-                    <include layout="@layout/item_shimmer_album" />
+                        <include layout="@layout/item_shimmer_album" />
 
-                    <include layout="@layout/item_shimmer_album" />
+                        <include layout="@layout/item_shimmer_album" />
 
-                    <include layout="@layout/item_shimmer_album" />
-                </LinearLayout>
+                        <include layout="@layout/item_shimmer_album" />
 
-            </com.facebook.shimmer.ShimmerFrameLayout>
-        </LinearLayout>
-    </ScrollView>
+                        <include layout="@layout/item_shimmer_album" />
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+                <TextView
+                    android:id="@+id/txtBestOfArtist"
+                    style="@style/ListHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="20dp"
+                    android:text="@string/best_of_artists" />
+
+                <!--best_of_artists-->
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmer_best_of_artists"
+                    shimmer_duration="@integer/integerShimmerDuration"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginTop="@dimen/dimenMarginUnderListHeader">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <include layout="@layout/item_shimmer_album" />
+
+                        <include layout="@layout/item_shimmer_album" />
+
+                        <include layout="@layout/item_shimmer_album" />
+
+                        <include layout="@layout/item_shimmer_album" />
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

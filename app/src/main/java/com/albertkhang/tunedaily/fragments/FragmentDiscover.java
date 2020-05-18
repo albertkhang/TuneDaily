@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
@@ -48,6 +49,8 @@ public class FragmentDiscover extends Fragment {
     private TextView txtBestOfArtist;
     private ImageView imgTopLogo;
 
+    private SwipeRefreshLayout swipe_frame;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,12 +65,6 @@ public class FragmentDiscover extends Fragment {
         addEvent(view);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-//        updateTheme();
-    }
-
     private void addControl(View view) {
         imgSettings = view.findViewById(R.id.imgSettings);
         imgUser = view.findViewById(R.id.imgUser);
@@ -77,6 +74,8 @@ public class FragmentDiscover extends Fragment {
         txtPopularAlbum = view.findViewById(R.id.txtPopularAlbum);
         txtBestOfArtist = view.findViewById(R.id.txtBestOfArtist);
         imgTopLogo = view.findViewById(R.id.imgTopLogo);
+
+        swipe_frame = view.findViewById(R.id.swipe_frame);
 
         shimmer_top_chart = view.findViewById(R.id.shimmer_top_chart);
         rvTopChart = view.findViewById(R.id.rvTopChart);
@@ -90,6 +89,21 @@ public class FragmentDiscover extends Fragment {
         };
         manager.setOrientation(RecyclerView.VERTICAL);
         rvTopChart.setLayoutManager(manager);
+
+        updateTopChart();
+
+        updateTheme();
+
+        swipe_frame.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                updateTopChart();
+            }
+        });
+    }
+
+    private void updateTopChart() {
+        shimmer_top_chart.setVisibility(View.VISIBLE);
 
         final ArrayList ids = new ArrayList();
 
@@ -123,12 +137,12 @@ public class FragmentDiscover extends Fragment {
                 shimmer_top_chart.setVisibility(View.GONE);
                 rvTopChart.setVisibility(View.VISIBLE);
                 topChartAdapter.updateTopTracks(tracks);
+
+                swipe_frame.setRefreshing(false);
             }
         });
 
         firebaseManager.getTopTrack();
-
-        updateTheme();
     }
 
     private void updateTheme() {
@@ -160,7 +174,7 @@ public class FragmentDiscover extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdateThemeEvent(UpdateThemeEvent updateThemeEvent) {
-            updateTheme();
+        updateTheme();
     }
 
     @Override
