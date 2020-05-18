@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         addControl();
-        addMiniPlayer(savedInstanceState);
         addEvent();
     }
 
@@ -69,21 +68,13 @@ public class MainActivity extends AppCompatActivity {
 
         settingManager = SettingManager.getInstance(this);
 
-//        addMiniPlayer();
+        addMiniPlayer();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
-    private void addMiniPlayer(Bundle savedInstanceState) {
-        if (findViewById(R.id.miniPlayer_frame) != null) {
-            if (savedInstanceState != null) {
-                return;
-            }
-        }
-
-        FragmentMiniPlayer fragmentMiniPlayer = new FragmentMiniPlayer();
-        fragmentMiniPlayer.setArguments(getIntent().getExtras());
+    private void addMiniPlayer() {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.miniPlayer_frame, fragmentMiniPlayer).commit();
+                .add(R.id.miniPlayer_frame, new FragmentMiniPlayer()).commit();
     }
 
     private void addEvent() {

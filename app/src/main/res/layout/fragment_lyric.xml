@@ -84,6 +84,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
+                android:id="@+id/txtLyric"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/song_singer_frame"
@@ -99,25 +100,17 @@
     </ScrollView>
 
     <FrameLayout
+        android:id="@+id/top_gradient_frame"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentTop="true"
         android:background="@drawable/lyric_hidden_top_gradient_dark" />
 
     <FrameLayout
+        android:id="@+id/bottom_gradient_frame"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_above="@id/miniPlayer_frame"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/lyric_hidden_bottom_gradient_dark" />
-
-    <FrameLayout
-        android:id="@+id/miniPlayer_frame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <include layout="@layout/fragment_mini_player" />
-    </FrameLayout>
-
 
 </RelativeLayout>

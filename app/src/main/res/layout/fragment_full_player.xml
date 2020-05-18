@@ -76,6 +76,8 @@
         android:maxHeight="4dp"
         android:paddingStart="0dp"
         android:paddingEnd="0dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
 
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

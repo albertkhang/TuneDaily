@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".activities.FullPlayerActivity"
     android:background="@color/colorDark1"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/root_view">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/top_frame"
@@ -40,12 +41,14 @@
             android:layout_marginLeft="8dp">
 
             <TextView
+                android:id="@+id/txtTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="songName"
                 style="@style/TitleText"/>
 
             <TextView
+                android:id="@+id/txtArtist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="singerName"
