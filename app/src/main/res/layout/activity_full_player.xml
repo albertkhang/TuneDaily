@@ -73,7 +73,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
         app:layout_constraintTop_toBottomOf="@id/pageIndicatorView"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/miniPlayer_frame"
         android:layout_marginTop="12dp"/>
 
     <com.rd.PageIndicatorView
@@ -94,4 +94,14 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/top_frame"
         android:layout_marginTop="12dp"/>
+
+    <FrameLayout
+        android:id="@+id/miniPlayer_frame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

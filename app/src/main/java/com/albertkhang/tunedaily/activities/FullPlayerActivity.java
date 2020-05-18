@@ -6,6 +6,7 @@ import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
 import com.albertkhang.tunedaily.fragments.FragmentDetail;
 import com.albertkhang.tunedaily.fragments.FragmentFullPlayer;
 import com.albertkhang.tunedaily.fragments.FragmentLyric;
+import com.albertkhang.tunedaily.fragments.FragmentMiniPlayer;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.rd.PageIndicatorView;
 
@@ -36,6 +38,8 @@ public class FullPlayerActivity extends AppCompatActivity {
     private TextView txtTitle;
     private TextView txtArtist;
 
+    private FrameLayout miniPlayer_frame;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,7 @@ public class FullPlayerActivity extends AppCompatActivity {
         pageIndicatorView = findViewById(R.id.pageIndicatorView);
         root_view = findViewById(R.id.root_view);
         top_frame = findViewById(R.id.top_frame);
+        miniPlayer_frame = findViewById(R.id.miniPlayer_frame);
 
         fragmentFullPlayer = new FragmentFullPlayer();
         fragmentDetail = new FragmentDetail();
@@ -64,12 +69,33 @@ public class FullPlayerActivity extends AppCompatActivity {
 
         vpFullPlayer.setAdapter(adapter);
         vpFullPlayer.setCurrentItem(1);
+        vpFullPlayer.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position != 1) {
+                    miniPlayer_frame.setVisibility(View.VISIBLE);
+                } else {
+                    miniPlayer_frame.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         imgCollapse = findViewById(R.id.imgCollapse);
         imgMore = findViewById(R.id.imgMore);
         txtTitle = findViewById(R.id.txtTitle);
         txtArtist = findViewById(R.id.txtArtist);
 
+        addMiniPlayer();
         updateTheme();
     }
 
@@ -106,5 +132,10 @@ public class FullPlayerActivity extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void addMiniPlayer() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.miniPlayer_frame, new FragmentMiniPlayer()).commit();
     }
 }
