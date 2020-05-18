@@ -20,8 +20,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
+import com.albertkhang.tunedaily.adapters.AlbumAdapter;
 import com.albertkhang.tunedaily.adapters.TopChartAdapter;
-import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
+import com.albertkhang.tunedaily.utils.Album;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.TopTrack;
@@ -34,14 +35,16 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class FragmentDiscover extends Fragment {
     private ImageView imgSettings;
     private ImageView imgUser;
     private ShimmerFrameLayout shimmer_top_chart;
+    private ShimmerFrameLayout shimmer_popular_albums;
     private RecyclerView rvTopChart;
+    private RecyclerView rvPopularAlbums;
     private TopChartAdapter topChartAdapter;
+    private AlbumAdapter albumAdapter;
     private LinearLayout root_view;
     private RelativeLayout top_frame;
     private TextView txtTopChart;
@@ -78,19 +81,36 @@ public class FragmentDiscover extends Fragment {
         swipe_frame = view.findViewById(R.id.swipe_frame);
 
         shimmer_top_chart = view.findViewById(R.id.shimmer_top_chart);
+        shimmer_popular_albums = view.findViewById(R.id.shimmer_popular_albums);
         rvTopChart = view.findViewById(R.id.rvTopChart);
+        rvPopularAlbums = view.findViewById(R.id.rvPopularAlbums);
+
         topChartAdapter = new TopChartAdapter(getContext());
         rvTopChart.setAdapter(topChartAdapter);
-        LinearLayoutManager manager = new LinearLayoutManager(getContext()) {
+
+        LinearLayoutManager managerTopChart = new LinearLayoutManager(getContext()) {
             @Override
             public boolean canScrollVertically() {
                 return false;
             }
         };
-        manager.setOrientation(RecyclerView.VERTICAL);
-        rvTopChart.setLayoutManager(manager);
+        managerTopChart.setOrientation(RecyclerView.VERTICAL);
+        rvTopChart.setLayoutManager(managerTopChart);
+
+        albumAdapter = new AlbumAdapter(getContext());
+        rvPopularAlbums.setAdapter(albumAdapter);
+
+        LinearLayoutManager managerAlbums = new LinearLayoutManager(getContext()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        managerAlbums.setOrientation(RecyclerView.HORIZONTAL);
+        rvPopularAlbums.setLayoutManager(managerAlbums);
 
         updateTopChart();
+        updatePopularAlbum();
 
         updateTheme();
 
@@ -98,17 +118,40 @@ public class FragmentDiscover extends Fragment {
             @Override
             public void onRefresh() {
                 updateTopChart();
+                updatePopularAlbum();
+                swipe_frame.setRefreshing(false);
             }
         });
     }
 
+    private void updatePopularAlbum() {
+        shimmer_popular_albums.setVisibility(View.VISIBLE);
+        rvPopularAlbums.setVisibility(View.GONE);
+
+        FirebaseManager firebaseManager = FirebaseManager.getInstance();
+
+        firebaseManager.setReadRandomAlbumListener(new FirebaseManager.ReadRandomAlbumListener() {
+            @Override
+            public void readRandomAlbumListener(ArrayList<Album> albums) {
+
+                shimmer_popular_albums.setVisibility(View.GONE);
+                rvPopularAlbums.setVisibility(View.VISIBLE);
+
+                albumAdapter.updateTopTracks(albums);
+            }
+        });
+
+        firebaseManager.getRandomAlbum();
+    }
+
     private void updateTopChart() {
         shimmer_top_chart.setVisibility(View.VISIBLE);
+        rvTopChart.setVisibility(View.GONE);
 
         final ArrayList ids = new ArrayList();
 
         final FirebaseManager firebaseManager = FirebaseManager.getInstance();
-        firebaseManager.setUpdateTopTrackIdsListener(new FirebaseManager.UpdateTopTrackIdsListener() {
+        firebaseManager.setReadTopTrackIdsListener(new FirebaseManager.ReadTopTrackIdsListener() {
             @Override
             public void updateTopTrackListener(ArrayList<TopTrack> topChartIdsOrdered) {
                 for (TopTrack track : topChartIdsOrdered) {
@@ -136,9 +179,8 @@ public class FragmentDiscover extends Fragment {
 
                 shimmer_top_chart.setVisibility(View.GONE);
                 rvTopChart.setVisibility(View.VISIBLE);
-                topChartAdapter.updateTopTracks(tracks);
 
-                swipe_frame.setRefreshing(false);
+                topChartAdapter.updateTopTracks(tracks);
             }
         });
 

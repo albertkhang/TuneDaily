@@ -18,10 +18,12 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class FirebaseManager {
     private static FirebaseManager instance;
     private static final int LIMIT_TOP_CHART = 5;
+    private static final int LIMIT_RANDOM_ALBUM = 5;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public static FirebaseManager getInstance() {
@@ -35,14 +37,14 @@ public class FirebaseManager {
         return instance;
     }
 
-    public interface UpdateTopTrackIdsListener {
+    public interface ReadTopTrackIdsListener {
         void updateTopTrackListener(ArrayList<TopTrack> topChartIdsOrdered);
     }
 
-    private UpdateTopTrackIdsListener updateTopTrackIdsListener;
+    private ReadTopTrackIdsListener readTopTrackIdsListener;
 
-    public void setUpdateTopTrackIdsListener(UpdateTopTrackIdsListener updateTopTrackIdsListener) {
-        this.updateTopTrackIdsListener = updateTopTrackIdsListener;
+    public void setReadTopTrackIdsListener(ReadTopTrackIdsListener readTopTrackIdsListener) {
+        this.readTopTrackIdsListener = readTopTrackIdsListener;
     }
 
     public interface ReadTrackFromIdsListener {
@@ -53,6 +55,16 @@ public class FirebaseManager {
 
     public void setReadTrackFromIdsListener(ReadTrackFromIdsListener readTrackFromIdsListener) {
         this.readTrackFromIdsListener = readTrackFromIdsListener;
+    }
+
+    public interface ReadRandomAlbumListener {
+        void readRandomAlbumListener(ArrayList<Album> albums);
+    }
+
+    private ReadRandomAlbumListener readRandomAlbumListener;
+
+    public void setReadRandomAlbumListener(ReadRandomAlbumListener readRandomAlbumListener) {
+        this.readRandomAlbumListener = readRandomAlbumListener;
     }
 
     public void getTopTrack() {
@@ -82,7 +94,7 @@ public class FirebaseManager {
                         }
 
                         Collections.sort(topChartsOrdered);
-                        updateTopTrackIdsListener.updateTopTrackListener(topChartsOrdered);
+                        readTopTrackIdsListener.updateTopTrackListener(topChartsOrdered);
                     }
 
                     @Override
@@ -92,7 +104,7 @@ public class FirebaseManager {
                 });
     }
 
-    public ArrayList<Track> getTrackFromIds(List<Integer> ids) {
+    public void getTrackFromIds(List<Integer> ids) {
         final ArrayList<Track> topTracks = new ArrayList();
 
         db.collection("TuneDaily/tracks/track")
@@ -132,7 +144,7 @@ public class FirebaseManager {
                                     duration,
                                     track,
                                     cover,
-                                    type, null
+                                    type
                             ));
                         }
 
@@ -144,6 +156,51 @@ public class FirebaseManager {
                     }
                 });
 
-        return topTracks;
+    }
+
+    public void getRandomAlbum() {
+        final List<Integer> ids = new ArrayList<>();
+        final ArrayList<Album> results = new ArrayList<>();
+
+        for (int i = 0; i < LIMIT_RANDOM_ALBUM; i++) {
+            Random rn = new Random();
+            ids.add(rn.nextInt(30 + 1));
+        }
+
+        Log.d("getRandomAlbum", "ids: " + ids);
+
+        db.collection("TuneDaily/albums/album")
+                .whereIn("id", ids)
+                .get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("getRandomAlbum", "Failure: ", e);
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Log.d("getRandomAlbum", document.getId());
+
+//                            Log.d("getRandomAlbum", "id: " + document.get("id"));
+//                            Log.d("getRandomAlbum", "title: " + document.get("title"));
+//                            Log.d("getRandomAlbum", "tracks: " + document.get("tracks"));
+//                            Log.d("getRandomAlbum", "cover: " + document.get("cover"));
+
+                            int id = (int) (long) document.get("id");
+                            String title = (String) document.get("title");
+                            List<Integer> tracks = (List<Integer>) document.get("tracks");
+                            String cover = (String) document.get("cover");
+
+                            results.add(new Album(id, title, cover, tracks));
+                        }
+
+                        readRandomAlbumListener.readRandomAlbumListener(results);
+                        Log.d("getRandomAlbum", results.toString());
+                    }
+                });
+
     }
 }

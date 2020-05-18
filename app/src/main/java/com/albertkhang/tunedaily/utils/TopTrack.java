@@ -22,10 +22,12 @@ public class TopTrack implements Comparable<TopTrack> {
         return value;
     }
 
-    @NonNull
     @Override
     public String toString() {
-        return "TopTrack(id: " + id + ", value: " + value + ")";
+        return "TopTrack{" +
+                "id=" + id +
+                ", value=" + value +
+                '}';
     }
 
     @Override

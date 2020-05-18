@@ -14,9 +14,8 @@ public class Track {
     private String track;
     private String cover;
     private String type;
-    private List<String> search_key;
 
-    public Track(int id, String title, String album, String artist, String genre, int duration, String track, String cover, String type, List<String> search_key) {
+    public Track(int id, String title, String album, String artist, String genre, int duration, String track, String cover, String type) {
         this.id = id;
         this.title = title;
         this.album = album;
@@ -26,7 +25,6 @@ public class Track {
         this.track = track;
         this.cover = cover;
         this.type = type;
-        this.search_key = search_key;
     }
 
     public int getId() {
@@ -65,23 +63,18 @@ public class Track {
         return type;
     }
 
-    public List<String> getSearch_key() {
-        return search_key;
-    }
-
-    @NonNull
     @Override
     public String toString() {
-        return "Track["
-                + id + ", "
-                + title + ", "
-                + album + ", "
-                + artist + ", "
-                + genre + ", "
-                + duration + ", "
-                + track + ", "
-                + cover + ", "
-                + type + ", "
-                + search_key + "]";
+        return "Track{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", album='" + album + '\'' +
+                ", artist='" + artist + '\'' +
+                ", genre='" + genre + '\'' +
+                ", duration=" + duration +
+                ", track='" + track + '\'' +
+                ", cover='" + cover + '\'' +
+                ", type='" + type + '\'' +
+                '}';
     }
 }

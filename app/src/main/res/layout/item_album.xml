@@ -16,21 +16,22 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <TextView
-        android:id="@+id/txtAlbumName"
+        android:id="@+id/txtAlbum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Combo Hits"
-        style="@style/TitleText"
+        style="@style/AlbumTitleText"
         app:layout_constraintTop_toBottomOf="@id/imgCover"
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
     <TextView
+        android:id="@+id/txtArtist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Various Artists"
-        style="@style/DescriptionText"
-        app:layout_constraintTop_toBottomOf="@id/txtAlbumName"
+        style="@style/AlbumDescriptionText"
+        app:layout_constraintTop_toBottomOf="@id/txtAlbum"
         app:layout_constraintLeft_toLeftOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

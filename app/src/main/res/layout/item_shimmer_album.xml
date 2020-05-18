@@ -16,7 +16,7 @@
         app:layout_constraintRight_toRightOf="parent"/>
 
     <com.albertkhang.tunedaily.views.ShimmerRoundImageView
-        android:id="@+id/txtAlbumName"
+        android:id="@+id/txtAlbum"
         android:layout_width="80dp"
         android:layout_height="16dp"
         android:src="@color/colorLight4"
@@ -30,7 +30,7 @@
         android:layout_height="14dp"
         android:src="@color/colorLight5"
 
-        app:layout_constraintTop_toBottomOf="@id/txtAlbumName"
+        app:layout_constraintTop_toBottomOf="@id/txtAlbum"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="6dp"/>
 
