@@ -111,7 +111,7 @@
                 android:layout_height="wrap_content"
                 style="@style/ListHeader"
                 android:text="@string/songs"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="@dimen/dimenPaddingBetweenFrame"
                 android:layout_marginLeft="20dp"/>
 
             <com.facebook.shimmer.ShimmerFrameLayout

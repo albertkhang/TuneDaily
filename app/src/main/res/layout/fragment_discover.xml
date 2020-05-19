@@ -116,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/dimenPaddingBetweenFrame"
                     android:text="@string/popular_albums" />
 
                 <!--popular_albums-->
@@ -159,7 +159,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="@dimen/dimenPaddingBetweenFrame"
                     android:text="@string/best_of_artists" />
 
                 <!--best_of_artists-->
