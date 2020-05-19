@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
 
 import java.util.Objects;
 
@@ -64,7 +65,7 @@ public class InSearchActivity extends AppCompatActivity {
         scroll_view.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                hideSoftKeyboard();
+                SoftKeyboardManager.hideSoftKeyboard(InSearchActivity.this, txtSearchText);
                 txtSearchText.clearFocus();
                 scroll_view.requestFocus();
                 return false;
@@ -79,12 +80,6 @@ public class InSearchActivity extends AppCompatActivity {
         });
     }
 
-    private void hideSoftKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        if (imm != null && this.getCurrentFocus() != null) {
-            imm.hideSoftInputFromWindow(this.getCurrentFocus().getWindowToken(), 0);
-        }
-    }
 
     private void updateTheme() {
         if (settingManager.isDarkTheme()) {

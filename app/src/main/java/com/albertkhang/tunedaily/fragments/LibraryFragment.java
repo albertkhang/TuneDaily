@@ -56,7 +56,6 @@ public class LibraryFragment extends Fragment {
     private TextView txtPlaylist;
     private ConstraintLayout create_new_playlist_frame;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -157,7 +156,7 @@ public class LibraryFragment extends Fragment {
                             txtPlaylistName.postDelayed(new Runnable() {
                                 @Override
                                 public void run() {
-                                    showSoftKeyboard(getContext(), txtPlaylistName);
+                                    SoftKeyboardManager.showSoftKeyboard(getContext(), txtPlaylistName);
                                 }
                             }, 100);
                         }
@@ -167,14 +166,6 @@ public class LibraryFragment extends Fragment {
         });
 
         dialog.show();
-    }
-
-    public void showSoftKeyboard(Context context, View view) {
-        if (view.requestFocus()) {
-            InputMethodManager imm = (InputMethodManager)
-                    context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT);
-        }
     }
 
     @Override
