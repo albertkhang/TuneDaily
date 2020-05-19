@@ -56,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollView_frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -195,7 +195,7 @@
                     android:visibility="gone"
                     android:paddingLeft="10dp"/>
             </LinearLayout>
-        </ScrollView>
+        </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

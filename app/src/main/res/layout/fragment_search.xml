@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +8,7 @@
     android:background="@color/colorDark1"
     android:id="@+id/root_view">
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -78,13 +78,13 @@
                 android:layout_marginTop="40dp"/>
 
             <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmer_popular_albums"
+                android:id="@+id/shimmer_random_artists"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
                 android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
                 shimmer_duration="@integer/integerShimmerDuration"
-                android:layout_marginLeft="20dp">
+                android:layout_marginLeft="10dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -97,6 +97,14 @@
                     <include layout="@layout/item_shimmer_album"/>
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRandomArtists"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                android:layout_marginLeft="10dp"
+                android:visibility="gone"/>
 
             <TextView
                 android:id="@+id/txtRandomTracks"
@@ -128,8 +136,16 @@
                     <include layout="@layout/item_shimmer_list"/>
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRandomSongs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                android:layout_marginLeft="20dp"
+                android:visibility="gone"/>
         </LinearLayout>
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

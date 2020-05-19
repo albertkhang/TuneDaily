@@ -58,7 +58,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         holder.txtAlbum.setText(albums.get(position).getTitle());
+        handleTitleColor(holder.txtAlbum);
+
         holder.txtArtist.setText("Various Artists");
+        handleArtistColor(holder.txtArtist);
 
         handleCoverPlaceholderColor(holder.imgCover, position);
 
@@ -93,7 +96,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
         return albums.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private RoundImageView imgCover;
         private TextView txtAlbum;
         private TextView txtArtist;

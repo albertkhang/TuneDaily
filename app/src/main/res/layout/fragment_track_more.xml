@@ -82,11 +82,40 @@
             android:id="@+id/txtLibrary"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add to library"
+            android:text="@string/add_to_library"
             android:textColor="@color/colorLight1"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/imgLibrary"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="7dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="20dp">
+
+        <ImageView
+            android:id="@+id/imgPlaylist"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_add_playlist"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txtPlaylist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_to_playlist"
+            android:textColor="@color/colorLight1"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@id/imgPlaylist"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -111,7 +140,7 @@
             android:id="@+id/txtDownload"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Download"
+            android:text="@string/download"
             android:textColor="@color/colorLight1"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -141,7 +170,7 @@
             android:id="@+id/txtBroadcast"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Play as Broadcast"
+            android:text="@string/play_as_broadcast"
             android:textColor="@color/colorLight1"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"

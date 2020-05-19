@@ -1,7 +1,6 @@
 package com.albertkhang.tunedaily.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,12 +20,12 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
-public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHolder> {
+public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> {
     private ArrayList<Track> tracks = new ArrayList<>();
     private Context context;
     private SettingManager settingManager;
 
-    public TopChartAdapter(Context context) {
+    public TrackAdapter(Context context) {
         this.context = context;
         this.settingManager = SettingManager.getInstance(context);
     }
@@ -38,7 +37,7 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
     }
 
     public interface OnMoreListener {
-        void onMoreListener(View view, int position);
+        void onMorekListener(View view, int position);
     }
 
     private OnMoreListener onMoreListener;
@@ -51,15 +50,13 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_top_chart, parent, false);
+        View view = inflater.inflate(R.layout.item_track, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
-        handlePositionTextColor(holder.txtPosition, position + 1);
-
         holder.txtTitle.setText(tracks.get(position).getTitle());
         handleTitleColor(holder.txtTitle);
 
@@ -70,11 +67,12 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
         holder.imgMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onMoreListener.onMoreListener(holder.itemView, position);
+                onMoreListener.onMorekListener(holder.itemView, position);
             }
         });
 
         handleMoreIconColor(holder.imgMore);
+        handleFavouriteIconColor(holder.imgFavourite);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,6 +83,14 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
     }
 
     private void handleMoreIconColor(ImageView imageView) {
+        if (settingManager.isDarkTheme()) {
+            imageView.setColorFilter(context.getResources().getColor(R.color.colorLight5));
+        } else {
+            imageView.setColorFilter(context.getResources().getColor(R.color.colorDark5));
+        }
+    }
+
+    private void handleFavouriteIconColor(ImageView imageView) {
         if (settingManager.isDarkTheme()) {
             imageView.setColorFilter(context.getResources().getColor(R.color.colorLight5));
         } else {
@@ -116,52 +122,25 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
         }
     }
 
-    private void handlePositionTextColor(TextView txtPosition, int position) {
-        txtPosition.setText("0" + position);
-
-        if (settingManager.isDarkTheme()) {
-            txtPosition.setTextColor(context.getResources().getColor(R.color.colorLight5));
-        } else {
-            txtPosition.setTextColor(context.getResources().getColor(R.color.colorDark5));
-        }
-
-        switch (position) {
-            case 1:
-                txtPosition.setTextColor(context.getResources().getColor(R.color.colorSt1));
-                txtPosition.setTypeface(Typeface.DEFAULT_BOLD);
-                break;
-
-            case 2:
-                txtPosition.setTextColor(context.getResources().getColor(R.color.colorSt2));
-                txtPosition.setTypeface(Typeface.DEFAULT_BOLD);
-                break;
-
-            case 3:
-                txtPosition.setTextColor(context.getResources().getColor(R.color.colorSt3));
-                txtPosition.setTypeface(Typeface.DEFAULT_BOLD);
-                break;
-        }
-    }
-
     @Override
     public int getItemCount() {
         return tracks.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtPosition;
         private RoundImageView imgCover;
         private TextView txtTitle;
         private TextView txtArtist;
         private ImageView imgMore;
+        private ImageView imgFavourite;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            txtPosition = itemView.findViewById(R.id.txtPosition);
             imgCover = itemView.findViewById(R.id.imgCover);
             txtTitle = itemView.findViewById(R.id.txtTitle);
             txtArtist = itemView.findViewById(R.id.txtArtist);
+            imgFavourite = itemView.findViewById(R.id.imgFavourite);
             imgMore = itemView.findViewById(R.id.imgMore);
         }
     }

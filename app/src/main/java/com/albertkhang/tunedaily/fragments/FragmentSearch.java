@@ -6,10 +6,10 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,22 +19,36 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.InSearchActivity;
+import com.albertkhang.tunedaily.adapters.AlbumAdapter;
+import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.utils.Album;
+import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.Track;
 import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
+
 public class FragmentSearch extends Fragment {
     private FrameLayout search_frame;
-    private ConstraintLayout root_view;
+    private FrameLayout root_view;
     private SettingManager settingManager;
     private TextView txtSearchTitle;
     private ImageView imgSearch;
     private TextView txtSearchText;
     private TextView txtRandomArtist;
     private TextView txtRandomTracks;
+    private ShimmerFrameLayout shimmer_random_artists;
+    private ShimmerFrameLayout shimmer_random_songs;
+    private RecyclerView rvRandomArtists;
+    private RecyclerView rvRandomSongs;
+    private AlbumAdapter randomArtistsAdapter;
+    private TrackAdapter randomSongsAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,10 +84,68 @@ public class FragmentSearch extends Fragment {
         txtSearchText = view.findViewById(R.id.txtSearchText);
         txtRandomArtist = view.findViewById(R.id.txtRandomArtist);
         txtRandomTracks = view.findViewById(R.id.txtRandomTracks);
+        shimmer_random_artists = view.findViewById(R.id.shimmer_random_artists);
+        shimmer_random_songs = view.findViewById(R.id.shimmer_random_songs);
+        rvRandomArtists = view.findViewById(R.id.rvRandomArtists);
+        rvRandomSongs = view.findViewById(R.id.rvRandomSongs);
 
         settingManager = SettingManager.getInstance(getContext());
 
+        //Random Artists
+        randomArtistsAdapter = new AlbumAdapter(getContext());
+        rvRandomArtists.setAdapter(randomArtistsAdapter);
+
+        LinearLayoutManager managerArtists = new LinearLayoutManager(getContext()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        managerArtists.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvRandomArtists.setLayoutManager(managerArtists);
+
+        //Random Songs
+        randomSongsAdapter = new TrackAdapter(getContext());
+        rvRandomSongs.setAdapter(randomSongsAdapter);
+
+        LinearLayoutManager managerSongs = new LinearLayoutManager(getContext());
+        managerSongs.setOrientation(LinearLayoutManager.VERTICAL);
+        rvRandomSongs.setLayoutManager(managerSongs);
+        rvRandomSongs.setNestedScrollingEnabled(false);
+
+        updateList();
         updateTheme();
+    }
+
+    private void updateList() {
+        updateRandomArtists();
+        updateRandomSongs();
+    }
+
+    private void updateRandomSongs() {
+        shimmer_random_songs.setVisibility(View.VISIBLE);
+        rvRandomSongs.setVisibility(View.GONE);
+
+        FirebaseManager firebaseManager = FirebaseManager.getInstance();
+
+        firebaseManager.setReadRandomSongsListener(new FirebaseManager.ReadRandomSongsListener() {
+            @Override
+            public void readRandomSongsListener(final ArrayList<Track> tracks) {
+                shimmer_random_songs.setVisibility(View.GONE);
+                rvRandomSongs.setVisibility(View.VISIBLE);
+
+                randomSongsAdapter.setOnMoreListener(new TrackAdapter.OnMoreListener() {
+                    @Override
+                    public void onMorekListener(View view, int position) {
+                        showMoreItem(tracks.get(position));
+                    }
+                });
+
+                randomSongsAdapter.update(tracks);
+            }
+        });
+
+        firebaseManager.getRandomSongs();
     }
 
     private void addEvent() {
@@ -84,6 +156,25 @@ public class FragmentSearch extends Fragment {
                 startActivity(intent);
             }
         });
+    }
+
+    private void updateRandomArtists() {
+        shimmer_random_artists.setVisibility(View.VISIBLE);
+        rvRandomArtists.setVisibility(View.GONE);
+
+        FirebaseManager firebaseManager = FirebaseManager.getInstance();
+
+        firebaseManager.setReadRandomArtistsListener(new FirebaseManager.ReadRandomArtistsListener() {
+            @Override
+            public void readRandomArtistsListener(ArrayList<Album> albums) {
+                shimmer_random_artists.setVisibility(View.GONE);
+                rvRandomArtists.setVisibility(View.VISIBLE);
+
+                randomArtistsAdapter.update(albums);
+            }
+        });
+
+        firebaseManager.getRandomArtist();
     }
 
     private void updateTheme() {
@@ -108,6 +199,9 @@ public class FragmentSearch extends Fragment {
             txtRandomArtist.setTextColor(getResources().getColor(R.color.colorDark1));
             txtRandomTracks.setTextColor(getResources().getColor(R.color.colorDark1));
         }
+
+        randomArtistsAdapter.notifyDataSetChanged();
+        randomSongsAdapter.notifyDataSetChanged();
     }
 
     private void setSearchBackground(int color) {
@@ -131,5 +225,10 @@ public class FragmentSearch extends Fragment {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    private void showMoreItem(Track track) {
+        FragmentTrackMore fragmentTrackMore = new FragmentTrackMore(track);
+        fragmentTrackMore.show(requireActivity().getSupportFragmentManager(), "FragmentTrackMore");
     }
 }

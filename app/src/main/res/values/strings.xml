@@ -99,6 +99,9 @@ Cần gì hơn) x 4\n</string>
     <string name="artists">ARTISTS</string>
     <string name="songs">SONGS</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!--TrackMore-->
+    <string name="add_to_library">Add to library</string>
+    <string name="add_to_playlist">Add to playlist</string>
+    <string name="download">Download</string>
+    <string name="play_as_broadcast">Play as Broadcast</string>
 </resources>

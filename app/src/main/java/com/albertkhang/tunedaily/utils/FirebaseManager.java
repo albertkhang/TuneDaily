@@ -24,6 +24,7 @@ public class FirebaseManager {
     private static FirebaseManager instance;
     private static final int LIMIT_TOP_CHART = 5;
     private static final int LIMIT_RANDOM_ALBUM = 5;
+    private static final int LIMIT_RANDOM_SONGS = 5;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public static FirebaseManager getInstance() {
@@ -85,6 +86,26 @@ public class FirebaseManager {
 
     public void setReadBestOfArtistListener(ReadBestOfArtistListener readBestOfArtistListener) {
         this.readBestOfArtistListener = readBestOfArtistListener;
+    }
+
+    public interface ReadRandomArtistsListener {
+        void readRandomArtistsListener(ArrayList<Album> albums);
+    }
+
+    private ReadRandomArtistsListener readRandomArtistsListener;
+
+    public void setReadRandomArtistsListener(ReadRandomArtistsListener readRandomArtistsListener) {
+        this.readRandomArtistsListener = readRandomArtistsListener;
+    }
+
+    public interface ReadRandomSongsListener {
+        void readRandomSongsListener(ArrayList<Track> tracks);
+    }
+
+    private ReadRandomSongsListener readRandomSongsListener;
+
+    public void setReadRandomSongsListener(ReadRandomSongsListener readRandomSongsListener) {
+        this.readRandomSongsListener = readRandomSongsListener;
     }
 
     public void getTopTrack() {
@@ -310,6 +331,108 @@ public class FirebaseManager {
 
                         readBestOfArtistListener.readBestOfArtistListener(results);
                         Log.d("getBestOfArtist", results.toString());
+                    }
+                });
+    }
+
+    public void getRandomArtist() {
+        final List<Integer> ids = new ArrayList<>();
+        final ArrayList<Album> results = new ArrayList<>();
+
+        for (int i = 0; i < LIMIT_RANDOM_ALBUM; i++) {
+            Random rn = new Random();
+            ids.add(rn.nextInt(30 + 1));
+        }
+
+        Log.d("getRandomArtist", "ids: " + ids);
+
+        db.collection("TuneDaily/albums/album")
+                .whereIn("id", ids)
+                .get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("getRandomArtist", "Failure: ", e);
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Log.d("getRandomArtist", document.getId());
+
+//                            Log.d("getRandomArtist", "id: " + document.get("id"));
+//                            Log.d("getRandomArtist", "title: " + document.get("title"));
+//                            Log.d("getRandomArtist", "tracks: " + document.get("tracks"));
+//                            Log.d("getRandomArtist", "cover: " + document.get("cover"));
+
+                            int id = (int) (long) document.get("id");
+                            String title = (String) document.get("title");
+                            List<Integer> tracks = (List<Integer>) document.get("tracks");
+                            String cover = (String) document.get("cover");
+
+                            results.add(new Album(id, title, cover, tracks));
+                        }
+
+                        readRandomArtistsListener.readRandomArtistsListener(results);
+                        Log.d("getRandomArtist", results.toString());
+                    }
+                });
+    }
+
+    public void getRandomSongs() {
+        final List<Integer> ids = new ArrayList<>();
+        final ArrayList<Track> results = new ArrayList<>();
+
+        for (int i = 0; i < LIMIT_RANDOM_SONGS; i++) {
+            Random rn = new Random();
+            ids.add(rn.nextInt(100 + 1));
+        }
+
+        Log.d("getRandomSongs", "ids: " + ids);
+
+        db.collection("TuneDaily/tracks/track")
+                .whereIn("id", ids)
+                .get()
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("getRandomSongs", "Failure: ", e);
+                    }
+                })
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Log.d("getRandomSongs", document.getId());
+//                            Log.d("getRandomSongs", "data: " + document.getData());
+
+                            int id = (int) (long) document.get("id");
+                            String title = (String) document.get("title");
+                            String album = (String) document.get("album");
+                            String artist = (String) document.get("artist");
+                            String genre = (String) document.get("genre");
+                            int duration = (int) (long) document.get("duration");
+                            String track = (String) document.get("track");
+                            String cover = (String) document.get("cover");
+                            String type = (String) document.get("type");
+
+                            duration /= 1000;
+
+                            results.add(new Track(
+                                    id,
+                                    title,
+                                    album,
+                                    artist,
+                                    genre,
+                                    duration,
+                                    track,
+                                    cover,
+                                    type
+                            ));
+                        }
+
+                        readRandomSongsListener.readRandomSongsListener(results);
                     }
                 });
     }

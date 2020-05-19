@@ -27,9 +27,11 @@ public class FragmentTrackMore extends BottomSheetDialogFragment {
     private TextView txtArtist;
     private LinearLayout root_view;
     private ImageView imgLibrary;
+    private ImageView imgPlaylist;
     private ImageView imgDownload;
     private ImageView imgBroadcast;
     private TextView txtLibrary;
+    private TextView txtPlaylist;
     private TextView txtDownload;
     private TextView txtBroadcast;
 
@@ -60,9 +62,11 @@ public class FragmentTrackMore extends BottomSheetDialogFragment {
         txtArtist = view.findViewById(R.id.txtArtist);
         root_view = view.findViewById(R.id.root_view);
         imgLibrary = view.findViewById(R.id.imgLibrary);
+        imgPlaylist = view.findViewById(R.id.imgPlaylist);
         imgDownload = view.findViewById(R.id.imgDownload);
         imgBroadcast = view.findViewById(R.id.imgBroadcast);
         txtLibrary = view.findViewById(R.id.txtLibrary);
+        txtPlaylist = view.findViewById(R.id.txtPlaylist);
         txtDownload = view.findViewById(R.id.txtDownload);
         txtBroadcast = view.findViewById(R.id.txtBroadcast);
 
@@ -84,6 +88,9 @@ public class FragmentTrackMore extends BottomSheetDialogFragment {
             imgLibrary.setColorFilter(getResources().getColor(R.color.colorLight5));
             txtLibrary.setTextColor(getResources().getColor(R.color.colorLight1));
 
+            imgPlaylist.setColorFilter(getResources().getColor(R.color.colorLight5));
+            txtPlaylist.setTextColor(getResources().getColor(R.color.colorLight1));
+
             imgDownload.setColorFilter(getResources().getColor(R.color.colorLight5));
             txtDownload.setTextColor(getResources().getColor(R.color.colorLight1));
 
@@ -97,6 +104,9 @@ public class FragmentTrackMore extends BottomSheetDialogFragment {
 
             imgLibrary.setColorFilter(getResources().getColor(R.color.colorDark5));
             txtLibrary.setTextColor(getResources().getColor(R.color.colorDark1));
+
+            imgPlaylist.setColorFilter(getResources().getColor(R.color.colorDark5));
+            txtPlaylist.setTextColor(getResources().getColor(R.color.colorDark1));
 
             imgDownload.setColorFilter(getResources().getColor(R.color.colorDark5));
             txtDownload.setTextColor(getResources().getColor(R.color.colorDark1));

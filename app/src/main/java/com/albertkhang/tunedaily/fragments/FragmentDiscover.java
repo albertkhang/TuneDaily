@@ -119,7 +119,6 @@ public class FragmentDiscover extends Fragment {
         managerArtist.setOrientation(RecyclerView.HORIZONTAL);
         rvBestOfArtists.setLayoutManager(managerArtist);
 
-        updateList();
         updateTheme();
 
         swipe_frame.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -129,6 +128,8 @@ public class FragmentDiscover extends Fragment {
                 swipe_frame.setRefreshing(false);
             }
         });
+
+        updateList();
     }
 
     private void updateList() {
@@ -204,9 +205,9 @@ public class FragmentDiscover extends Fragment {
                     Log.d("firebaseManager", track.toString());
                 }
 
-                topChartAdapter.setOnItemClickListener(new TopChartAdapter.OnItemClickListener() {
+                topChartAdapter.setOnMoreListener(new TopChartAdapter.OnMoreListener() {
                     @Override
-                    public void onItemClickListener(View view, int position) {
+                    public void onMoreListener(View view, int position) {
                         showMoreItem(tracks.get(position));
                     }
                 });
@@ -246,6 +247,8 @@ public class FragmentDiscover extends Fragment {
             txtPopularAlbum.setTextColor(getResources().getColor(R.color.colorDark1));
             txtBestOfArtist.setTextColor(getResources().getColor(R.color.colorDark1));
         }
+
+        topChartAdapter.notifyDataSetChanged();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -268,7 +271,6 @@ public class FragmentDiscover extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        topChartAdapter.notifyDataSetChanged();
         updateTheme();
     }
 

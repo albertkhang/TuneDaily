@@ -2,6 +2,7 @@ package com.albertkhang.tunedaily.fragments;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,9 +20,22 @@ import android.widget.TextView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
+import com.bumptech.glide.Glide;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.IOException;
 
 public class FragmentMiniPlayer extends Fragment {
     private static final String LOG_TAG = "MiniPlayerFragment";
+
+    public interface ACTION {
+        String PLAY = "com.albertkhang.action.play";
+    }
 
     private ConstraintLayout miniPlayer_background;
     private SettingManager settingManager;
@@ -42,6 +56,7 @@ public class FragmentMiniPlayer extends Fragment {
     private TextView txtTitle;
     private TextView txtArtist;
 
+    private MediaPlayer mediaPlayer;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -83,14 +98,8 @@ public class FragmentMiniPlayer extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d(LOG_TAG, "imgPlayPause onClick");
-
-                if (isPlaying) {
-                    isPlaying = false;
-                    imgPlayPause.setImageResource(R.drawable.ic_play);
-                } else {
-                    isPlaying = true;
-                    imgPlayPause.setImageResource(R.drawable.ic_pause);
-                }
+                updatePlayerStatus();
+                updatePlayback();
             }
         });
 
@@ -139,5 +148,74 @@ public class FragmentMiniPlayer extends Fragment {
         Drawable drawable = getResources().getDrawable(R.drawable.round_corner_top_background);
         drawable.setTint(getResources().getColor(color));
         miniPlayer_background.setBackground(drawable);
+    }
+
+    private void play(Track track) {
+        if (mediaPlayer == null) {
+            mediaPlayer = new MediaPlayer();
+        }
+
+        if (mediaPlayer.isPlaying()) {
+            pause();
+        }
+
+        try {
+            mediaPlayer.setDataSource(track.getTrack());
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (Exception e) {
+            Log.d("play", "e: " + e);
+        }
+    }
+
+    private void setCover(String cover) {
+        Glide.with(this).load(cover).placeholder(R.color.colorLight5).into(imgCover);
+    }
+
+    private void pause() {
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                mediaPlayer.pause();
+            }
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayAction(Track track) {
+        play(track);
+        setCover(track.getCover());
+        txtTitle.setText(track.getTitle());
+        txtArtist.setText(track.getArtist());
+        updatePlayback();
+    }
+
+    private void updatePlayerStatus() {
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
+        } else {
+            mediaPlayer.start();
+        }
+    }
+
+    private void updatePlayback() {
+        if (mediaPlayer != null) {
+            if (mediaPlayer.isPlaying()) {
+                imgPlayPause.setImageResource(R.drawable.ic_pause);
+            } else {
+                imgPlayPause.setImageResource(R.drawable.ic_play);
+            }
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }
