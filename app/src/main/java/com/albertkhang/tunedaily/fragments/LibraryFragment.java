@@ -111,16 +111,17 @@ public class LibraryFragment extends Fragment {
         final Dialog dialog = new Dialog(getContext(), R.style.RoundCornerDialogFrament);
         dialog.setContentView(R.layout.fragment_create_new_playlist);
 
+        final EditText txtPlaylistName = dialog.findViewById(R.id.txtPlaylistName);
+        TextView txtTitle = dialog.findViewById(R.id.txtTitle);
+
         Button cancel = dialog.findViewById(R.id.btnCancel);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SoftKeyboardManager.hideSoftKeyboard(getActivity(), txtPlaylistName);
                 dialog.cancel();
             }
         });
-
-        final EditText txtPlaylistName = dialog.findViewById(R.id.txtPlaylistName);
-        TextView txtTitle = dialog.findViewById(R.id.txtTitle);
 
         Button create = dialog.findViewById(R.id.btnCreate);
         create.setOnClickListener(new View.OnClickListener() {
@@ -137,6 +138,7 @@ public class LibraryFragment extends Fragment {
 
                     case PlaylistManager.NAME_VALID:
                         Toast.makeText(getContext(), "Created " + txtPlaylistName.getText(), Toast.LENGTH_LONG).show();
+                        SoftKeyboardManager.hideSoftKeyboard(getActivity(), txtPlaylistName);
                         dialog.dismiss();
                         break;
                 }
@@ -147,24 +149,11 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onShow(DialogInterface dialogInterface) {
                 Log.d("dialog", "onShow");
-
-                if (txtPlaylistName.requestFocus()) {
-                    Log.d("dialog", "requestFocus");
-
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            txtPlaylistName.postDelayed(new Runnable() {
-                                @Override
-                                public void run() {
-                                    SoftKeyboardManager.showSoftKeyboard(getContext(), txtPlaylistName);
-                                }
-                            }, 100);
-                        }
-                    }).start();
-                }
+                SoftKeyboardManager.showSoftKeyboard(getActivity(), txtPlaylistName);
             }
         });
+
+        dialog.setCanceledOnTouchOutside(false);
 
         if (settingManager.isDarkTheme()) {
             dialog.findViewById(R.id.root_view).setBackgroundResource(R.drawable.round_dark_dialog_background);

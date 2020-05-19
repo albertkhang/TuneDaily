@@ -6,18 +6,17 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 public class SoftKeyboardManager {
-    public static void showSoftKeyboard(Context context, View view) {
+    public static void showSoftKeyboard(Activity activity, View view) {
         if (view.requestFocus()) {
-            InputMethodManager imm = (InputMethodManager)
-                    context.getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
+            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         }
     }
 
-    public static void hideSoftKeyboard(Context context, View view) {
-        InputMethodManager keyboard = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (keyboard != null) {
-            keyboard.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
+    public static void hideSoftKeyboard(Activity activity, View view) {
+        view.clearFocus();
+
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
