@@ -55,6 +55,7 @@ public class MiniPlayerFragment extends Fragment {
     private ImageView imgSkipNext;
     private TextView txtTitle;
     private TextView txtArtist;
+    private ConstraintLayout root_view;
 
     private MediaPlayer mediaPlayer;
 
@@ -73,6 +74,7 @@ public class MiniPlayerFragment extends Fragment {
         imgSkipNext = view.findViewById(R.id.imgSkipNext);
         txtTitle = view.findViewById(R.id.txtTitle);
         txtArtist = view.findViewById(R.id.txtArtist);
+        root_view = view.findViewById(R.id.root_view);
 
         miniPlayer_background = view.findViewById(R.id.miniPlayer_background);
         settingManager = SettingManager.getInstance(getContext());
@@ -130,6 +132,7 @@ public class MiniPlayerFragment extends Fragment {
             imgSkipNext.setColorFilter(getResources().getColor(R.color.colorLight1));
 
             imgCover.setImageResource(R.color.colorDark5);
+            root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
         } else {
             setMiniPlayerBackground(R.color.colorLight2);
 
@@ -141,6 +144,7 @@ public class MiniPlayerFragment extends Fragment {
             imgSkipNext.setColorFilter(getResources().getColor(R.color.colorDark2));
 
             imgCover.setImageResource(R.color.colorLight5);
+            root_view.setBackgroundColor(getResources().getColor(R.color.colorLight1));
         }
     }
 

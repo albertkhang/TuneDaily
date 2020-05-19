@@ -42,6 +42,7 @@
             android:maxEms="100"
             android:singleLine="true"
             android:imeOptions="actionDone"
+            style="@style/editText"
 
             app:layout_constraintTop_toTopOf="@id/imgCollapse"
             app:layout_constraintBottom_toBottomOf="@id/imgCollapse"

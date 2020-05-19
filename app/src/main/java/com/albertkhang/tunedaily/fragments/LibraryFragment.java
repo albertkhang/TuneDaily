@@ -120,6 +120,7 @@ public class LibraryFragment extends Fragment {
         });
 
         final EditText txtPlaylistName = dialog.findViewById(R.id.txtPlaylistName);
+        TextView txtTitle = dialog.findViewById(R.id.txtTitle);
 
         Button create = dialog.findViewById(R.id.btnCreate);
         create.setOnClickListener(new View.OnClickListener() {
@@ -164,6 +165,32 @@ public class LibraryFragment extends Fragment {
                 }
             }
         });
+
+        if (settingManager.isDarkTheme()) {
+            dialog.findViewById(R.id.root_view).setBackgroundResource(R.drawable.round_dark_dialog_background);
+            txtTitle.setTextColor(getResources().getColor(R.color.colorLight1));
+
+            txtPlaylistName.setTextColor(getResources().getColor(R.color.colorLight1));
+            txtPlaylistName.setHintTextColor(getResources().getColor(R.color.colorLight5));
+
+            cancel.setBackgroundResource(R.drawable.round_dark_dialog_button);
+            create.setBackgroundResource(R.drawable.round_dark_dialog_button);
+
+            cancel.setTextColor(getResources().getColor(R.color.colorLight1));
+            create.setTextColor(getResources().getColor(R.color.colorLight1));
+        } else {
+            dialog.findViewById(R.id.root_view).setBackgroundResource(R.drawable.round_light_dialog_background);
+            txtTitle.setTextColor(getResources().getColor(R.color.colorDark1));
+
+            txtPlaylistName.setTextColor(getResources().getColor(R.color.colorDark1));
+            txtPlaylistName.setHintTextColor(getResources().getColor(R.color.colorDark5));
+
+            cancel.setBackgroundResource(R.drawable.round_light_dialog_button);
+            create.setBackgroundResource(R.drawable.round_light_dialog_button);
+
+            cancel.setTextColor(getResources().getColor(R.color.colorDark1));
+            create.setTextColor(getResources().getColor(R.color.colorDark1));
+        }
 
         dialog.show();
     }

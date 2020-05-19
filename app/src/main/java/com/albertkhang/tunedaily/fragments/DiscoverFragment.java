@@ -249,6 +249,8 @@ public class DiscoverFragment extends Fragment {
         }
 
         topChartAdapter.notifyDataSetChanged();
+        popularAlbumAdapter.notifyDataSetChanged();
+        bestOfArtistAlbumAdapter.notifyDataSetChanged();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

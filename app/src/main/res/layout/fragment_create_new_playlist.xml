@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="20dp"
-    android:background="@drawable/round_dark_dialog_background">
+    android:background="@drawable/round_dark_dialog_background"
+    android:id="@+id/root_view">
 
     <TextView
         android:id="@+id/txtTitle"
@@ -24,9 +25,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/name_here"
+
         android:textColorHint="@color/colorLight5"
         android:textColor="@color/colorLight1"
         android:backgroundTint="@color/colorLight5"
+
         android:maxLines="1"
         android:minLines="1"
         android:lines="1"
@@ -34,6 +37,7 @@
         android:maxLength="20"
         android:singleLine="true"
         android:imeOptions="actionDone"
+        style="@style/editText"
 
         app:layout_constraintTop_toBottomOf="@id/txtTitle"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -65,7 +69,6 @@
         android:textSize="16dp"
         android:textColor="@color/colorLight1"
 
-        app:layout_constraintTop_toBottomOf="@id/txtSearchText"
         android:layout_marginTop="10dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@id/btnCreate"
