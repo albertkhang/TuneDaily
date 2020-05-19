@@ -41,6 +41,7 @@
             android:lines="1"
             android:maxEms="100"
             android:singleLine="true"
+            android:imeOptions="actionDone"
 
             app:layout_constraintTop_toTopOf="@id/imgCollapse"
             app:layout_constraintBottom_toBottomOf="@id/imgCollapse"

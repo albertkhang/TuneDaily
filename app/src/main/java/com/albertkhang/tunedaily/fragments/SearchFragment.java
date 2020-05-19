@@ -34,7 +34,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-public class FragmentSearch extends Fragment {
+public class SearchFragment extends Fragment {
     private FrameLayout search_frame;
     private FrameLayout root_view;
     private SettingManager settingManager;
@@ -228,7 +228,7 @@ public class FragmentSearch extends Fragment {
     }
 
     private void showMoreItem(Track track) {
-        FragmentTrackMore fragmentTrackMore = new FragmentTrackMore(track);
-        fragmentTrackMore.show(requireActivity().getSupportFragmentManager(), "FragmentTrackMore");
+        TrackMoreFragment trackMoreFragment = new TrackMoreFragment(track);
+        trackMoreFragment.show(requireActivity().getSupportFragmentManager(), "FragmentTrackMore");
     }
 }

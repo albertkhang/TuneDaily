@@ -17,7 +17,7 @@ import androidx.fragment.app.Fragment;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.utils.SettingManager;
 
-public class FragmentFullPlayer extends Fragment {
+public class FullPlayerFragment extends Fragment {
     private SettingManager settingManager;
     private TextView txtTitle;
     private TextView txtArtist;

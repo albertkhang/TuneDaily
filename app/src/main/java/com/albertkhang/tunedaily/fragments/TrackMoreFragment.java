@@ -19,7 +19,7 @@ import com.albertkhang.tunedaily.views.RoundImageView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
-public class FragmentTrackMore extends BottomSheetDialogFragment {
+public class TrackMoreFragment extends BottomSheetDialogFragment {
     private Track track;
     private SettingManager settingManager;
     private RoundImageView imgCover;
@@ -35,7 +35,7 @@ public class FragmentTrackMore extends BottomSheetDialogFragment {
     private TextView txtDownload;
     private TextView txtBroadcast;
 
-    public FragmentTrackMore(Track track) {
+    public TrackMoreFragment(Track track) {
         this.track = track;
     }
 

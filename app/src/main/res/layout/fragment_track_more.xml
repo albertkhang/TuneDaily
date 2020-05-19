@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@color/colorDark1"
     android:orientation="vertical"
-    tools:context=".fragments.FragmentTrackMore"
+    tools:context=".fragments.TrackMoreFragment"
     android:id="@+id/root_view">
 
     <androidx.constraintlayout.widget.ConstraintLayout

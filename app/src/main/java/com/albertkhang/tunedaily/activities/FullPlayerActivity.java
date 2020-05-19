@@ -12,10 +12,10 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
-import com.albertkhang.tunedaily.fragments.FragmentDetail;
-import com.albertkhang.tunedaily.fragments.FragmentFullPlayer;
-import com.albertkhang.tunedaily.fragments.FragmentLyric;
-import com.albertkhang.tunedaily.fragments.FragmentMiniPlayer;
+import com.albertkhang.tunedaily.fragments.DetailFragment;
+import com.albertkhang.tunedaily.fragments.FullPlayerFragment;
+import com.albertkhang.tunedaily.fragments.LyricFragment;
+import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.rd.PageIndicatorView;
 
@@ -27,9 +27,9 @@ public class FullPlayerActivity extends AppCompatActivity {
     private ViewPagerAdapter adapter;
     private PageIndicatorView pageIndicatorView;
 
-    private FragmentFullPlayer fragmentFullPlayer;
-    private FragmentDetail fragmentDetail;
-    private FragmentLyric fragmentLyric;
+    private FullPlayerFragment fullPlayerFragment;
+    private DetailFragment detailFragment;
+    private LyricFragment lyricFragment;
 
     private ImageView imgCollapse;
     private ImageView imgMore;
@@ -59,13 +59,13 @@ public class FullPlayerActivity extends AppCompatActivity {
         top_frame = findViewById(R.id.top_frame);
         miniPlayer_frame = findViewById(R.id.miniPlayer_frame);
 
-        fragmentFullPlayer = new FragmentFullPlayer();
-        fragmentDetail = new FragmentDetail();
-        fragmentLyric = new FragmentLyric();
+        fullPlayerFragment = new FullPlayerFragment();
+        detailFragment = new DetailFragment();
+        lyricFragment = new LyricFragment();
 
-        adapter.addFragment(fragmentDetail);
-        adapter.addFragment(fragmentFullPlayer);
-        adapter.addFragment(fragmentLyric);
+        adapter.addFragment(detailFragment);
+        adapter.addFragment(fullPlayerFragment);
+        adapter.addFragment(lyricFragment);
 
         vpFullPlayer.setAdapter(adapter);
         vpFullPlayer.setCurrentItem(1);
@@ -136,6 +136,6 @@ public class FullPlayerActivity extends AppCompatActivity {
 
     private void addMiniPlayer() {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.miniPlayer_frame, new FragmentMiniPlayer()).commit();
+                .add(R.id.miniPlayer_frame, new MiniPlayerFragment()).commit();
     }
 }

@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.FragmentFullPlayer"
+    tools:context=".fragments.FullPlayerFragment"
     android:paddingLeft="20dp"
     android:paddingRight="20dp"
     android:paddingTop="30dp">

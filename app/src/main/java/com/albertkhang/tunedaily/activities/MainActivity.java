@@ -1,10 +1,8 @@
 package com.albertkhang.tunedaily.activities;
 
-import androidx.annotation.LongDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
@@ -13,24 +11,19 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
-import com.albertkhang.tunedaily.fragments.FragmentDiscover;
-import com.albertkhang.tunedaily.fragments.FragmentLibrary;
-import com.albertkhang.tunedaily.fragments.FragmentMiniPlayer;
-import com.albertkhang.tunedaily.fragments.FragmentSearch;
+import com.albertkhang.tunedaily.fragments.DiscoverFragment;
+import com.albertkhang.tunedaily.fragments.LibraryFragment;
+import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
+import com.albertkhang.tunedaily.fragments.SearchFragment;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import io.opencensus.trace.MessageEvent;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
@@ -42,9 +35,9 @@ public class MainActivity extends AppCompatActivity {
     public static final int BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT = 1;
 
     //Fragments
-    private FragmentDiscover fragmentDiscover;
-    private FragmentSearch fragmentSearch;
-    private FragmentLibrary fragmentLibrary;
+    private DiscoverFragment discoverFragment;
+    private SearchFragment searchFragment;
+    private LibraryFragment libraryFragment;
 
     private MenuItem menuItem;
 
@@ -69,12 +62,11 @@ public class MainActivity extends AppCompatActivity {
         settingManager = SettingManager.getInstance(this);
 
         addMiniPlayer();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     private void addMiniPlayer() {
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.miniPlayer_frame, new FragmentMiniPlayer()).commit();
+                .add(R.id.miniPlayer_frame, new MiniPlayerFragment()).commit();
     }
 
     private void addEvent() {
@@ -144,13 +136,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager(), BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
-        fragmentDiscover = new FragmentDiscover();
-        fragmentSearch = new FragmentSearch();
-        fragmentLibrary = new FragmentLibrary();
+        discoverFragment = new DiscoverFragment();
+        searchFragment = new SearchFragment();
+        libraryFragment = new LibraryFragment();
 
-        adapter.addFragment(fragmentDiscover);
-        adapter.addFragment(fragmentSearch);
-        adapter.addFragment(fragmentLibrary);
+        adapter.addFragment(discoverFragment);
+        adapter.addFragment(searchFragment);
+        adapter.addFragment(libraryFragment);
         viewPager.setAdapter(adapter);
 
         viewPager.setOffscreenPageLimit(adapter.getCount());

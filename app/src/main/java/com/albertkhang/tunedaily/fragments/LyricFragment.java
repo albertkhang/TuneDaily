@@ -1,13 +1,11 @@
 package com.albertkhang.tunedaily.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +15,7 @@ import android.widget.TextView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.utils.SettingManager;
 
-import java.util.Objects;
-
-public class FragmentLyric extends Fragment {
+public class LyricFragment extends Fragment {
     private SettingManager settingManager;
 
     private FrameLayout top_gradient_frame;
@@ -33,9 +29,9 @@ public class FragmentLyric extends Fragment {
 
     private TextView txtLyric;
 
-    private FragmentMiniPlayer fragmentMiniPlayer;
+    private MiniPlayerFragment miniPlayerFragment;
 
-    public FragmentLyric() {
+    public LyricFragment() {
     }
 
     @Override

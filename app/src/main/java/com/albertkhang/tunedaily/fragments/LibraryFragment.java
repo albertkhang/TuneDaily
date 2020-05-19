@@ -1,5 +1,10 @@
 package com.albertkhang.tunedaily.fragments;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -12,22 +17,32 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
 import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
 import com.albertkhang.tunedaily.views.RoundImageView;
+import com.google.firebase.firestore.model.Values;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-public class FragmentLibrary extends Fragment {
+import java.util.Objects;
+
+public class LibraryFragment extends Fragment {
 
     private SettingManager settingManager;
     private ConstraintLayout liked_songs_frame;
@@ -39,6 +54,7 @@ public class FragmentLibrary extends Fragment {
     private ImageView imgMusicNote;
     private RoundImageView playlist_background_frame;
     private TextView txtPlaylist;
+    private ConstraintLayout create_new_playlist_frame;
 
 
     @Override
@@ -70,6 +86,8 @@ public class FragmentLibrary extends Fragment {
         playlist_background_frame = view.findViewById(R.id.playlist_background_frame);
         txtPlaylist = view.findViewById(R.id.txtPlaylist);
 
+        create_new_playlist_frame = view.findViewById(R.id.create_new_playlist_frame);
+
         updateTheme();
     }
 
@@ -81,6 +99,82 @@ public class FragmentLibrary extends Fragment {
                 startActivity(intent);
             }
         });
+
+        create_new_playlist_frame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialog();
+            }
+        });
+    }
+
+    private void showDialog() {
+        final Dialog dialog = new Dialog(getContext(), R.style.RoundCornerDialogFrament);
+        dialog.setContentView(R.layout.fragment_create_new_playlist);
+
+        Button cancel = dialog.findViewById(R.id.btnCancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+
+        final EditText txtPlaylistName = dialog.findViewById(R.id.txtPlaylistName);
+
+        Button create = dialog.findViewById(R.id.btnCreate);
+        create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                switch (PlaylistManager.isPlaylistNameValidated(txtPlaylistName.getText().toString())) {
+                    case PlaylistManager.NAME_EMPTY:
+                        txtPlaylistName.setError("Playlist name must not empty.");
+                        break;
+
+                    case PlaylistManager.NAME_NOT_VALID:
+                        txtPlaylistName.setError("Only letters a-z, A-Z, 0-9, space.\nFirst letter must not a space.");
+                        break;
+
+                    case PlaylistManager.NAME_VALID:
+                        Toast.makeText(getContext(), "Created " + txtPlaylistName.getText(), Toast.LENGTH_LONG).show();
+                        dialog.dismiss();
+                        break;
+                }
+            }
+        });
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Log.d("dialog", "onShow");
+
+                if (txtPlaylistName.requestFocus()) {
+                    Log.d("dialog", "requestFocus");
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            txtPlaylistName.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    showSoftKeyboard(getContext(), txtPlaylistName);
+                                }
+                            }, 100);
+                        }
+                    }).start();
+                }
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void showSoftKeyboard(Context context, View view) {
+        if (view.requestFocus()) {
+            InputMethodManager imm = (InputMethodManager)
+                    context.getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(0, InputMethodManager.SHOW_IMPLICIT);
+        }
     }
 
     @Override

@@ -30,7 +30,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 
-public class FragmentMiniPlayer extends Fragment {
+public class MiniPlayerFragment extends Fragment {
     private static final String LOG_TAG = "MiniPlayerFragment";
 
     public interface ACTION {

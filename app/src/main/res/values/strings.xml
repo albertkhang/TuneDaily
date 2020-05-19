@@ -30,6 +30,7 @@
     <string name="library_header">LIBRARY</string>
     <string name="liked_songs">Liked Songs</string>
     <string name="liked_songs_uppercase">LIKED SONGS</string>
+    <string name="create_new_playlist">Create new playlist</string>
 
     <!--LyricFragment-->
     <string name="song_lyric">Song: </string>
@@ -104,4 +105,5 @@ Cần gì hơn) x 4\n</string>
     <string name="add_to_playlist">Add to playlist</string>
     <string name="download">Download</string>
     <string name="play_as_broadcast">Play as Broadcast</string>
+    <string name="name_here">Name here</string>
 </resources>

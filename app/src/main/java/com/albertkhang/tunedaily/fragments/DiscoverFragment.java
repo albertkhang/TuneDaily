@@ -36,7 +36,7 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
-public class FragmentDiscover extends Fragment {
+public class DiscoverFragment extends Fragment {
     private ImageView imgSettings;
     private ImageView imgUser;
     private ShimmerFrameLayout shimmer_top_chart;
@@ -294,7 +294,7 @@ public class FragmentDiscover extends Fragment {
     }
 
     private void showMoreItem(Track track) {
-        FragmentTrackMore fragmentTrackMore = new FragmentTrackMore(track);
-        fragmentTrackMore.show(requireActivity().getSupportFragmentManager(), "FragmentTrackMore");
+        TrackMoreFragment trackMoreFragment = new TrackMoreFragment(track);
+        trackMoreFragment.show(requireActivity().getSupportFragmentManager(), "FragmentTrackMore");
     }
 }

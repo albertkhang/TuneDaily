@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragments.FragmentLibrary"
+    tools:context=".fragments.LibraryFragment"
     android:orientation="vertical"
     android:id="@+id/root_view">
 
@@ -107,6 +107,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/create_new_playlist_frame"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
                 android:layout_marginLeft="20dp"
@@ -142,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
 
-                    android:text="@string/liked_songs"
+                    android:text="@string/create_new_playlist"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toRightOf="@id/playlist_background_frame"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -153,6 +154,7 @@
                 android:id="@+id/shimmer_random_songs"
                 shimmer_duration="@integer/integerShimmerDuration"
                 android:layout_width="match_parent"
+                android:visibility="gone"
 
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
