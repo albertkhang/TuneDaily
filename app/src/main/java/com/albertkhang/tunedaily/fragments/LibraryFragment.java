@@ -1,9 +1,6 @@
 package com.albertkhang.tunedaily.fragments;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -17,8 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,13 +29,12 @@ import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
 import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
 import com.albertkhang.tunedaily.views.RoundImageView;
-import com.google.firebase.firestore.model.Values;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Objects;
+import java.util.List;
 
 public class LibraryFragment extends Fragment {
 
@@ -55,6 +49,8 @@ public class LibraryFragment extends Fragment {
     private RoundImageView playlist_background_frame;
     private TextView txtPlaylist;
     private ConstraintLayout create_new_playlist_frame;
+
+    private PlaylistManager playlistManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -88,6 +84,8 @@ public class LibraryFragment extends Fragment {
         create_new_playlist_frame = view.findViewById(R.id.create_new_playlist_frame);
 
         updateTheme();
+
+        playlistManager = PlaylistManager.getInstance(getContext());
     }
 
     private void addEvent() {
@@ -119,6 +117,8 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 SoftKeyboardManager.hideSoftKeyboard(getActivity(), txtPlaylistName);
+                getAllPlayList();
+
                 dialog.cancel();
             }
         });
@@ -127,7 +127,7 @@ public class LibraryFragment extends Fragment {
         create.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                switch (PlaylistManager.isPlaylistNameValidated(txtPlaylistName.getText().toString())) {
+                switch (playlistManager.isPlaylistNameValidated(txtPlaylistName.getText().toString())) {
                     case PlaylistManager.NAME_EMPTY:
                         txtPlaylistName.setError("Playlist name must not empty.");
                         break;
@@ -137,9 +137,16 @@ public class LibraryFragment extends Fragment {
                         break;
 
                     case PlaylistManager.NAME_VALID:
-                        Toast.makeText(getContext(), "Created " + txtPlaylistName.getText(), Toast.LENGTH_LONG).show();
                         SoftKeyboardManager.hideSoftKeyboard(getActivity(), txtPlaylistName);
+
+                        playlistManager.createNewPlaylist(txtPlaylistName.getText().toString());
+
+                        Toast.makeText(getContext(), "Created " + txtPlaylistName.getText(), Toast.LENGTH_LONG).show();
                         dialog.dismiss();
+                        break;
+
+                    case PlaylistManager.NAME_EXIST:
+                        txtPlaylistName.setError("Name exist.");
                         break;
                 }
             }
@@ -182,6 +189,18 @@ public class LibraryFragment extends Fragment {
         }
 
         dialog.show();
+    }
+
+    private void getAllPlayList() {
+        List<String> getAllPlaylistName = playlistManager.getAllPlaylistName();
+        Log.d("getAllPlayList", "size: " + getAllPlaylistName.size());
+
+        for (int i = 0; i < getAllPlaylistName.size(); i++) {
+            Log.d("getAllPlayList", "[" + i + "] name: " + getAllPlaylistName.get(i));
+            Log.d("getAllPlayList", "[" + i + "] total: " + playlistManager.getPlaylistTotal(getAllPlaylistName.get(i)));
+            Log.d("getAllPlayList", "[" + i + "] cover: " + playlistManager.getPlaylistCover(getAllPlaylistName.get(i)));
+            Log.d("getAllPlayList", "[" + i + "] tracks: " + playlistManager.getPlaylistTracks(getAllPlaylistName.get(i)));
+        }
     }
 
     @Override

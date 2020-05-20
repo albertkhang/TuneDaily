@@ -25,6 +25,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import org.greenrobot.eventbus.EventBus;
 
+import io.paperdb.Paper;
+
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private ConstraintLayout splash_screen;
@@ -62,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
         settingManager = SettingManager.getInstance(this);
 
         addMiniPlayer();
+        Paper.init(this);
     }
 
     private void addMiniPlayer() {
