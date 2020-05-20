@@ -1,6 +1,7 @@
 package com.albertkhang.tunedaily.utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,10 +41,10 @@ public class PlaylistManager {
     public int isPlaylistNameValidated(String playlistName) {
         if (!playlistName.isEmpty()) {
             if (playlistName.matches(PLAYLIST_REGEX)) {
-                if (getAllPlaylistName().size() == 0) {
+                if (getAllPlaylist().size() == 0) {
                     return NAME.VALID;
                 } else {
-                    if (getAllPlaylistName().contains(playlistName)) {
+                    if (getAllPlaylist().contains(playlistName)) {
                         return NAME.EXIST;
                     } else {
                         return NAME.VALID;
@@ -57,7 +58,7 @@ public class PlaylistManager {
         }
     }
 
-    public List<String> getAllPlaylistName() {
+    public List<String> getAllPlaylist() {
         return Paper.book().read(PLAYLIST.PLAYLIST_NAMES, new ArrayList<String>());
     }
 
@@ -65,9 +66,46 @@ public class PlaylistManager {
         Paper.book(name).write(PLAYLIST.COVER, "");
         Paper.book(name).write(PLAYLIST.TRACKS, new ArrayList<Integer>());
 
-        List<String> arrayList = getAllPlaylistName();
+        List<String> arrayList = getAllPlaylist();
         arrayList.add(name);
         Paper.book().write(PLAYLIST.PLAYLIST_NAMES, arrayList);
+    }
+
+    public void addToFirstPlaylist(final String name, int trackId) {
+        ArrayList ids = new ArrayList();
+        ids.add(trackId);
+        ids.addAll(getPlaylistTracks(name));
+        Paper.book(name).write(PLAYLIST.TRACKS, ids);
+
+        getTrack(name, trackId);
+    }
+
+    public interface OnCompletePlaylistCoverListener {
+        void onCompletePlaylistCoverListener(String cover);
+    }
+
+    private OnCompletePlaylistCoverListener onCompletePlaylistCoverListener;
+
+    public void setOnCompletePlaylistCoverListener(OnCompletePlaylistCoverListener onCompletePlaylistCoverListener) {
+        this.onCompletePlaylistCoverListener = onCompletePlaylistCoverListener;
+    }
+
+    private void getTrack(final String name, int id) {
+        ArrayList<Integer> ids = new ArrayList<>();
+        ids.add(id);
+
+        FirebaseManager.getInstance().setReadTrackFromIdsListener(new FirebaseManager.ReadTrackFromIdsListener() {
+            @Override
+            public void readTrackFromIdsListener(ArrayList<Track> tracks) {
+                Log.d("PlaylistManager", tracks.get(0).toString());
+
+                String cover = tracks.get(0).getCover();
+                setPlaylistCover(name, cover);
+                onCompletePlaylistCoverListener.onCompletePlaylistCoverListener(cover);
+            }
+        });
+
+        FirebaseManager.getInstance().getTrackFromIds(ids);
     }
 
     public int getPlaylistTotal(String name) {
@@ -78,7 +116,7 @@ public class PlaylistManager {
         return Paper.book(name).read(PLAYLIST.COVER);
     }
 
-    public void setPlaylistCover(String name, String url) {
+    private void setPlaylistCover(String name, String url) {
         Paper.book(name).write(PLAYLIST.COVER, url);
     }
 

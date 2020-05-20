@@ -94,6 +94,7 @@ Cần gì hơn) x 4\n</string>
     <string name="composer_detail">Composer</string>
     <string name="similar_songs">SIMILAR SONGS</string>
     <string name="play">PLAY</string>
+    <string name="shuffle_play">SHUFFLE PLAY</string>
 
     <!--SearchActivity-->
     <string name="search_here">Search here</string>
@@ -106,4 +107,5 @@ Cần gì hơn) x 4\n</string>
     <string name="download">Download</string>
     <string name="play_as_broadcast">Play as Broadcast</string>
     <string name="name_here">Name here</string>
+    <string name="songs_playlist"> songs</string>
 </resources>

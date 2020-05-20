@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +26,8 @@ import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
+import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
+import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
@@ -34,7 +38,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class LibraryFragment extends Fragment {
 
@@ -51,6 +57,9 @@ public class LibraryFragment extends Fragment {
     private ConstraintLayout create_new_playlist_frame;
 
     private PlaylistManager playlistManager;
+
+    private RecyclerView rvPlaylist;
+    private PlaylistAdapter playlistAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -86,6 +95,21 @@ public class LibraryFragment extends Fragment {
         updateTheme();
 
         playlistManager = PlaylistManager.getInstance(getContext());
+
+        rvPlaylist = view.findViewById(R.id.rvPlaylist);
+        playlistAdapter = new PlaylistAdapter(getContext());
+        rvPlaylist.setAdapter(playlistAdapter);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
+        rvPlaylist.setLayoutManager(linearLayoutManager);
+
+        updatePlaylist();
     }
 
     private void addEvent() {
@@ -117,7 +141,8 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 SoftKeyboardManager.hideSoftKeyboard(getActivity(), txtPlaylistName);
-                getAllPlayList();
+                playlistManager.addToFirstPlaylist("b", (new Random()).nextInt(100 +1));
+                updatePlaylist();
 
                 dialog.cancel();
             }
@@ -142,6 +167,8 @@ public class LibraryFragment extends Fragment {
                         playlistManager.createNewPlaylist(txtPlaylistName.getText().toString());
 
                         Toast.makeText(getContext(), "Created " + txtPlaylistName.getText(), Toast.LENGTH_LONG).show();
+                        updatePlaylist();
+
                         dialog.dismiss();
                         break;
 
@@ -191,16 +218,26 @@ public class LibraryFragment extends Fragment {
         dialog.show();
     }
 
-    private void getAllPlayList() {
-        List<String> getAllPlaylistName = playlistManager.getAllPlaylistName();
+    private void updatePlaylist() {
+        List<String> getAllPlaylistName = playlistManager.getAllPlaylist();
         Log.d("getAllPlayList", "size: " + getAllPlaylistName.size());
 
+        ArrayList<Playlist> playlists = new ArrayList<>();
         for (int i = 0; i < getAllPlaylistName.size(); i++) {
-            Log.d("getAllPlayList", "[" + i + "] name: " + getAllPlaylistName.get(i));
-            Log.d("getAllPlayList", "[" + i + "] total: " + playlistManager.getPlaylistTotal(getAllPlaylistName.get(i)));
-            Log.d("getAllPlayList", "[" + i + "] cover: " + playlistManager.getPlaylistCover(getAllPlaylistName.get(i)));
-            Log.d("getAllPlayList", "[" + i + "] tracks: " + playlistManager.getPlaylistTracks(getAllPlaylistName.get(i)));
+            String name = getAllPlaylistName.get(i);
+            int total = playlistManager.getPlaylistTotal(getAllPlaylistName.get(i));
+            String cover = playlistManager.getPlaylistCover(getAllPlaylistName.get(i));
+            ArrayList<Integer> tracks = playlistManager.getPlaylistTracks(getAllPlaylistName.get(i));
+
+            Log.d("getAllPlayList", "[" + i + "] name: " + name);
+            Log.d("getAllPlayList", "[" + i + "] total: " + total);
+            Log.d("getAllPlayList", "[" + i + "] cover: " + cover);
+            Log.d("getAllPlayList", "[" + i + "] tracks: " + tracks);
+
+            playlists.add(new Playlist(name, total, cover));
         }
+
+        playlistAdapter.update(playlists);
     }
 
     @Override

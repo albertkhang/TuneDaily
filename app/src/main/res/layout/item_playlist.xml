@@ -42,12 +42,12 @@
             android:layout_height="wrap_content"
             android:src="@drawable/ic_music_note"
 
-            app:layout_constraintBottom_toBottomOf="@id/txtSongsAmount"
+            app:layout_constraintBottom_toBottomOf="@id/txtTotal"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@id/txtSongsAmount" />
+            app:layout_constraintTop_toTopOf="@id/txtTotal" />
 
         <TextView
-            android:id="@+id/txtSongsAmount"
+            android:id="@+id/txtTotal"
             style="@style/DescriptionText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,8 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            android:text=" songs"
-            app:layout_constraintLeft_toRightOf="@id/txtSongsAmount"
+            android:text="@string/songs_playlist"
+            app:layout_constraintLeft_toRightOf="@id/txtTotal"
             app:layout_constraintTop_toBottomOf="@id/txtPlaylist" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

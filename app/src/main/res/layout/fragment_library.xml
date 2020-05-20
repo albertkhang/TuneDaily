@@ -151,7 +151,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.facebook.shimmer.ShimmerFrameLayout
-                android:id="@+id/shimmer_random_songs"
+                android:id="@+id/shimmer_playlist"
                 shimmer_duration="@integer/integerShimmerDuration"
                 android:layout_width="match_parent"
                 android:visibility="gone"
@@ -173,6 +173,12 @@
                     <include layout="@layout/item_shimmer_list" />
                 </LinearLayout>
             </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPlaylist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"/>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
