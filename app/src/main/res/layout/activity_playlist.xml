@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:text="@string/liked_songs_uppercase"
-            style="@style/ListHeader"
+            style="@style/HeaderPlaylist"
 
             app:layout_constraintBottom_toBottomOf="@id/imgCollapse"
             app:layout_constraintLeft_toRightOf="@id/imgCollapse"
