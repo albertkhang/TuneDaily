@@ -117,6 +117,7 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), PlaylistActivity.class);
+                intent.putExtra("type", PlaylistActivity.TYPE.PLAYLIST);
                 intent.putExtra("name", txtLikedSongs.getText().toString());
                 startActivity(intent);
             }

@@ -65,6 +65,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<AlbumAdapter.ViewHolder> 
 
         handleCoverPlaceholderColor(holder.imgCover, position);
 
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onItemClickListener(view, position);
+            }
+        });
+
     }
 
     private void handleArtistColor(TextView textView) {

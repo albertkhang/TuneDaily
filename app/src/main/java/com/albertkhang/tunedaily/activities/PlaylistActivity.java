@@ -15,15 +15,17 @@ import android.widget.TextView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
+import com.albertkhang.tunedaily.utils.Album;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class PlaylistActivity extends AppCompatActivity {
+public class PlaylistActivity extends AppCompatActivity implements Serializable {
     private SettingManager settingManager;
 
     private ConstraintLayout root_view;
@@ -40,6 +42,11 @@ public class PlaylistActivity extends AppCompatActivity {
     private TextView txtEmpty;
 
     private ArrayList<Integer> tracks;
+
+    public interface TYPE {
+        String PLAYLIST = "playlist";
+        String ALBUM = "album";
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,13 +122,28 @@ public class PlaylistActivity extends AppCompatActivity {
     }
 
     private void updateIntentData() {
-        String name = getIntent().getStringExtra("name");
-        Log.d("updateIntentData", "name: " + name);
+        String type = getIntent().getStringExtra("type");
 
-        txtTitle.setText(name);
+        switch (type) {
+            case TYPE.PLAYLIST:
+                String name = getIntent().getStringExtra("name");
+                Log.d("updateIntentData", "name: " + name);
 
-        tracks = PlaylistManager.getInstance(this).getPlaylistTracks(name);
-        Log.d("updateIntentData", tracks.toString());
+                txtTitle.setText(name);
+
+                tracks = PlaylistManager.getInstance(this).getPlaylistTracks(name);
+                Log.d("updateIntentData", tracks.toString());
+
+                break;
+
+            case TYPE.ALBUM:
+                Album album = (Album) getIntent().getSerializableExtra("album");
+                Log.d("updateIntentData", album.toString());
+                txtTitle.setText(album.getTitle());
+
+                tracks = (ArrayList<Integer>) album.getTracks();
+                break;
+        }
     }
 
     private void addEvent() {

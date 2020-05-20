@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
 import com.albertkhang.tunedaily.adapters.AlbumAdapter;
 import com.albertkhang.tunedaily.adapters.TopChartAdapter;
@@ -148,9 +149,19 @@ public class DiscoverFragment extends Fragment {
 
         firebaseManager.setReadBestOfArtistListener(new FirebaseManager.ReadBestOfArtistListener() {
             @Override
-            public void readBestOfArtistListener(ArrayList<Album> albums) {
+            public void readBestOfArtistListener(final ArrayList<Album> albums) {
                 shimmer_best_of_artists.setVisibility(View.GONE);
                 rvBestOfArtists.setVisibility(View.VISIBLE);
+
+                bestOfArtistAlbumAdapter.setOnItemClickListener(new AlbumAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClickListener(View view, int position) {
+                        Intent intent = new Intent(getActivity(), PlaylistActivity.class);
+                        intent.putExtra("type", PlaylistActivity.TYPE.ALBUM);
+                        intent.putExtra("album", albums.get(position));
+                        startActivity(intent);
+                    }
+                });
 
                 bestOfArtistAlbumAdapter.update(albums);
             }
@@ -167,10 +178,20 @@ public class DiscoverFragment extends Fragment {
 
         firebaseManager.setReadPopularAlbumsListener(new FirebaseManager.ReadPopularAlbumsListener() {
             @Override
-            public void readPopularAlbumsListener(ArrayList<Album> albums) {
+            public void readPopularAlbumsListener(final ArrayList<Album> albums) {
 
                 shimmer_popular_albums.setVisibility(View.GONE);
                 rvPopularAlbums.setVisibility(View.VISIBLE);
+
+                popularAlbumAdapter.setOnItemClickListener(new AlbumAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClickListener(View view, int position) {
+                        Intent intent = new Intent(getActivity(), PlaylistActivity.class);
+                        intent.putExtra("type", PlaylistActivity.TYPE.ALBUM);
+                        intent.putExtra("album", albums.get(position));
+                        startActivity(intent);
+                    }
+                });
 
                 popularAlbumAdapter.update(albums);
             }

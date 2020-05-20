@@ -32,7 +32,7 @@
 
         <TextView
             android:id="@+id/txtTitle"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:text="@string/liked_songs_uppercase"
@@ -40,7 +40,10 @@
 
             app:layout_constraintBottom_toBottomOf="@id/imgCollapse"
             app:layout_constraintLeft_toRightOf="@id/imgCollapse"
-            app:layout_constraintTop_toTopOf="@id/imgCollapse" />
+            app:layout_constraintTop_toTopOf="@id/imgCollapse"
+            app:layout_constraintRight_toLeftOf="@id/imgMore"
+            android:layout_marginRight="8dp"
+            />
 
         <ImageView
             android:id="@+id/imgMore"

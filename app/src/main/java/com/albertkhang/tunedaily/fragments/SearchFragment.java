@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.InSearchActivity;
+import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.adapters.AlbumAdapter;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.utils.Album;
@@ -32,9 +34,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class SearchFragment extends Fragment {
+public class SearchFragment extends Fragment implements Serializable {
     private FrameLayout search_frame;
     private FrameLayout root_view;
     private SettingManager settingManager;
@@ -166,9 +169,21 @@ public class SearchFragment extends Fragment {
 
         firebaseManager.setReadRandomArtistsListener(new FirebaseManager.ReadRandomArtistsListener() {
             @Override
-            public void readRandomArtistsListener(ArrayList<Album> albums) {
+            public void readRandomArtistsListener(final ArrayList<Album> albums) {
+                Log.d("firebaseManager", albums.toString());
+
                 shimmer_random_artists.setVisibility(View.GONE);
                 rvRandomArtists.setVisibility(View.VISIBLE);
+
+                randomArtistsAdapter.setOnItemClickListener(new AlbumAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClickListener(View view, int position) {
+                        Intent intent = new Intent(getActivity(), PlaylistActivity.class);
+                        intent.putExtra("type", PlaylistActivity.TYPE.ALBUM);
+                        intent.putExtra("album", albums.get(position));
+                        startActivity(intent);
+                    }
+                });
 
                 randomArtistsAdapter.update(albums);
             }
