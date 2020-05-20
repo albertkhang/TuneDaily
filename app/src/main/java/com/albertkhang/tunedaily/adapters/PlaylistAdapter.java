@@ -1,6 +1,7 @@
 package com.albertkhang.tunedaily.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.views.RoundImageView;
@@ -45,7 +47,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlaylistAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull PlaylistAdapter.ViewHolder holder, final int position) {
         Log.d("PlaylistAdapter", playlists.get(position).getName() + ": " + playlists.get(position));
 
         String cover = playlistManager.getPlaylistCover(playlists.get(position).getName());
@@ -56,6 +58,15 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
         holder.txtPlaylist.setText(playlists.get(position).getName());
         holder.txtTotal.setText(String.valueOf(playlists.get(position).getTotal()));
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(context, PlaylistActivity.class);
+                intent.putExtra("name", playlists.get(position).getName());
+                context.startActivity(intent);
+            }
+        });
     }
 
     private void handleAddToPlaylistListener(final RoundImageView view) {

@@ -117,6 +117,7 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), PlaylistActivity.class);
+                intent.putExtra("name", txtLikedSongs.getText().toString());
                 startActivity(intent);
             }
         });
@@ -141,7 +142,7 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 SoftKeyboardManager.hideSoftKeyboard(getActivity(), txtPlaylistName);
-                playlistManager.addToFirstPlaylist("b", (new Random()).nextInt(100 +1));
+                playlistManager.addToFirstPlaylist("b", (new Random()).nextInt(100 + 1));
                 updatePlaylist();
 
                 dialog.cancel();

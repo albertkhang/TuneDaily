@@ -36,8 +36,6 @@ public class PlaylistManager {
         return instance;
     }
 
-    private static final String LIKED_SONGS = "liked_songs";
-
     public int isPlaylistNameValidated(String playlistName) {
         if (!playlistName.isEmpty()) {
             if (playlistName.matches(PLAYLIST_REGEX)) {
@@ -121,6 +119,6 @@ public class PlaylistManager {
     }
 
     public ArrayList<Integer> getPlaylistTracks(String name) {
-        return Paper.book(name).read(PLAYLIST.TRACKS);
+        return Paper.book(name).read(PLAYLIST.TRACKS, new ArrayList<Integer>());
     }
 }
