@@ -128,15 +128,15 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 switch (playlistManager.isPlaylistNameValidated(txtPlaylistName.getText().toString())) {
-                    case PlaylistManager.NAME_EMPTY:
+                    case PlaylistManager.NAME.EMPTY:
                         txtPlaylistName.setError("Playlist name must not empty.");
                         break;
 
-                    case PlaylistManager.NAME_NOT_VALID:
+                    case PlaylistManager.NAME.NOT_VALID:
                         txtPlaylistName.setError("Only letters a-z, A-Z, 0-9, space.\nFirst letter must not a space.");
                         break;
 
-                    case PlaylistManager.NAME_VALID:
+                    case PlaylistManager.NAME.VALID:
                         SoftKeyboardManager.hideSoftKeyboard(getActivity(), txtPlaylistName);
 
                         playlistManager.createNewPlaylist(txtPlaylistName.getText().toString());
@@ -145,7 +145,7 @@ public class LibraryFragment extends Fragment {
                         dialog.dismiss();
                         break;
 
-                    case PlaylistManager.NAME_EXIST:
+                    case PlaylistManager.NAME.EXIST:
                         txtPlaylistName.setError("Name exist.");
                         break;
                 }

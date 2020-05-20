@@ -11,10 +11,12 @@ public class PlaylistManager {
     private static final String PLAYLIST_REGEX = "[a-zA-Z0-9]([a-zA-Z0-9 ])*";
     private static PlaylistManager instance;
 
-    public static final int NAME_EMPTY = 0;
-    public static final int NAME_NOT_VALID = 1;
-    public static final int NAME_VALID = 3;
-    public static final int NAME_EXIST = 4;
+    public interface NAME {
+        int EMPTY = 0;
+        int NOT_VALID = 1;
+        int VALID = 2;
+        int EXIST = 3;
+    }
 
     public interface PLAYLIST {
         String COVER = "cover";
@@ -39,19 +41,19 @@ public class PlaylistManager {
         if (!playlistName.isEmpty()) {
             if (playlistName.matches(PLAYLIST_REGEX)) {
                 if (getAllPlaylistName().size() == 0) {
-                    return NAME_VALID;
+                    return NAME.VALID;
                 } else {
                     if (getAllPlaylistName().contains(playlistName)) {
-                        return NAME_EXIST;
+                        return NAME.EXIST;
                     } else {
-                        return NAME_VALID;
+                        return NAME.VALID;
                     }
                 }
             } else {
-                return NAME_NOT_VALID;
+                return NAME.NOT_VALID;
             }
         } else {
-            return NAME_EMPTY;
+            return NAME.EMPTY;
         }
     }
 
