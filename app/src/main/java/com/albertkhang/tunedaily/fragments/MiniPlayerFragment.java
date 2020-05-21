@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
+import com.albertkhang.tunedaily.activities.MainActivity;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.albertkhang.tunedaily.utils.UpdateThemeEvent;

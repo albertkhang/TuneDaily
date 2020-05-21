@@ -19,11 +19,14 @@ import com.albertkhang.tunedaily.fragments.LibraryFragment;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.SearchFragment;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.Track;
 import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.FirebaseDatabase;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import io.paperdb.Paper;
 
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private ConstraintLayout splash_screen;
     private static final int SHOWING_INTERVAL = 2000;
+    public static final String SHOW_MINI_PLAYER_ACTION = "com.albertkhang.activities.showminiplayer";
 
     //This is our viewPager
     private ViewPager viewPager;
@@ -45,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SettingManager settingManager;
     private FrameLayout bottom_gradient_frame;
+    private FrameLayout miniPlayer_frame;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         splash_screen = findViewById(R.id.splash_screen);
         bottom_gradient_frame = findViewById(R.id.bottom_gradient_frame);
+        miniPlayer_frame = findViewById(R.id.miniPlayer_frame);
 
         settingManager = SettingManager.getInstance(this);
 
@@ -68,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addMiniPlayer() {
+        miniPlayer_frame.setVisibility(View.GONE);
+
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.miniPlayer_frame, new MiniPlayerFragment()).commit();
     }
@@ -172,5 +180,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void sendUpdateThemeEvent() {
         EventBus.getDefault().post(new UpdateThemeEvent());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayAction(String action) {
+        switch (action) {
+            case SHOW_MINI_PLAYER_ACTION:
+                miniPlayer_frame.setVisibility(View.VISIBLE);
+                break;
+        }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.activities.MainActivity;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.albertkhang.tunedaily.views.RoundImageView;
@@ -78,6 +79,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 EventBus.getDefault().post(tracks.get(position));
+                EventBus.getDefault().post(MainActivity.SHOW_MINI_PLAYER_ACTION);
             }
         });
     }
