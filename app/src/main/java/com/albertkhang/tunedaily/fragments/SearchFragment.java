@@ -139,7 +139,7 @@ public class SearchFragment extends Fragment implements Serializable {
 
                 randomSongsAdapter.setOnMoreListener(new TrackAdapter.OnMoreListener() {
                     @Override
-                    public void onMorekListener(View view, int position) {
+                    public void onMoreListener(View view, int position) {
                         showMoreItem(tracks.get(position));
                     }
                 });

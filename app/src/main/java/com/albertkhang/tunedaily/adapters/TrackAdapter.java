@@ -38,7 +38,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
     }
 
     public interface OnMoreListener {
-        void onMorekListener(View view, int position);
+        void onMoreListener(View view, int position);
     }
 
     private OnMoreListener onMoreListener;
@@ -68,7 +68,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
         holder.imgMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onMoreListener.onMorekListener(holder.itemView, position);
+                onMoreListener.onMoreListener(holder.itemView, position);
             }
         });
 

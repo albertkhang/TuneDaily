@@ -3,6 +3,7 @@ package com.albertkhang.tunedaily.utils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -11,9 +12,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.ktx.Firebase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -106,6 +111,44 @@ public class FirebaseManager {
 
     public void setReadRandomSongsListener(ReadRandomSongsListener readRandomSongsListener) {
         this.readRandomSongsListener = readRandomSongsListener;
+    }
+
+    public void searchTrackByTitle(String s) {
+//        Log.d("searchTrackByTitle", "s: " + s);
+
+        if (!s.equals("")) {
+            db.collection("TuneDaily/tracks/track")
+                    .whereArrayContains("search_key", s)
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException e) {
+                            Log.d("searchTrackByTitle", "size: " + documents.size());
+
+                            for (QueryDocumentSnapshot document : documents) {
+                                Log.d("searchTrackByTitle", document.getId() + "=> " + document.get("title"));
+                            }
+                        }
+                    });
+        }
+    }
+
+    public void searchAlbumByTitle(String s) {
+//        Log.d("searchAlbumByTitle", "s: " + s);
+
+        if (!s.equals("")) {
+            db.collection("TuneDaily/tracks/track")
+                    .whereArrayContains("search_key", s)
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                        @Override
+                        public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException e) {
+                            Log.d("searchAlbumByTitle", "size: " + documents.size());
+
+                            for (QueryDocumentSnapshot document : documents) {
+                                Log.d("searchAlbumByTitle", document.getId() + "=> " + document.get("title"));
+                            }
+                        }
+                    });
+        }
     }
 
     public void getTopTrack() {

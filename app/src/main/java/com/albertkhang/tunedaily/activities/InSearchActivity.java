@@ -4,13 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -18,10 +18,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
-
-import java.util.Objects;
 
 public class InSearchActivity extends AppCompatActivity {
     private SettingManager settingManager;
@@ -31,9 +30,12 @@ public class InSearchActivity extends AppCompatActivity {
     private ImageView imgCollapse;
     private RelativeLayout root_view;
     private ConstraintLayout top_frame;
-    private ImageView imgClose;
+    private ImageView imgClear;
     private TextView txtArtist;
     private TextView txtSongs;
+    private TextView txtResultStatus;
+
+    private static final long DELAY_GETTING_TEXT_DURATION = 1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +55,10 @@ public class InSearchActivity extends AppCompatActivity {
         imgCollapse = findViewById(R.id.imgCollapse);
         root_view = findViewById(R.id.root_view);
         top_frame = findViewById(R.id.top_frame);
-        imgClose = findViewById(R.id.imgClose);
+        imgClear = findViewById(R.id.imgClear);
         txtArtist = findViewById(R.id.txtArtist);
         txtSongs = findViewById(R.id.txtSongs);
+        txtResultStatus = findViewById(R.id.txtResultStatus);
 
         updateTheme();
     }
@@ -78,8 +81,53 @@ public class InSearchActivity extends AppCompatActivity {
                 finish();
             }
         });
-    }
 
+        txtSearchText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+//                Log.d("txtSearchText", "beforeTextChanged: " + "start: " + start + ", count:" + count + ", after: " + after);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+//                Log.d("txtSearchText", "onTextChanged: " + "start: " + start + ", before: " + before + ", count: " + count);
+                if (count != 0) {
+                    imgClear.setVisibility(View.VISIBLE);
+                } else {
+                    imgClear.setVisibility(View.GONE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(final Editable editable) {
+                Log.d("txtSearchText", "afterTextChanged: " + "editable: " + editable);
+
+                final String temp = editable.toString();
+
+                Runnable r = new Runnable() {
+                    public void run() {
+                        Log.d("afterTextChanged", "editable: " + editable + ", temp: " + temp);
+                        if (temp.equals(editable.toString())) {
+                            Log.d("afterTextChanged", "run");
+
+                            FirebaseManager.getInstance().searchTrackByTitle(temp);
+                            FirebaseManager.getInstance().searchAlbumByTitle(temp);
+                        }
+                    }
+                };
+
+                Handler handler = new Handler();
+                handler.postDelayed(r, DELAY_GETTING_TEXT_DURATION);
+            }
+        });
+
+        imgClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                txtSearchText.setText("");
+            }
+        });
+    }
 
     private void updateTheme() {
         if (settingManager.isDarkTheme()) {
@@ -88,7 +136,7 @@ public class InSearchActivity extends AppCompatActivity {
             top_frame.setBackgroundColor(getResources().getColor(R.color.colorDark2));
             imgCollapse.setColorFilter(getResources().getColor(R.color.colorLight5));
             txtSearchText.setTextColor(getResources().getColor(R.color.colorLight1));
-            imgClose.setColorFilter(getResources().getColor(R.color.colorLight5));
+            imgClear.setColorFilter(getResources().getColor(R.color.colorLight5));
 
             txtArtist.setTextColor(getResources().getColor(R.color.colorLight1));
             txtSongs.setTextColor(getResources().getColor(R.color.colorLight1));
@@ -98,7 +146,7 @@ public class InSearchActivity extends AppCompatActivity {
             top_frame.setBackgroundColor(getResources().getColor(R.color.colorLight2));
             imgCollapse.setColorFilter(getResources().getColor(R.color.colorDark5));
             txtSearchText.setTextColor(getResources().getColor(R.color.colorDark1));
-            imgClose.setColorFilter(getResources().getColor(R.color.colorDark5));
+            imgClear.setColorFilter(getResources().getColor(R.color.colorDark5));
 
             txtArtist.setTextColor(getResources().getColor(R.color.colorDark1));
             txtSongs.setTextColor(getResources().getColor(R.color.colorDark1));
