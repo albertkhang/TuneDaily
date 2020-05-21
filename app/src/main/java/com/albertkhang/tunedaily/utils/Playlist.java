@@ -11,6 +11,12 @@ public class Playlist {
         this.cover = cover;
     }
 
+    public Playlist(Playlist playlist) {
+        this.name = playlist.name;
+        this.total = playlist.total;
+        this.cover = playlist.cover;
+    }
+
     public String getName() {
         return name;
     }

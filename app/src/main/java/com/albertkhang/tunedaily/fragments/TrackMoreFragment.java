@@ -80,7 +80,7 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
     private void updateTheme() {
         SettingManager settingManager = SettingManager.getInstance(getContext());
         if (settingManager.isDarkTheme()) {
-            root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
+//            root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
 
             txtTitle.setTextColor(getResources().getColor(R.color.colorLight1));
             txtArtist.setTextColor(getResources().getColor(R.color.colorLight5));
@@ -97,7 +97,7 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
             imgBroadcast.setColorFilter(getResources().getColor(R.color.colorLight5));
             txtBroadcast.setTextColor(getResources().getColor(R.color.colorLight1));
         } else {
-            root_view.setBackgroundColor(getResources().getColor(R.color.colorLight1));
+//            root_view.setBackgroundColor(getResources().getColor(R.color.colorLight1));
 
             txtTitle.setTextColor(getResources().getColor(R.color.colorDark1));
             txtArtist.setTextColor(getResources().getColor(R.color.colorDark5));

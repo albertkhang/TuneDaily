@@ -1,6 +1,7 @@
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowTranslucentStatus">true</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
     </style>
     
     <style name="ListHeader">
@@ -8,6 +9,14 @@
         <item name="android:textColor">@color/colorLight1</item>
         <item name="android:textStyle">bold</item>
         <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TitlePlaylistMore">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">2</item>
         <item name="android:ellipsize">end</item>
     </style>
 
@@ -98,11 +107,21 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="RoundCornerDialogFrament" parent="Theme.AppCompat.Light.Dialog.Alert">
+    <style name="RoundCornerDialogFragment" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:windowBackground">@drawable/round_dark_dialog_background</item>
     </style>
 
     <style name="editText" parent="@android:style/Widget.Holo.Light.EditText">
         <item name="android:textCursorDrawable">@drawable/cursor_edittext_color</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_bottom_sheet_dialog_fragment_dark_background</item>
     </style>
 </resources>

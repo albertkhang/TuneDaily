@@ -60,6 +60,7 @@ public class LibraryFragment extends Fragment {
 
     private RecyclerView rvPlaylist;
     private PlaylistAdapter playlistAdapter;
+    private ArrayList<Playlist> playlists;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -110,6 +111,18 @@ public class LibraryFragment extends Fragment {
         rvPlaylist.setLayoutManager(linearLayoutManager);
 
         updatePlaylist();
+
+        playlistAdapter.setOnMoreListener(new PlaylistAdapter.OnMoreListener() {
+            @Override
+            public void onMoreListener(View view, int position) {
+                showMoreItem(playlists.get(position));
+            }
+        });
+    }
+
+    private void showMoreItem(Playlist playlist) {
+        PlaylistMoreFragment playlistMoreFragment = new PlaylistMoreFragment(playlist);
+        playlistMoreFragment.show(requireActivity().getSupportFragmentManager(), "PlaylistMoreFragment");
     }
 
     private void addEvent() {
@@ -119,6 +132,7 @@ public class LibraryFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), PlaylistActivity.class);
                 intent.putExtra("type", PlaylistActivity.TYPE.PLAYLIST);
                 intent.putExtra("name", txtLikedSongs.getText().toString());
+                intent.putExtra("cover", "");
                 startActivity(intent);
             }
         });
@@ -132,7 +146,7 @@ public class LibraryFragment extends Fragment {
     }
 
     private void showDialog() {
-        final Dialog dialog = new Dialog(getContext(), R.style.RoundCornerDialogFrament);
+        final Dialog dialog = new Dialog(getContext(), R.style.RoundCornerDialogFragment);
         dialog.setContentView(R.layout.fragment_create_new_playlist);
 
         final EditText txtPlaylistName = dialog.findViewById(R.id.txtPlaylistName);
@@ -224,7 +238,7 @@ public class LibraryFragment extends Fragment {
         List<String> getAllPlaylistName = playlistManager.getAllPlaylist();
         Log.d("getAllPlayList", "size: " + getAllPlaylistName.size());
 
-        ArrayList<Playlist> playlists = new ArrayList<>();
+        playlists = new ArrayList<>();
         for (int i = 0; i < getAllPlaylistName.size(); i++) {
             String name = getAllPlaylistName.get(i);
             int total = playlistManager.getPlaylistTotal(getAllPlaylistName.get(i));

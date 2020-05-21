@@ -101,10 +101,13 @@ Cần gì hơn) x 4\n</string>
     <string name="artists">ARTISTS</string>
     <string name="songs">SONGS</string>
 
-    <!--TrackMore-->
+    <!--More-->
     <string name="add_to_library">Add to library</string>
+    <string name="add_all_to_library">Add all to library</string>
     <string name="add_to_playlist">Add to playlist</string>
+    <string name="add_all_to_playlist">Add all to playlist</string>
     <string name="download">Download</string>
+    <string name="download_playlist">Select songs to download</string>
     <string name="play_as_broadcast">Play as Broadcast</string>
     <string name="name_here">Name here</string>
     <string name="songs_playlist"> songs</string>

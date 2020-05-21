@@ -40,6 +40,16 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+    public interface OnMoreListener {
+        void onMoreListener(View view, int position);
+    }
+
+    private OnMoreListener onMoreListener;
+
+    public void setOnMoreListener(OnMoreListener onMoreListener) {
+        this.onMoreListener = onMoreListener;
+    }
+
     @NonNull
     @Override
     public PlaylistAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -68,7 +78,15 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                 Intent intent = new Intent(context, PlaylistActivity.class);
                 intent.putExtra("type", PlaylistActivity.TYPE.PLAYLIST);
                 intent.putExtra("name", playlists.get(position).getName());
+                intent.putExtra("cover", playlists.get(position).getCover());
                 context.startActivity(intent);
+            }
+        });
+
+        holder.imgMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onMoreListener.onMoreListener(view, position);
             }
         });
 
