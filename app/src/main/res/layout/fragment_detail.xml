@@ -172,13 +172,14 @@ tools:context=".fragments.DetailFragment">
             android:layout_marginTop="20dp"/>
 
         <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmer_random_songs"
+            android:id="@+id/shimmer_similar_songs"
             shimmer_duration="@integer/integerShimmerDuration"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
             app:layout_constraintTop_toBottomOf="@id/txtSimilarSongs"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">
@@ -186,8 +187,7 @@ tools:context=".fragments.DetailFragment">
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="@dimen/dimenMarginUnderListHeader">
+                android:orientation="vertical">
 
                 <include layout="@layout/item_shimmer_list" />
                 <include layout="@layout/item_shimmer_list" />
@@ -196,6 +196,19 @@ tools:context=".fragments.DetailFragment">
                 <include layout="@layout/item_shimmer_list" />
             </LinearLayout>
         </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSimilarSongs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+
+            app:layout_constraintTop_toBottomOf="@id/txtSimilarSongs"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

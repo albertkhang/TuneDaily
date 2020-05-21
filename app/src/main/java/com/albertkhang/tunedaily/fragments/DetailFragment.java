@@ -6,6 +6,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,15 +16,19 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.bumptech.glide.Glide;
+import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class DetailFragment extends Fragment implements Serializable {
     private SettingManager settingManager;
@@ -45,7 +51,9 @@ public class DetailFragment extends Fragment implements Serializable {
 
     private FrameLayout bottom_gradient_frame;
 
-    private MiniPlayerFragment miniPlayerFragment;
+    private ShimmerFrameLayout shimmer_similar_songs;
+    private RecyclerView rvSimilarSongs;
+    private TrackAdapter similarSongsAdapter;
 
     private Track currentTrack;
 
@@ -91,7 +99,50 @@ public class DetailFragment extends Fragment implements Serializable {
 
         bottom_gradient_frame = view.findViewById(R.id.bottom_gradient_frame);
 
+        shimmer_similar_songs = view.findViewById(R.id.shimmer_similar_songs);
+        rvSimilarSongs = view.findViewById(R.id.rvSimilarSongs);
+
+        similarSongsAdapter = new TrackAdapter(getContext());
+        rvSimilarSongs.setAdapter(similarSongsAdapter);
+
+        LinearLayoutManager managerSongs = new LinearLayoutManager(getContext());
+        managerSongs.setOrientation(LinearLayoutManager.VERTICAL);
+        rvSimilarSongs.setLayoutManager(managerSongs);
+        rvSimilarSongs.setNestedScrollingEnabled(false);
+
         updateTheme();
+        updateSimilarSongs();
+    }
+
+    private void updateSimilarSongs() {
+        shimmer_similar_songs.setVisibility(View.VISIBLE);
+        rvSimilarSongs.setVisibility(View.GONE);
+
+        FirebaseManager firebaseManager = FirebaseManager.getInstance();
+
+        firebaseManager.setReadRandomSongsListener(new FirebaseManager.ReadRandomSongsListener() {
+            @Override
+            public void readRandomSongsListener(final ArrayList<Track> tracks) {
+                shimmer_similar_songs.setVisibility(View.GONE);
+                rvSimilarSongs.setVisibility(View.VISIBLE);
+
+                similarSongsAdapter.setOnMoreListener(new TrackAdapter.OnMoreListener() {
+                    @Override
+                    public void onMorekListener(View view, int position) {
+                        showMoreItem(tracks.get(position));
+                    }
+                });
+
+                similarSongsAdapter.update(tracks);
+            }
+        });
+
+        firebaseManager.getRandomSongs();
+    }
+
+    private void showMoreItem(Track track) {
+        TrackMoreFragment trackMoreFragment = new TrackMoreFragment(track);
+        trackMoreFragment.show(requireActivity().getSupportFragmentManager(), "FragmentTrackMore");
     }
 
     private void addEvent() {
