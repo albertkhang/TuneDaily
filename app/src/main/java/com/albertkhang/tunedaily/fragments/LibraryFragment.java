@@ -282,6 +282,7 @@ public class LibraryFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onUpdateThemeEvent(UpdateThemeEvent updateThemeEvent) {
         updateTheme();
+        playlistAdapter.notifyDataSetChanged();
     }
 
     @Override

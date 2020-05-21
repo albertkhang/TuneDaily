@@ -68,13 +68,13 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
         handleArtistColor(holder.txtArtist);
 
         handleCoverPlaceholderColor(holder.imgCover, position);
+        
         holder.imgMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onMoreListener.onMoreListener(holder.itemView, position);
             }
         });
-
         handleMoreIconColor(holder.imgMore);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

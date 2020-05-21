@@ -16,6 +16,7 @@ import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
+import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.views.RoundImageView;
 import com.bumptech.glide.Glide;
 
@@ -25,10 +26,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
     private ArrayList<Playlist> playlists = new ArrayList<>();
     private Context context;
     private PlaylistManager playlistManager;
+    private SettingManager settingManager;
 
     public PlaylistAdapter(Context context) {
         this.context = context;
         this.playlistManager = PlaylistManager.getInstance(context);
+        this.settingManager = SettingManager.getInstance(context);
     }
 
     public void update(ArrayList<Playlist> playlists) {
@@ -68,6 +71,22 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
                 context.startActivity(intent);
             }
         });
+
+        updateTheme(holder);
+    }
+
+    private void updateTheme(ViewHolder holder) {
+        if (settingManager.isDarkTheme()) {
+            holder.txtPlaylist.setTextColor(context.getResources().getColor(R.color.colorLight1));
+            holder.txtTotal.setTextColor(context.getResources().getColor(R.color.colorLight5));
+
+            holder.imgMore.setColorFilter(context.getResources().getColor(R.color.colorLight5));
+        } else {
+            holder.txtPlaylist.setTextColor(context.getResources().getColor(R.color.colorDark1));
+            holder.txtTotal.setTextColor(context.getResources().getColor(R.color.colorDark5));
+
+            holder.imgMore.setColorFilter(context.getResources().getColor(R.color.colorDark5));
+        }
     }
 
     private void handleAddToPlaylistListener(final RoundImageView view) {
