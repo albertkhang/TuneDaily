@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -53,9 +54,9 @@ public class FullPlayerActivity extends AppCompatActivity implements Serializabl
         setContentView(R.layout.activity_full_player);
 
         addControl();
-        addMiniPlayer();
         updateTheme();
         updateDataIntent();
+        addMiniPlayer();
         addEvent();
     }
 

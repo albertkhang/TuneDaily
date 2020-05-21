@@ -65,6 +65,7 @@ public class DetailFragment extends Fragment implements Serializable {
 
         addControl(view);
         updateDataIntent();
+        EventBus.getDefault().post(currentTrack);
         addEvent();
     }
 
@@ -94,7 +95,6 @@ public class DetailFragment extends Fragment implements Serializable {
     }
 
     private void addEvent() {
-
     }
 
     private void updateTheme() {

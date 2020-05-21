@@ -199,10 +199,7 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(Track track) {
         currentTrack = new Track(track);
-
-        setCover(track.getCover());
-        txtTitle.setText(track.getTitle());
-        txtArtist.setText(track.getArtist());
+        updateCurrentTrack();
 
 //        play(track);
         updatePlayback();
