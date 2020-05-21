@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
 import com.albertkhang.tunedaily.utils.Album;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
@@ -40,6 +41,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     private TrackAdapter trackAdapter;
     private ShimmerFrameLayout shimmer_random_songs;
     private TextView txtEmpty;
+    private FrameLayout miniPlayer_frame;
 
     private ArrayList<Integer> tracks;
 
@@ -54,7 +56,13 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         setContentView(R.layout.activity_playlist);
 
         addControl();
+        addMiniPlayer();
         addEvent();
+    }
+
+    private void addMiniPlayer() {
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.miniPlayer_frame, new MiniPlayerFragment()).commit();
     }
 
     private void addControl() {
@@ -70,6 +78,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         rvTracks = findViewById(R.id.rvTracks);
         shimmer_random_songs = findViewById(R.id.shimmer_random_songs);
         txtEmpty = findViewById(R.id.txtEmpty);
+        miniPlayer_frame = findViewById(R.id.miniPlayer_frame);
 
         trackAdapter = new TrackAdapter(this);
         rvTracks.setAdapter(trackAdapter);

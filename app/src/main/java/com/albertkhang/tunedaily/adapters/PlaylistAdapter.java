@@ -74,7 +74,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         playlistManager.setOnCompletePlaylistCoverListener(new PlaylistManager.OnCompletePlaylistCoverListener() {
             @Override
             public void onCompletePlaylistCoverListener(String cover) {
-                Glide.with(context).load(cover).into(view);
+                Glide.with(context).load(cover).placeholder(view.getDrawable()).into(view);
             }
         });
     }
