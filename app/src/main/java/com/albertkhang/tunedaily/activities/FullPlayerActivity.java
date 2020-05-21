@@ -16,10 +16,16 @@ import com.albertkhang.tunedaily.fragments.DetailFragment;
 import com.albertkhang.tunedaily.fragments.FullPlayerFragment;
 import com.albertkhang.tunedaily.fragments.LyricFragment;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
+import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.Track;
 import com.rd.PageIndicatorView;
 
-public class FullPlayerActivity extends AppCompatActivity {
+import org.greenrobot.eventbus.EventBus;
+
+import java.io.Serializable;
+
+public class FullPlayerActivity extends AppCompatActivity implements Serializable {
     public static final int BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT = 1;
     private SettingManager settingManager;
 
@@ -39,6 +45,7 @@ public class FullPlayerActivity extends AppCompatActivity {
     private TextView txtArtist;
 
     private FrameLayout miniPlayer_frame;
+    private Track currentTrack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +53,15 @@ public class FullPlayerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_full_player);
 
         addControl();
+        addMiniPlayer();
+        updateTheme();
+        updateDataIntent();
         addEvent();
+    }
+
+    private void updateDataIntent() {
+        txtTitle.setText(currentTrack.getTitle());
+        txtArtist.setText(currentTrack.getArtist());
     }
 
     private void addControl() {
@@ -59,9 +74,19 @@ public class FullPlayerActivity extends AppCompatActivity {
         top_frame = findViewById(R.id.top_frame);
         miniPlayer_frame = findViewById(R.id.miniPlayer_frame);
 
+        Track track = (Track) getIntent().getSerializableExtra("current_track");
+        currentTrack = new Track(track);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("current_track", track);
+
         fullPlayerFragment = new FullPlayerFragment();
+        fullPlayerFragment.setArguments(bundle);
+
         detailFragment = new DetailFragment();
+        detailFragment.setArguments(bundle);
+
         lyricFragment = new LyricFragment();
+        lyricFragment.setArguments(bundle);
 
         adapter.addFragment(detailFragment);
         adapter.addFragment(fullPlayerFragment);
@@ -69,7 +94,7 @@ public class FullPlayerActivity extends AppCompatActivity {
 
         vpFullPlayer.setAdapter(adapter);
         vpFullPlayer.setCurrentItem(1);
-        vpFullPlayer.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        vpFullPlayer.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -94,9 +119,6 @@ public class FullPlayerActivity extends AppCompatActivity {
         imgMore = findViewById(R.id.imgMore);
         txtTitle = findViewById(R.id.txtTitle);
         txtArtist = findViewById(R.id.txtArtist);
-
-        addMiniPlayer();
-        updateTheme();
     }
 
     private void updateTheme() {
@@ -132,10 +154,22 @@ public class FullPlayerActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        imgMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showMoreItem(currentTrack);
+            }
+        });
     }
 
     private void addMiniPlayer() {
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.miniPlayer_frame, new MiniPlayerFragment()).commit();
+    }
+
+    private void showMoreItem(Track track) {
+        TrackMoreFragment trackMoreFragment = new TrackMoreFragment(track);
+        trackMoreFragment.show(getSupportFragmentManager(), "FragmentTrackMore");
     }
 }

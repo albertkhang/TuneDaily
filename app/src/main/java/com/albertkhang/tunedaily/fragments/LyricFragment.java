@@ -14,8 +14,15 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.Track;
 
-public class LyricFragment extends Fragment {
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.Serializable;
+
+public class LyricFragment extends Fragment implements Serializable {
     private SettingManager settingManager;
 
     private FrameLayout top_gradient_frame;
@@ -31,12 +38,15 @@ public class LyricFragment extends Fragment {
 
     private MiniPlayerFragment miniPlayerFragment;
 
+    private Track currentTrack;
+
     public LyricFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        currentTrack = (Track) getArguments().getSerializable("current_track");
         return inflater.inflate(R.layout.fragment_lyric, container, false);
     }
 
@@ -45,7 +55,14 @@ public class LyricFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         addControl(view);
+        updateTheme();
+        updateDataIntent();
         addEvent();
+    }
+
+    private void updateDataIntent() {
+        txtTitle.setText(currentTrack.getTitle());
+        txtArtist.setText(currentTrack.getArtist());
     }
 
     private void addControl(View view) {
@@ -61,8 +78,6 @@ public class LyricFragment extends Fragment {
         txtArtist = view.findViewById(R.id.txtArtist);
 
         txtLyric = view.findViewById(R.id.txtLyric);
-
-        updateTheme();
     }
 
     private void updateTheme() {

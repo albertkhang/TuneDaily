@@ -29,8 +29,9 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
+import java.io.Serializable;
 
-public class MiniPlayerFragment extends Fragment {
+public class MiniPlayerFragment extends Fragment implements Serializable {
     private static final String LOG_TAG = "MiniPlayerFragment";
 
     public interface ACTION {
@@ -58,6 +59,7 @@ public class MiniPlayerFragment extends Fragment {
     private ConstraintLayout root_view;
 
     private MediaPlayer mediaPlayer;
+    private Track currentTrack;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -105,10 +107,11 @@ public class MiniPlayerFragment extends Fragment {
             }
         });
 
-        miniPlayer_background.setOnClickListener(new View.OnClickListener() {
+        root_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FullPlayerActivity.class);
+                intent.putExtra("current_track", currentTrack);
                 startActivity(intent);
             }
         });
@@ -118,6 +121,15 @@ public class MiniPlayerFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateTheme();
+        updateCurrentTrack();
+    }
+
+    private void updateCurrentTrack() {
+        if (currentTrack != null) {
+            setCover(currentTrack.getCover());
+            txtTitle.setText(currentTrack.getTitle());
+            txtArtist.setText(currentTrack.getArtist());
+        }
     }
 
     private void updateTheme() {
@@ -186,10 +198,13 @@ public class MiniPlayerFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(Track track) {
-        play(track);
+        currentTrack = new Track(track);
+
         setCover(track.getCover());
         txtTitle.setText(track.getTitle());
         txtArtist.setText(track.getArtist());
+
+//        play(track);
         updatePlayback();
     }
 

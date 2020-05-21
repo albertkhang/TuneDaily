@@ -74,6 +74,13 @@
         <item name="android:maxHeight">20dip</item>
     </style>
 
+    <style name="LyricTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorLight2</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
     <style name="LyricStyle">
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/colorLight2</item>
@@ -87,6 +94,8 @@
     <style name="DetailValueStyle">
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
     </style>
 
     <style name="RoundCornerDialogFrament" parent="Theme.AppCompat.Light.Dialog.Alert">

@@ -34,7 +34,7 @@
 
     <!--LyricFragment-->
     <string name="song_lyric">Song: </string>
-    <string name="singer_lyric">Singer: </string>
+    <string name="artist">Artist: </string>
     <string name="fake_lyric">Nơi tin yêu nhiệm màu\n
 Từng nụ hôn trao như tình đầu\n
 Anh đưa tay nguyện cầu\n

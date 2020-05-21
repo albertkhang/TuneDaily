@@ -24,6 +24,7 @@
             android:layout_width="196dp"
             android:layout_height="196dp"
             style="@style/CoverImage"
+            android:layout_gravity="center_horizontal"
 
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"

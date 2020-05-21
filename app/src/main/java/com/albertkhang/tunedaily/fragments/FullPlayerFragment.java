@@ -16,9 +16,20 @@ import androidx.fragment.app.Fragment;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.TimeConverter;
+import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.views.CircleImageView;
+import com.bumptech.glide.Glide;
 
-public class FullPlayerFragment extends Fragment {
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.Serializable;
+
+public class FullPlayerFragment extends Fragment implements Serializable {
     private SettingManager settingManager;
+    private CircleImageView imgCover;
     private TextView txtTitle;
     private TextView txtArtist;
     private SeekBar seekbar;
@@ -30,9 +41,12 @@ public class FullPlayerFragment extends Fragment {
     private ImageView imgFavourite;
     private ImageView imgRepeat;
 
+    private Track currentTrack;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        currentTrack = (Track) getArguments().getSerializable("current_track");
         return inflater.inflate(R.layout.fragment_full_player, container, false);
     }
 
@@ -41,13 +55,23 @@ public class FullPlayerFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         addControl(view);
+        updateDataIntent();
         addEvent();
+    }
+
+    private void updateDataIntent() {
+        Glide.with(this).load(currentTrack.getCover()).into(imgCover);
+        txtTitle.setText(currentTrack.getTitle());
+        txtArtist.setText(currentTrack.getArtist());
+
+        txtTimeStampEnd.setText(TimeConverter.getInstance().getTimestamp(currentTrack.getDuration()));
     }
 
     private void addControl(View view) {
         settingManager = SettingManager.getInstance(getContext());
 
         seekbar = view.findViewById(R.id.seekbar);
+        imgCover = view.findViewById(R.id.imgCover);
         txtTitle = view.findViewById(R.id.txtTitle);
         txtArtist = view.findViewById(R.id.txtArtist);
         txtTimeStampStart = view.findViewById(R.id.txtTimeStampStart);
@@ -96,6 +120,23 @@ public class FullPlayerFragment extends Fragment {
 
     private void addEvent() {
 
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReceiveTrack(Track track) {
+        Glide.with(this).load(track.getCover()).into(imgCover);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }
 

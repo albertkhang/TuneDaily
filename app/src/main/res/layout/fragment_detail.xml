@@ -95,7 +95,7 @@ tools:context=".fragments.DetailFragment">
 
             <TextView
                 android:id="@+id/txtSong"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="songName"
                 style="@style/DetailValueStyle"
@@ -103,11 +103,12 @@ tools:context=".fragments.DetailFragment">
                 app:layout_constraintTop_toTopOf="@id/txtSongTitle"
                 app:layout_constraintBottom_toBottomOf="@id/txtSongTitle"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginLeft="100dp"/>
+                android:layout_marginLeft="100dp"
+                app:layout_constraintRight_toRightOf="parent"/>
 
             <TextView
                 android:id="@+id/txtAlbum"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="album"
                 style="@style/DetailValueStyle"
@@ -115,11 +116,12 @@ tools:context=".fragments.DetailFragment">
                 app:layout_constraintTop_toTopOf="@id/txtAlbumTitle"
                 app:layout_constraintBottom_toBottomOf="@id/txtAlbumTitle"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginLeft="100dp"/>
+                android:layout_marginLeft="100dp"
+                app:layout_constraintRight_toRightOf="parent"/>
 
             <TextView
                 android:id="@+id/txtArtist"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="artist"
                 style="@style/DetailValueStyle"
@@ -127,11 +129,12 @@ tools:context=".fragments.DetailFragment">
                 app:layout_constraintTop_toTopOf="@id/txtArtistTitle"
                 app:layout_constraintBottom_toBottomOf="@id/txtArtistTitle"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginLeft="100dp"/>
+                android:layout_marginLeft="100dp"
+                app:layout_constraintRight_toRightOf="parent"/>
 
             <TextView
                 android:id="@+id/txtGenre"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="genre"
                 style="@style/DetailValueStyle"
@@ -139,11 +142,12 @@ tools:context=".fragments.DetailFragment">
                 app:layout_constraintTop_toTopOf="@id/txtGenreTitle"
                 app:layout_constraintBottom_toBottomOf="@id/txtGenreTitle"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginLeft="100dp"/>
+                android:layout_marginLeft="100dp"
+                app:layout_constraintRight_toRightOf="parent"/>
 
             <TextView
                 android:id="@+id/txtComposer"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="composer"
                 style="@style/DetailValueStyle"
@@ -151,7 +155,8 @@ tools:context=".fragments.DetailFragment">
                 app:layout_constraintTop_toTopOf="@id/txtComposerTitle"
                 app:layout_constraintBottom_toBottomOf="@id/txtComposerTitle"
                 app:layout_constraintLeft_toLeftOf="parent"
-                android:layout_marginLeft="100dp"/>
+                android:layout_marginLeft="100dp"
+                app:layout_constraintRight_toRightOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView

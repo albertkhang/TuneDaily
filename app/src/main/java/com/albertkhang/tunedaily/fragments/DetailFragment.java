@@ -15,8 +15,16 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.Track;
+import com.bumptech.glide.Glide;
 
-public class DetailFragment extends Fragment {
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
+import java.io.Serializable;
+
+public class DetailFragment extends Fragment implements Serializable {
     private SettingManager settingManager;
     private FrameLayout top_gradient_frame;
     private ConstraintLayout detail_frame;
@@ -39,12 +47,15 @@ public class DetailFragment extends Fragment {
 
     private MiniPlayerFragment miniPlayerFragment;
 
+    private Track currentTrack;
+
     public DetailFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        currentTrack = (Track) getArguments().getSerializable("current_track");
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
 
@@ -53,6 +64,7 @@ public class DetailFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         addControl(view);
+        updateDataIntent();
         addEvent();
     }
 
@@ -127,5 +139,13 @@ public class DetailFragment extends Fragment {
 
             bottom_gradient_frame.setBackgroundResource(R.drawable.lyric_hidden_bottom_gradient_light);
         }
+    }
+
+    private void updateDataIntent() {
+        txtSong.setText(currentTrack.getTitle());
+        txtAlbum.setText(currentTrack.getAlbum());
+        txtArtist.setText(currentTrack.getArtist());
+        txtGenre.setText(currentTrack.getGenre());
+        txtComposer.setText("N/A");
     }
 }

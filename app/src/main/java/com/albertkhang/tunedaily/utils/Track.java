@@ -2,9 +2,10 @@ package com.albertkhang.tunedaily.utils;
 
 import androidx.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Track {
+public class Track implements Serializable {
     private int id;
     private String title;
     private String album;
@@ -25,6 +26,18 @@ public class Track {
         this.track = track;
         this.cover = cover;
         this.type = type;
+    }
+
+    public Track(Track track) {
+        this.id = track.getId();
+        this.title = track.getTitle();
+        this.album = track.getAlbum();
+        this.artist = track.getArtist();
+        this.genre = track.getGenre();
+        this.duration = track.getDuration();
+        this.track = track.getTrack();
+        this.cover = track.getCover();
+        this.type = track.getType();
     }
 
     public int getId() {
