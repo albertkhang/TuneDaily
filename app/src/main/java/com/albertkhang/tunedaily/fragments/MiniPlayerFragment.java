@@ -1,7 +1,9 @@
 package com.albertkhang.tunedaily.fragments;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -10,6 +12,12 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
+import android.os.RemoteException;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,17 +27,16 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
-import com.albertkhang.tunedaily.activities.MainActivity;
+import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
-import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
 import com.bumptech.glide.Glide;
+import com.google.common.eventbus.AllowConcurrentEvents;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.io.Serializable;
 
 public class MiniPlayerFragment extends Fragment implements Serializable {
@@ -49,7 +56,6 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     }
 
     private boolean isFavourite = false;
-    private boolean isPlaying = false;
 
     private ImageView imgCover;
     private ImageView imgFavourite;
@@ -59,8 +65,12 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     private TextView txtArtist;
     private ConstraintLayout root_view;
 
-    private MediaPlayer mediaPlayer;
     private Track currentTrack;
+
+    private MediaBrowserCompat mediaBrowser;
+    private MediaBrowserCompat.ConnectionCallback connectionCallback;
+    private MediaControllerCompat.Callback controllerCallback;
+    private MediaControllerCompat mediaController;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -81,6 +91,97 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
 
         miniPlayer_background = view.findViewById(R.id.miniPlayer_background);
         settingManager = SettingManager.getInstance(getContext());
+
+        mediaController = MediaControllerCompat.getMediaController(getActivity());
+
+        initialControllerCallback();
+        initialConnectionCallback();
+        initialMediaBrowser();
+
+        Log.d(LOG_TAG, "addControl");
+    }
+
+    private void initialControllerCallback() {
+        controllerCallback = new MediaControllerCompat.Callback() {
+            @Override
+            public void onMetadataChanged(MediaMetadataCompat metadata) {
+                super.onMetadataChanged(metadata);
+                Log.d(LOG_TAG, "metadata: " + metadata.toString());
+            }
+
+            @Override
+            public void onPlaybackStateChanged(PlaybackStateCompat state) {
+                super.onPlaybackStateChanged(state);
+                Log.d(LOG_TAG, "state: " + state.toString());
+
+                if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
+                    Log.d(LOG_TAG, "controllerCallback STATE_PLAYING");
+                    imgPlayPause.setImageResource(R.drawable.ic_pause);
+                } else {
+                    Log.d(LOG_TAG, "controllerCallback STATE_PAUSED");
+                    imgPlayPause.setImageResource(R.drawable.ic_play);
+                }
+            }
+        };
+    }
+
+    private void initialConnectionCallback() {
+        connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
+            @Override
+            public void onConnected() {
+                super.onConnected();
+                Log.d(LOG_TAG, "onConnected");
+
+                // Get the token for the MediaSession
+                MediaSessionCompat.Token token = mediaBrowser.getSessionToken();
+                Log.d(LOG_TAG, "token: " + token.toString());
+
+                // Create a MediaControllerCompat
+                try {
+                    mediaController =
+                            new MediaControllerCompat(getContext(), // Context
+                                    token);
+
+                    // Save the controller
+                    MediaControllerCompat.setMediaController(getActivity(), mediaController);
+
+                    // Finish building the UI
+                    buildTransportControls();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    private void buildTransportControls() {
+        imgPlayPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pbState = mediaController.getPlaybackState().getState();
+                if (pbState == PlaybackStateCompat.STATE_PLAYING) {
+                    Log.d(LOG_TAG, "STATE_PLAYING");
+                    mediaController.getTransportControls().pause();
+                } else {
+                    Log.d(LOG_TAG, "STATE_PAUSED");
+                    mediaController.getTransportControls().play();
+                }
+            }
+        });
+
+        // Display the initial state
+        mediaController.getMetadata();
+        mediaController.getPlaybackState();
+
+        // Register a Callback to stay in sync
+        mediaController.registerCallback(controllerCallback);
+    }
+
+    private void initialMediaBrowser() {
+        mediaBrowser = new MediaBrowserCompat(getContext(),
+                new ComponentName(requireContext(), MediaPlaybackService.class),
+                connectionCallback,
+                null); // optional Bundle
     }
 
     private void addEvent() {
@@ -99,15 +200,6 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
             }
         });
 
-        imgPlayPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.d(LOG_TAG, "imgPlayPause onClick");
-                updatePlayerStatus();
-                updatePlayback();
-            }
-        });
-
         root_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -123,6 +215,21 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         super.onResume();
         updateTheme();
         updateCurrentTrack();
+        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        updateCurrentStatus();
+    }
+
+    private void updateCurrentStatus() {
+        if (mediaController != null) {
+            int pbState = mediaController.getPlaybackState().getState();
+            if (pbState == PlaybackStateCompat.STATE_PLAYING) {
+                Log.d(LOG_TAG, "updateCurrentStatus STATE_PLAYING");
+                imgPlayPause.setImageResource(R.drawable.ic_pause);
+            } else {
+                Log.d(LOG_TAG, "updateCurrentStatus STATE_PAUSED");
+                imgPlayPause.setImageResource(R.drawable.ic_play);
+            }
+        }
     }
 
     private void updateCurrentTrack() {
@@ -167,34 +274,8 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         miniPlayer_background.setBackground(drawable);
     }
 
-    private void play(Track track) {
-        if (mediaPlayer == null) {
-            mediaPlayer = new MediaPlayer();
-        }
-
-        if (mediaPlayer.isPlaying()) {
-            pause();
-        }
-
-        try {
-            mediaPlayer.setDataSource(track.getTrack());
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (Exception e) {
-            Log.d("play", "e: " + e);
-        }
-    }
-
     private void setCover(String cover) {
         Glide.with(this).load(cover).placeholder(R.color.colorLight5).into(imgCover);
-    }
-
-    private void pause() {
-        if (mediaPlayer != null) {
-            if (mediaPlayer.isPlaying()) {
-                mediaPlayer.pause();
-            }
-        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -202,37 +283,27 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         currentTrack = new Track(track);
         updateCurrentTrack();
 
-//        play(track);
-        updatePlayback();
-    }
+        MediaPlaybackService.addTrack(currentTrack);
 
-    private void updatePlayerStatus() {
-        if (mediaPlayer.isPlaying()) {
-            mediaPlayer.pause();
-        } else {
-            mediaPlayer.start();
-        }
-    }
-
-    private void updatePlayback() {
-        if (mediaPlayer != null) {
-            if (mediaPlayer.isPlaying()) {
-                imgPlayPause.setImageResource(R.drawable.ic_pause);
-            } else {
-                imgPlayPause.setImageResource(R.drawable.ic_play);
-            }
-        }
+        mediaController.getTransportControls().prepare();
+        mediaController.getTransportControls().play();
+        Log.d(LOG_TAG, "play track: " + track.toString());
     }
 
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        mediaBrowser.connect();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        if (MediaControllerCompat.getMediaController(getActivity()) != null) {
+            MediaControllerCompat.getMediaController(getActivity()).unregisterCallback(controllerCallback);
+        }
+        mediaBrowser.disconnect();
     }
 }
