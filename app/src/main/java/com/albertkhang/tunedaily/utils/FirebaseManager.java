@@ -113,39 +113,115 @@ public class FirebaseManager {
         this.readRandomSongsListener = readRandomSongsListener;
     }
 
+    public interface ReadByTitleListener {
+        void readTrackByTitleListener(ArrayList<Track> tracks);
+
+        void readAlbumByTitleListener(ArrayList<Album> albums);
+
+        void handleSearchIsEmptyListener();
+    }
+
+    private ReadByTitleListener readByTitleListener;
+
+    public void setReadByTitleListener(ReadByTitleListener readByTitleListener) {
+        this.readByTitleListener = readByTitleListener;
+    }
+
     public void searchTrackByTitle(String s) {
 //        Log.d("searchTrackByTitle", "s: " + s);
 
         if (!s.equals("")) {
+            isSearchTracksEmpty = false;
+
             db.collection("TuneDaily/tracks/track")
                     .whereArrayContains("search_key", s)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException e) {
                             Log.d("searchTrackByTitle", "size: " + documents.size());
+                            ArrayList<Track> tracks = new ArrayList<>();
 
                             for (QueryDocumentSnapshot document : documents) {
                                 Log.d("searchTrackByTitle", document.getId() + "=> " + document.get("title"));
+
+                                int id = (int) (long) document.get("id");
+                                String title = (String) document.get("title");
+                                String album = (String) document.get("album");
+                                String artist = (String) document.get("artist");
+                                String genre = (String) document.get("genre");
+                                int duration = (int) (long) document.get("duration");
+                                String track = (String) document.get("track");
+                                String cover = (String) document.get("cover");
+                                String type = (String) document.get("type");
+
+                                duration /= 1000;
+
+                                tracks.add(new Track(
+                                        id,
+                                        title,
+                                        album,
+                                        artist,
+                                        genre,
+                                        duration,
+                                        track,
+                                        cover,
+                                        type
+                                ));
                             }
+
+                            Log.d("searchTrackByTitle", tracks.toString());
+
+                            if (tracks.size() == 0) {
+                                isSearchTracksEmpty = true;
+
+                                if (isSearchAlbumsEmpty) {
+                                    readByTitleListener.handleSearchIsEmptyListener();
+                                }
+                            }
+
+                            readByTitleListener.readTrackByTitleListener(tracks);
                         }
                     });
         }
     }
 
+    private volatile boolean isSearchTracksEmpty = false;
+    private volatile boolean isSearchAlbumsEmpty = false;
+
     public void searchAlbumByTitle(String s) {
 //        Log.d("searchAlbumByTitle", "s: " + s);
 
         if (!s.equals("")) {
-            db.collection("TuneDaily/tracks/track")
+            isSearchAlbumsEmpty = false;
+
+            db.collection("TuneDaily/albums/album")
                     .whereArrayContains("search_key", s)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException e) {
                             Log.d("searchAlbumByTitle", "size: " + documents.size());
+                            ArrayList<Album> albums = new ArrayList<>();
 
                             for (QueryDocumentSnapshot document : documents) {
                                 Log.d("searchAlbumByTitle", document.getId() + "=> " + document.get("title"));
+
+                                int id = (int) (long) document.get("id");
+                                String title = (String) document.get("title");
+                                List<Integer> tracks = (List<Integer>) document.get("tracks");
+                                String cover = (String) document.get("cover");
+
+                                albums.add(new Album(id, title, cover, tracks));
                             }
+
+                            if (albums.size() == 0) {
+                                isSearchAlbumsEmpty = true;
+
+                                if (isSearchTracksEmpty) {
+                                    readByTitleListener.handleSearchIsEmptyListener();
+                                }
+                            }
+
+                            readByTitleListener.readAlbumByTitleListener(albums);
                         }
                     });
         }

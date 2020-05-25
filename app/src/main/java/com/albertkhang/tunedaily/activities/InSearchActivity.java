@@ -2,8 +2,11 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -12,15 +15,23 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.adapters.AlbumAdapter;
+import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.utils.Album;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
+import com.albertkhang.tunedaily.utils.Track;
+
+import java.util.ArrayList;
 
 public class InSearchActivity extends AppCompatActivity {
     private SettingManager settingManager;
@@ -34,6 +45,15 @@ public class InSearchActivity extends AppCompatActivity {
     private TextView txtArtist;
     private TextView txtSongs;
     private TextView txtResultStatus;
+    private FrameLayout shimmer_artists;
+    private FrameLayout shimmer_songs;
+    private RecyclerView rvArtist;
+    private RecyclerView rvTracks;
+    private LinearLayout artist_frame;
+    private LinearLayout songs_frame;
+
+    private AlbumAdapter artistsAdapter;
+    private TrackAdapter tracksAdapter;
 
     private static final long DELAY_GETTING_TEXT_DURATION = 1000;
 
@@ -58,7 +78,34 @@ public class InSearchActivity extends AppCompatActivity {
         imgClear = findViewById(R.id.imgClear);
         txtArtist = findViewById(R.id.txtArtist);
         txtSongs = findViewById(R.id.txtSongs);
+        rvArtist = findViewById(R.id.rvArtist);
+        rvTracks = findViewById(R.id.rvTracks);
+        artist_frame = findViewById(R.id.artist_frame);
+        songs_frame = findViewById(R.id.songs_frame);
+
+        artistsAdapter = new AlbumAdapter(this);
+        rvArtist.setAdapter(artistsAdapter);
+
+        tracksAdapter = new TrackAdapter(this);
+        rvTracks.setAdapter(tracksAdapter);
+
+        LinearLayoutManager artistManager = new LinearLayoutManager(this);
+        artistManager.setOrientation(RecyclerView.HORIZONTAL);
+        rvArtist.setLayoutManager(artistManager);
+
+        LinearLayoutManager tracksManager = new LinearLayoutManager(this) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+
+        tracksManager.setOrientation(RecyclerView.VERTICAL);
+        rvTracks.setLayoutManager(tracksManager);
+
         txtResultStatus = findViewById(R.id.txtResultStatus);
+        shimmer_artists = findViewById(R.id.shimmer_artists);
+        shimmer_songs = findViewById(R.id.shimmer_songs);
 
         updateTheme();
     }
@@ -91,27 +138,81 @@ public class InSearchActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
 //                Log.d("txtSearchText", "onTextChanged: " + "start: " + start + ", before: " + before + ", count: " + count);
-                if (count != 0) {
-                    imgClear.setVisibility(View.VISIBLE);
-                } else {
-                    imgClear.setVisibility(View.GONE);
-                }
             }
 
             @Override
             public void afterTextChanged(final Editable editable) {
-                Log.d("txtSearchText", "afterTextChanged: " + "editable: " + editable);
+//                Log.d("txtSearchText", "afterTextChanged: " + "editable: " + editable);
+                if (editable.length() != 0) {
+                    imgClear.setVisibility(View.VISIBLE);
+                } else {
+                    imgClear.setVisibility(View.GONE);
+                }
 
-                final String temp = editable.toString();
+                final String temp = editable.toString().toLowerCase();
 
                 Runnable r = new Runnable() {
                     public void run() {
-                        Log.d("afterTextChanged", "editable: " + editable + ", temp: " + temp);
-                        if (temp.equals(editable.toString())) {
+//                        Log.d("afterTextChanged", "editable: " + editable + ", temp: " + temp);
+                        if (temp.equals(editable.toString().toLowerCase()) && !temp.equals("")) {
                             Log.d("afterTextChanged", "run");
+
+                            txtResultStatus.setVisibility(View.GONE);
+                            scroll_view.setVisibility(View.VISIBLE);
+
+                            artist_frame.setVisibility(View.VISIBLE);
+                            songs_frame.setVisibility(View.VISIBLE);
+
+                            shimmer_artists.setVisibility(View.VISIBLE);
+                            shimmer_songs.setVisibility(View.VISIBLE);
+
+                            FirebaseManager.getInstance().setReadByTitleListener(new FirebaseManager.ReadByTitleListener() {
+                                @Override
+                                public void readTrackByTitleListener(ArrayList<Track> tracks) {
+                                    Log.d("afterTextChanged", "track: " + tracks.size());
+
+                                    if (tracks.size() == 0) {
+                                        songs_frame.setVisibility(View.GONE);
+                                    } else {
+                                        shimmer_songs.setVisibility(View.GONE);
+                                        rvTracks.setVisibility(View.VISIBLE);
+                                        tracksAdapter.update(tracks);
+                                    }
+                                }
+
+                                @Override
+                                public void readAlbumByTitleListener(final ArrayList<Album> albums) {
+                                    Log.d("afterTextChanged", "albums: " + albums.size());
+
+                                    if (albums.size() == 0) {
+                                        artist_frame.setVisibility(View.GONE);
+                                    } else {
+                                        shimmer_artists.setVisibility(View.GONE);
+                                        rvArtist.setVisibility(View.VISIBLE);
+                                        artistsAdapter.update(albums);
+                                    }
+                                }
+
+                                @Override
+                                public void handleSearchIsEmptyListener() {
+                                    Log.d("afterTextChanged", "handleSearchIsEmptyListener");
+
+                                    scroll_view.setVisibility(View.GONE);
+                                    txtResultStatus.setVisibility(View.VISIBLE);
+
+                                    txtResultStatus.setText(getString(R.string.found_0_result));
+                                }
+                            });
 
                             FirebaseManager.getInstance().searchTrackByTitle(temp);
                             FirebaseManager.getInstance().searchAlbumByTitle(temp);
+                        } else {
+                            if (temp.equals("")) {
+                                txtResultStatus.setVisibility(View.VISIBLE);
+                                scroll_view.setVisibility(View.GONE);
+
+                                txtResultStatus.setText(getString(R.string.your_results_will_be_shown_here));
+                            }
                         }
                     }
                 };
@@ -125,6 +226,7 @@ public class InSearchActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 txtSearchText.setText("");
+                txtResultStatus.setText(getString(R.string.your_results_will_be_shown_here));
             }
         });
     }
