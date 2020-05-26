@@ -32,14 +32,14 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private MediaSessionCompat.Callback mediaSessionCallback;
     private PlaybackStateCompat.Builder playbackStateBuilder;
 
-    public static ArrayList<Track> tracks;
-    private static MediaPlayer player;
-    private Handler handler;
+    public static ArrayList<Track> tracks = new ArrayList<>();
+    private static MediaPlayer player = new MediaPlayer();
+    private Handler handler = new Handler();
     private AudioManager.OnAudioFocusChangeListener afChangeListener;
     private AudioFocusRequest audioFocusRequest;
     private Runnable delayedStopRunnable;
 
-//    private static int trackPosition;
+    private static int currentTrackPosition;
 //    private static int currentMSec;
 
     @Override
@@ -48,10 +48,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
         initialSession();
 
-        tracks = new ArrayList<>();
-        player = new MediaPlayer();
-
-        handler = new Handler();
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+            }
+        });
     }
 
     private void initialAFChangeListener() {
@@ -99,21 +102,45 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     }
 
     public static void addTrack(Track track) {
-        Track temp = new Track(track);
-        tracks.add(temp);
-        Log.d(LOG_TAG, "tracks size: " + tracks.size() + " thread " + Thread.currentThread() + " " + player);
-
         if (mediaSession.getController().getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
             player.stop();
+            player.reset();
         }
 
-        try {
-            player.reset();
-            player.setDataSource(tracks.get(tracks.size() - 1).getTrack());
-            player.prepare();
-            player.start();
-        } catch (IOException e) {
-            Log.d(LOG_TAG, "e: " + e.toString());
+        boolean isContain = false;
+
+        for (int i = 0; i < tracks.size(); i++) {
+            if (tracks.get(i).getId() == track.getId()) {
+                isContain = true;
+                currentTrackPosition = i;
+                break;
+            }
+        }
+
+        if (!isContain) {
+            Log.d(LOG_TAG, "not contains track " + track.toString());
+
+            Track temp = new Track(track);
+            tracks.add(temp);
+//            Log.d(LOG_TAG, "tracks size: " + tracks.size() + " thread " + Thread.currentThread() + " " + player);
+
+            try {
+                player.setDataSource(tracks.get(tracks.size() - 1).getTrack());
+                player.prepareAsync();
+                player.start();
+            } catch (IOException e) {
+                Log.d(LOG_TAG, "e: " + e.toString());
+            }
+        } else {
+            Log.d(LOG_TAG, "contains track " + track.toString());
+
+            try {
+                player.setDataSource(tracks.get(currentTrackPosition).getTrack());
+                player.prepareAsync();
+                player.start();
+            } catch (IOException e) {
+                Log.d(LOG_TAG, "e: " + e.toString());
+            }
         }
     }
 
