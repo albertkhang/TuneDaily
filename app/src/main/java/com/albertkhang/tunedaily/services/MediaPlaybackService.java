@@ -2,6 +2,7 @@ package com.albertkhang.tunedaily.services;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -16,9 +17,11 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.media.MediaBrowserServiceCompat;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.broadcasts.BecomingNoisyReceiver;
 import com.albertkhang.tunedaily.utils.Track;
 
 import java.io.IOException;
@@ -38,14 +41,16 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private AudioManager.OnAudioFocusChangeListener afChangeListener;
     private AudioFocusRequest audioFocusRequest;
     private Runnable delayedStopRunnable;
+    private BecomingNoisyReceiver becomingNoisyReceiver;
+    private IntentFilter becomingNoisyFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
 
     private static int currentTrackPosition;
-//    private static int currentMSec;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
+        initialBecomingNoisyReceiver();
         initialSession();
 
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -57,8 +62,19 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         });
     }
 
+    private void initialBecomingNoisyReceiver() {
+        becomingNoisyReceiver = new BecomingNoisyReceiver();
+        becomingNoisyReceiver.setOnReceiveListener(new BecomingNoisyReceiver.OnReceiveListener() {
+            @Override
+            public void onReceiveListener() {
+                // Pause the playback
+                mediaSession.getController().getTransportControls().pause();
+            }
+        });
+    }
+
     private void initialAFChangeListener() {
-        initialDelayedStopRunnable();
+//        initialDelayedStopRunnable();
 
         afChangeListener = new AudioManager.OnAudioFocusChangeListener() {
             @Override
@@ -209,14 +225,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                         mediaSession.setPlaybackState(playbackStateBuilder.build());
 
                         //Player Implementation
-//                        if (currentMSec == -1) {
-//                            player.setDataSource(tracks.get(trackPosition).getTrack());
-//                        }
                         player.start();
-//                        currentMSec = -1;
 
                         //Becoming Noisy
-//                        registerReceiver(myNoisyAudioStreamReceiver, intentFilter);
+                        registerReceiver(becomingNoisyReceiver, becomingNoisyFilter);
 
                         //Notifications
 //                        service.startForeground(id, myPlayerNotification);
@@ -239,7 +251,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                 player.pause();
 
                 //Becoming Noisy
-//                unregisterReceiver(myNoisyAudioStreamReceiver);
+                LocalBroadcastManager.getInstance(getApplicationContext()).unregisterReceiver(becomingNoisyReceiver);
 
                 //Notifications
 
@@ -267,11 +279,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                 mediaSession.setPlaybackState(playbackStateBuilder.build());
 
                 //Player Implementation
-//                currentMSec = player.getCurrentPosition();
                 player.stop();
-
-                //Becoming Noisy
-//                unregisterReceiver(myNoisyAudioStreamReceiver);
 
                 //Notifications
 
