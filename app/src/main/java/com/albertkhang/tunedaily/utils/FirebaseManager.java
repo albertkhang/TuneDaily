@@ -228,6 +228,7 @@ public class FirebaseManager {
     }
 
     public void getTopTrack() {
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference ref = database.getReference("top_chart");
         ref.keepSynced(true);

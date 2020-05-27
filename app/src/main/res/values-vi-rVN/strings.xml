@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TuneDaily</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="english">Tiếng Anh</string>
+    <string name="language">Ngôn Ngữ</string>
+    <string name="theme">Giao Diện</string>
+    <string name="popular_albums">NHỮNG ALBUM PHỔ BIẾN</string>
+    <string name="best_of_artists">NHỮNG NGHỆ SỸ NỔI TIẾNG</string>
+    <string name="settings">CÀI ĐẶT</string>
+    <string name="top_chart">NHỮNG BÀI HÁT HÀNG ĐẦU</string>
+</resources>

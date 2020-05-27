@@ -2,6 +2,7 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -10,14 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
-import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
 import com.albertkhang.tunedaily.utils.SettingManager;
-import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
 import com.albertkhang.tunedaily.views.RoundImageView;
 
-import org.greenrobot.eventbus.EventBus;
-
-import io.opencensus.trace.MessageEvent;
+import java.util.Locale;
 
 public class SettingsActivity extends AppCompatActivity {
     private ImageView imgBack;
@@ -33,11 +30,14 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView txtEnglish;
     private TextView txtVietnamese;
 
-    private SettingManager settingManager;
+    private SettingManager settingManager = SettingManager.getInstance(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        updateLanguage();
+
         setContentView(R.layout.activity_settings);
 
         addControl();
@@ -58,8 +58,6 @@ public class SettingsActivity extends AppCompatActivity {
         txtEnglish = findViewById(R.id.txtEnglish);
         txtVietnamese = findViewById(R.id.txtVietnamese);
 
-        settingManager = SettingManager.getInstance(this);
-
         updateTheme();
     }
 
@@ -77,7 +75,6 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 settingManager.setTheme(true);
                 updateTheme();
-//                sendUpdateThemeEvent();
             }
         });
 
@@ -86,27 +83,33 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 settingManager.setTheme(false);
                 updateTheme();
-//                sendUpdateThemeEvent();
             }
         });
 
         txtEnglish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                settingManager.setLanguage(true);
-                updateTheme();
+                settingManager.changeLanguage(SettingsActivity.this, SettingManager.LANGUAGE.EN);
+                recreate();
             }
         });
 
         txtVietnamese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                settingManager.setLanguage(false);
-                updateTheme();
+                settingManager.changeLanguage(SettingsActivity.this, SettingManager.LANGUAGE.VI);
+                recreate();
             }
         });
     }
 
+    private void updateLanguage() {
+        if (SettingManager.getInstance(SettingsActivity.this).isEnglish()) {
+            settingManager.changeLanguage(SettingsActivity.this, SettingManager.LANGUAGE.EN);
+        } else {
+            settingManager.changeLanguage(SettingsActivity.this, SettingManager.LANGUAGE.VI);
+        }
+    }
 
     private void updateTheme() {
         if (settingManager.isDarkTheme()) {
@@ -122,7 +125,7 @@ public class SettingsActivity extends AppCompatActivity {
             txtThemeTitle.setTextColor(getResources().getColor(R.color.colorLight1));
             txtLanguageTitle.setTextColor(getResources().getColor(R.color.colorLight1));
 
-            changeLanguage(R.color.colorDark5);
+            updateLanguageColor(R.color.colorDark5);
 
             imgDarkTheme.setImageResource(R.color.colorDark3);
             imgLightTheme.setImageResource(R.color.colorLight1);
@@ -139,7 +142,7 @@ public class SettingsActivity extends AppCompatActivity {
             txtThemeTitle.setTextColor(getResources().getColor(R.color.colorDark1));
             txtLanguageTitle.setTextColor(getResources().getColor(R.color.colorDark1));
 
-            changeLanguage(R.color.colorLight5);
+            updateLanguageColor(R.color.colorLight5);
 
             imgDarkTheme.setImageResource(R.color.colorDark1);
             imgLightTheme.setImageResource(R.color.colorLight2);
@@ -152,7 +155,7 @@ public class SettingsActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.animation_finish_enter, R.anim.animation_finish_leave);
     }
 
-    private void changeLanguage(int notSelectId) {
+    private void updateLanguageColor(int notSelectId) {
         if (settingManager.isEnglish()) {
             txtEnglish.setTextColor(getResources().getColor(R.color.colorMain3));
             txtVietnamese.setTextColor(getResources().getColor(notSelectId));

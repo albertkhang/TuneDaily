@@ -2,15 +2,23 @@ package com.albertkhang.tunedaily.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 
 import androidx.preference.PreferenceManager;
 
 import com.albertkhang.tunedaily.R;
 
+import java.util.Locale;
+
 public class SettingManager {
     private static SettingManager instance;
     private Context context;
     private SharedPreferences prefs;
+
+    public interface LANGUAGE {
+        String VI = "vi";
+        String EN = "en";
+    }
 
     private SettingManager(Context context) {
         this.context = context;
@@ -26,6 +34,20 @@ public class SettingManager {
             }
         }
         return instance;
+    }
+
+    public void changeLanguage(Context context, String lang) {
+        if (lang.equals(LANGUAGE.EN)) {
+            setLanguage(true);
+        } else {
+            setLanguage(false);
+        }
+
+        Locale locale = new Locale(lang);
+        Locale.setDefault(locale);
+        Configuration config = new Configuration();
+        config.locale = locale;
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 
     public boolean isDarkTheme() {
@@ -48,7 +70,7 @@ public class SettingManager {
         return prefs.getBoolean(context.getResources().getString(R.string.isEnglish), true);
     }
 
-    public void setLanguage(boolean isEnglish) {
+    private void setLanguage(boolean isEnglish) {
         SharedPreferences.Editor editor = prefs.edit();
 
         if (isEnglish) {
