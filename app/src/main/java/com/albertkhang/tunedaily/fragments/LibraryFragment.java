@@ -31,7 +31,7 @@ import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
-import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
+import com.albertkhang.tunedaily.events.UpdateThemeEvent;
 import com.albertkhang.tunedaily.views.RoundImageView;
 
 import org.greenrobot.eventbus.EventBus;

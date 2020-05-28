@@ -19,10 +19,8 @@ import com.albertkhang.tunedaily.fragments.LibraryFragment;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.SearchFragment;
 import com.albertkhang.tunedaily.utils.SettingManager;
-import com.albertkhang.tunedaily.utils.Track;
-import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
+import com.albertkhang.tunedaily.events.UpdateThemeEvent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

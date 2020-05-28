@@ -27,7 +27,7 @@ import com.albertkhang.tunedaily.utils.Album;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
-import com.albertkhang.tunedaily.utils.UpdateThemeEvent;
+import com.albertkhang.tunedaily.events.UpdateThemeEvent;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.greenrobot.eventbus.EventBus;
