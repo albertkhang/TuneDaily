@@ -115,4 +115,7 @@ Cần gì hơn) x 4\n</string>
     <string name="your_results_will_be_shown_here">Your results will be shown here.</string>
     <string name="found_0_result">Found 0 result.</string>
     <string name="songs_library"> songs</string>
+    <string name="playlist_name">Playlist Name</string>
+    <string name="create">Create</string>
+    <string name="cancel">Cancel</string>
 </resources>
