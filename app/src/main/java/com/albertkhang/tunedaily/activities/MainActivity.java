@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
+import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.fragments.DiscoverFragment;
 import com.albertkhang.tunedaily.fragments.LibraryFragment;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
@@ -56,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
 
         addControl();
         addEvent();
+
+        //updateLanguage
+        settingManager.updateLanguageConfiguration();
+        EventBus.getDefault().post(new UpdateLanguageEvent());
     }
 
     private void addControl() {
@@ -161,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateTheme();
+        EventBus.getDefault().post(new UpdateThemeEvent());
     }
 
     private void updateTheme() {
@@ -172,12 +178,6 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setItemBackgroundResource(R.color.colorLight2);
             bottom_gradient_frame.setBackgroundResource(R.drawable.lyric_hidden_bottom_gradient_light);
         }
-
-        sendUpdateThemeEvent();
-    }
-
-    private void sendUpdateThemeEvent() {
-        EventBus.getDefault().post(new UpdateThemeEvent());
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

@@ -2,7 +2,6 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,10 +10,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.views.RoundImageView;
 
-import java.util.Locale;
+import org.greenrobot.eventbus.EventBus;
 
 public class SettingsActivity extends AppCompatActivity {
     private ImageView imgBack;
@@ -35,13 +35,18 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        updateLanguage();
-
         setContentView(R.layout.activity_settings);
 
         addControl();
         addEvent();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateTheme();
+
+        updateLanguage();
     }
 
     private void addControl() {
@@ -57,8 +62,6 @@ public class SettingsActivity extends AppCompatActivity {
         txtLanguageTitle = findViewById(R.id.txtLanguageTitle);
         txtEnglish = findViewById(R.id.txtEnglish);
         txtVietnamese = findViewById(R.id.txtVietnamese);
-
-        updateTheme();
     }
 
     private void addEvent() {
@@ -89,26 +92,34 @@ public class SettingsActivity extends AppCompatActivity {
         txtEnglish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                settingManager.changeLanguage(SettingsActivity.this, SettingManager.LANGUAGE.EN);
-                recreate();
+                settingManager.setLanguageSP(true);
+                EventBus.getDefault().post(new UpdateLanguageEvent());
+                updateLanguage();
+                updateTheme();
             }
         });
 
         txtVietnamese.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                settingManager.changeLanguage(SettingsActivity.this, SettingManager.LANGUAGE.VI);
-                recreate();
+                settingManager.setLanguageSP(false);
+                EventBus.getDefault().post(new UpdateLanguageEvent());
+                updateLanguage();
+                updateTheme();
             }
         });
     }
 
     private void updateLanguage() {
-        if (SettingManager.getInstance(SettingsActivity.this).isEnglish()) {
-            settingManager.changeLanguage(SettingsActivity.this, SettingManager.LANGUAGE.EN);
-        } else {
-            settingManager.changeLanguage(SettingsActivity.this, SettingManager.LANGUAGE.VI);
-        }
+        settingManager.updateLanguageConfiguration();
+
+        txtTopBarHeader.setText(getString(R.string.settings));
+
+        txtThemeTitle.setText(getString(R.string.theme));
+        txtLanguageTitle.setText(getString(R.string.language));
+
+        txtEnglish.setText(getString(R.string.english));
+        txtVietnamese.setText(getString(R.string.vietnamese));
     }
 
     private void updateTheme() {

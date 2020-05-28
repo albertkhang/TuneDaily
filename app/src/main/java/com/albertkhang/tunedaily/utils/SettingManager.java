@@ -36,20 +36,6 @@ public class SettingManager {
         return instance;
     }
 
-    public void changeLanguage(Context context, String lang) {
-        if (lang.equals(LANGUAGE.EN)) {
-            setLanguage(true);
-        } else {
-            setLanguage(false);
-        }
-
-        Locale locale = new Locale(lang);
-        Locale.setDefault(locale);
-        Configuration config = new Configuration();
-        config.locale = locale;
-        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
-    }
-
     public boolean isDarkTheme() {
         return prefs.getBoolean(context.getResources().getString(R.string.isDarkTheme), true);
     }
@@ -70,7 +56,7 @@ public class SettingManager {
         return prefs.getBoolean(context.getResources().getString(R.string.isEnglish), true);
     }
 
-    private void setLanguage(boolean isEnglish) {
+    public void setLanguageSP(boolean isEnglish) {
         SharedPreferences.Editor editor = prefs.edit();
 
         if (isEnglish) {
@@ -80,5 +66,21 @@ public class SettingManager {
         }
 
         editor.apply();
+    }
+
+    public void updateLanguageConfiguration() {
+        Locale locale;
+
+        if (isEnglish()) {
+            locale = new Locale(LANGUAGE.EN);
+            Locale.setDefault(locale);
+        } else {
+            locale = new Locale(LANGUAGE.VI);
+            Locale.setDefault(locale);
+        }
+
+        Configuration config = new Configuration();
+        config.locale = locale;
+        context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
 }

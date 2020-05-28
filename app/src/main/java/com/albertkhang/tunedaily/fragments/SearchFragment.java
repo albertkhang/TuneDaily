@@ -23,6 +23,7 @@ import com.albertkhang.tunedaily.activities.InSearchActivity;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.adapters.AlbumAdapter;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.utils.Album;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -56,7 +57,14 @@ public class SearchFragment extends Fragment implements Serializable {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         return inflater.inflate(R.layout.fragment_search, container, false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
     }
 
     @Override
@@ -219,27 +227,29 @@ public class SearchFragment extends Fragment implements Serializable {
         randomSongsAdapter.notifyDataSetChanged();
     }
 
+    private void updateLanguage() {
+        settingManager.updateLanguageConfiguration();
+
+        txtSearchTitle.setText(getString(R.string.search));
+        txtSearchText.setText(getString(R.string.artist_songs_or_album));
+        txtRandomArtist.setText(getString(R.string.random_artists));
+        txtRandomTracks.setText(getString(R.string.random_songs));
+    }
+
     private void setSearchBackground(int color) {
         Drawable drawable = getResources().getDrawable(R.drawable.search_background);
         drawable.setTint(getResources().getColor(color));
         search_frame.setBackground(drawable);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUpdateThemeEvent(UpdateThemeEvent updateThemeEvent) {
+    @Subscribe
+    public void onPlayAction(UpdateThemeEvent updateThemeEvent) {
         updateTheme();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+    @Subscribe
+    public void onPlayAction(UpdateLanguageEvent updateLanguageEvent) {
+        updateLanguage();
     }
 
     private void showMoreItem(Track track) {

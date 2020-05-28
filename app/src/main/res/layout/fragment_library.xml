@@ -94,14 +94,24 @@
                         app:layout_constraintTop_toTopOf="@id/txtSongsAmount" />
 
                     <TextView
-                        android:id="@+id/txtSongsAmount"
+                        android:id="@+id/txtTotal"
                         style="@style/DescriptionText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="4dp"
 
-                        android:text="13 songs"
+                        android:text="13"
                         app:layout_constraintLeft_toRightOf="@id/imgMusicNote"
+                        app:layout_constraintTop_toBottomOf="@id/txtLikedSongs" />
+
+                    <TextView
+                        android:id="@+id/txtSongsAmount"
+                        style="@style/DescriptionText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:text="@string/songs_library"
+                        app:layout_constraintLeft_toRightOf="@id/txtTotal"
                         app:layout_constraintTop_toBottomOf="@id/txtLikedSongs" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>

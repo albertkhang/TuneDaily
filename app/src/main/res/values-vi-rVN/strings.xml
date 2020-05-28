@@ -9,4 +9,12 @@
     <string name="best_of_artists">NHỮNG NGHỆ SỸ NỔI TIẾNG</string>
     <string name="settings">CÀI ĐẶT</string>
     <string name="top_chart">NHỮNG BÀI HÁT HÀNG ĐẦU</string>
+    <string name="search">Tìm Kiếm</string>
+    <string name="artist_songs_or_album">Nghệ sỹ, bài hát hoặc album</string>
+    <string name="random_artists">NHỮNG NGHỆ SỸ NGẪU NHIÊN</string>
+    <string name="random_songs">NHỮNG BÀI HÁT NGẪU NHIÊN</string>
+    <string name="library_header">THƯ VIỆN</string>
+    <string name="liked_songs">Những bài hát đã thích</string>
+    <string name="songs_library"> bài hát</string>
+    <string name="create_new_playlist">Tạo danh sách phát mới</string>
 </resources>

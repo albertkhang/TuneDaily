@@ -23,6 +23,7 @@ import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
 import com.albertkhang.tunedaily.adapters.AlbumAdapter;
 import com.albertkhang.tunedaily.adapters.TopChartAdapter;
+import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.utils.Album;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -58,10 +59,19 @@ public class DiscoverFragment extends Fragment {
 
     private SwipeRefreshLayout swipe_frame;
 
+    private SettingManager settingManager = SettingManager.getInstance(getContext());
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         return inflater.inflate(R.layout.fragment_discover, container, false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
     }
 
     @Override
@@ -274,21 +284,23 @@ public class DiscoverFragment extends Fragment {
         bestOfArtistAlbumAdapter.notifyDataSetChanged();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUpdateThemeEvent(UpdateThemeEvent updateThemeEvent) {
+    private void updateLanguage() {
+        settingManager.updateLanguageConfiguration();
+
+        txtTopChart.setText(getString(R.string.top_chart));
+        txtPopularAlbum.setText(getString(R.string.popular_albums));
+        txtBestOfArtist.setText(getString(R.string.best_of_artists));
+    }
+
+    @Subscribe
+    public void onPlayAction(UpdateThemeEvent updateThemeEvent) {
         updateTheme();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+    @Subscribe
+    public void onPlayAction(UpdateLanguageEvent updateLanguageEvent) {
+        Log.d("DiscoverFragment", "UpdateLanguageEvent");
+        updateLanguage();
     }
 
     @Override

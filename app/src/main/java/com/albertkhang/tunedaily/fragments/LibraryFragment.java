@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
+import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -50,6 +51,7 @@ public class LibraryFragment extends Fragment {
     private RelativeLayout top_frame;
     private TextView txtLibrary;
     private TextView txtLikedSongs;
+    private TextView txtTotal;
     private TextView txtSongsAmount;
     private ImageView imgMusicNote;
     private RoundImageView playlist_background_frame;
@@ -65,7 +67,14 @@ public class LibraryFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        EventBus.getDefault().register(this);
         return inflater.inflate(R.layout.fragment_library, container, false);
+    }
+
+    @Override
+    public void onDestroyView() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroyView();
     }
 
     @Override
@@ -85,6 +94,7 @@ public class LibraryFragment extends Fragment {
         txtLibrary = view.findViewById(R.id.txtLibrary);
 
         txtLikedSongs = view.findViewById(R.id.txtLikedSongs);
+        txtTotal = view.findViewById(R.id.txtTotal);
         txtSongsAmount = view.findViewById(R.id.txtSongsAmount);
         imgMusicNote = view.findViewById(R.id.imgMusicNote);
 
@@ -270,7 +280,8 @@ public class LibraryFragment extends Fragment {
             txtLibrary.setTextColor(getResources().getColor(R.color.colorLight1));
 
             txtLikedSongs.setTextColor(getResources().getColor(R.color.colorLight1));
-            txtSongsAmount.setTextColor(getResources().getColor(R.color.colorLight3));
+            txtTotal.setTextColor(getResources().getColor(R.color.colorLight5));
+            txtSongsAmount.setTextColor(getResources().getColor(R.color.colorLight5));
 
             imgMusicNote.setColorFilter(getResources().getColor(R.color.colorLight3));
 
@@ -284,7 +295,8 @@ public class LibraryFragment extends Fragment {
             txtLibrary.setTextColor(getResources().getColor(R.color.colorDark1));
 
             txtLikedSongs.setTextColor(getResources().getColor(R.color.colorDark1));
-            txtSongsAmount.setTextColor(getResources().getColor(R.color.colorDark3));
+            txtSongsAmount.setTextColor(getResources().getColor(R.color.colorDark5));
+            txtTotal.setTextColor(getResources().getColor(R.color.colorDark5));
 
             imgMusicNote.setColorFilter(getResources().getColor(R.color.colorDark3));
             playlist_background_frame.setColorFilter(getResources().getColor(R.color.colorLight3));
@@ -293,21 +305,23 @@ public class LibraryFragment extends Fragment {
         }
     }
 
+    private void updateLanguage() {
+        settingManager.updateLanguageConfiguration();
+
+        txtLibrary.setText(getString(R.string.library_header));
+        txtLikedSongs.setText(getString(R.string.liked_songs));
+        txtSongsAmount.setText(getString(R.string.songs_library));
+        txtPlaylist.setText(getString(R.string.create_new_playlist));
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onUpdateThemeEvent(UpdateThemeEvent updateThemeEvent) {
+    public void onPlayAction(UpdateThemeEvent updateThemeEvent) {
         updateTheme();
         playlistAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
+    @Subscribe
+    public void onPlayAction(UpdateLanguageEvent updateLanguageEvent) {
+        updateLanguage();
     }
 }
