@@ -19,6 +19,7 @@ import com.albertkhang.tunedaily.fragments.DiscoverFragment;
 import com.albertkhang.tunedaily.fragments.LibraryFragment;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.SearchFragment;
+import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.events.UpdateThemeEvent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout bottom_gradient_frame;
     private FrameLayout miniPlayer_frame;
 
+    private MediaPlaybackConnectHelper connectHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
 
         addMiniPlayer();
         Paper.init(this);
+
+        connectHelper = new MediaPlaybackConnectHelper(this);
     }
 
     private void addMiniPlayer() {
@@ -167,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         updateTheme();
         EventBus.getDefault().post(new UpdateThemeEvent());
+        connectHelper.putInOnResume();
     }
 
     private void updateTheme() {
@@ -193,11 +199,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        connectHelper.putInOnStart();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        connectHelper.putInOnStop();
     }
 }
