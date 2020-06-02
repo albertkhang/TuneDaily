@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import android.os.RemoteException;
 import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
+import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
@@ -98,7 +100,21 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         initialConnectionCallback();
         initialMediaBrowser();
 
+        updateIfIsPlaying();
+
         Log.d(LOG_TAG, "addControl");
+    }
+
+    private void updateIfIsPlaying() {
+        Bundle bundle = getArguments();
+        if (bundle != null && bundle.getBoolean("isPlaying")) {
+            Track track = MediaPlaybackConnectHelper.getCurrentTrack();
+
+            txtTitle.setText(track.getTitle());
+            txtArtist.setText(track.getArtist());
+            imgPlayPause.setImageResource(R.drawable.ic_pause);
+            Glide.with(this).load(track.getCover()).into(imgCover);
+        }
     }
 
     private void initialControllerCallback() {

@@ -20,6 +20,7 @@ import com.albertkhang.tunedaily.fragments.LibraryFragment;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.SearchFragment;
 import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
+import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.events.UpdateThemeEvent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -74,18 +75,34 @@ public class MainActivity extends AppCompatActivity {
         miniPlayer_frame = findViewById(R.id.miniPlayer_frame);
 
         settingManager = SettingManager.getInstance(this);
-
-        addMiniPlayer();
+        connectHelper = new MediaPlaybackConnectHelper(this);
         Paper.init(this);
 
-        connectHelper = new MediaPlaybackConnectHelper(this);
+        addMiniPlayer();
     }
 
     private void addMiniPlayer() {
         miniPlayer_frame.setVisibility(View.GONE);
+        final MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment();
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.miniPlayer_frame, new MiniPlayerFragment()).commit();
+        connectHelper.setOnPlayingListener(new MediaPlaybackConnectHelper.OnPlayingListener() {
+            @Override
+            public void onPlayingListener(boolean isPlaying) {
+                if (isPlaying) {
+                    miniPlayer_frame.setVisibility(View.VISIBLE);
+
+                    Bundle bundle = new Bundle();
+                    bundle.putBoolean("isPlaying", true);
+                    miniPlayerFragment.setArguments(bundle);
+
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.miniPlayer_frame, miniPlayerFragment).commit();
+                } else {
+                    getSupportFragmentManager().beginTransaction()
+                            .add(R.id.miniPlayer_frame, miniPlayerFragment).commit();
+                }
+            }
+        });
     }
 
     private void addEvent() {

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.utils.Track;
 
 public class MediaPlaybackConnectHelper {
     private static final String LOG_TAG = "MediaPbConnectHelper";
@@ -31,8 +32,10 @@ public class MediaPlaybackConnectHelper {
         initialControllerCallback();
         initialConnectionCallback();
         initialMediaBrowser();
+    }
 
-
+    public static Track getCurrentTrack() {
+        return MediaPlaybackService.getCurrentTrack();
     }
 
     private void initialControllerCallback() {
@@ -48,6 +51,16 @@ public class MediaPlaybackConnectHelper {
                         //TODO: Add onPlaybackStateChanged callback
                     }
                 };
+    }
+
+    public interface OnPlayingListener {
+        void onPlayingListener(boolean isPlaying);
+    }
+
+    private OnPlayingListener onPlayingListener;
+
+    public void setOnPlayingListener(OnPlayingListener onPlayingListener) {
+        this.onPlayingListener = onPlayingListener;
     }
 
     private void initialConnectionCallback() {
@@ -73,6 +86,9 @@ public class MediaPlaybackConnectHelper {
                     if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
                         //TODO: Add isPlaying State
                         Log.d(LOG_TAG, "STATE_PLAYING");
+                        onPlayingListener.onPlayingListener(true);
+                    } else {
+                        onPlayingListener.onPlayingListener(false);
                     }
                 } catch (RemoteException e) {
                     Log.d(LOG_TAG, "connectionCallbacks e: " + e.toString());

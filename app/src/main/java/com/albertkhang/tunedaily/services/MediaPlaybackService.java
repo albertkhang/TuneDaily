@@ -65,7 +65,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private IntentFilter becomingNoisyFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
     private NotificationCompat.Builder builder;
 
-    private static int currentTrackPosition;
+    private static int currentTrackPosition = -1;
 
     @Override
     public void onCreate() {
@@ -82,6 +82,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                 mp.start();
             }
         });
+    }
+
+    static Track getCurrentTrack() {
+        return tracks.get(currentTrackPosition);
     }
 
     private void initialNotificationChannelId() {
