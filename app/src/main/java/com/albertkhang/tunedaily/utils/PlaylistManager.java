@@ -1,7 +1,9 @@
 package com.albertkhang.tunedaily.utils;
 
-import android.content.Context;
 import android.util.Log;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +13,7 @@ import io.paperdb.Paper;
 public class PlaylistManager {
     private static final String PLAYLIST_REGEX = "[a-zA-Z0-9]([a-zA-Z0-9 ])*";
     private static PlaylistManager instance;
+    private FirebaseAuth mAuth;
 
     public interface NAME {
         int EMPTY = 0;
@@ -25,7 +28,11 @@ public class PlaylistManager {
         String PLAYLIST_NAMES = "playlist";
     }
 
-    public static PlaylistManager getInstance(Context context) {
+    public PlaylistManager() {
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    public static PlaylistManager getInstance() {
         if (instance == null) {
             synchronized (FirebaseManager.class) {
                 if (instance == null) {
@@ -34,6 +41,68 @@ public class PlaylistManager {
             }
         }
         return instance;
+    }
+
+    public void addToLikedSongs(int id) {
+        addToLikedSongsRef(id);
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            addToLikedSongsFirebase();
+        }
+    }
+
+    private void addToLikedSongsFirebase() {
+
+    }
+
+    private void addToLikedSongsRef(int id) {
+        List<Integer> tracks = getLikedSongsIds();
+
+        List<Integer> temp = new ArrayList<>();
+        temp.add(id);
+        temp.addAll(tracks);
+
+        Paper.book("liked_songs").write(PLAYLIST.TRACKS, temp);
+    }
+
+    public void removeFromLikedSongs(int id) {
+        removeFromLikedSongsRef(id);
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            removeFromLikedSongsFirebase(id);
+        }
+    }
+
+    private void removeFromLikedSongsFirebase(int id) {
+
+    }
+
+    private void removeFromLikedSongsRef(int id) {
+        List<Integer> tracks = getLikedSongsIds();
+        for (int i = 0; i < tracks.size(); i++) {
+            if (tracks.get(i) == id) {
+                tracks.remove(i);
+                break;
+            }
+        }
+
+        Paper.book("liked_songs").write(PLAYLIST.TRACKS, tracks);
+    }
+
+    public boolean isContainInLikedSongs(int id) {
+        List<Integer> tracks = getLikedSongsIds();
+        Log.d("Playlist", "tracks: " + tracks.toString());
+        return tracks.contains(id);
+    }
+
+    public List<Integer> getLikedSongsIds() {
+        return Paper.book("liked_songs").read(PLAYLIST.TRACKS, new ArrayList<Integer>());
+    }
+
+    public int getLikedSongsSize() {
+        return Paper.book("liked_songs").read(PLAYLIST.TRACKS, new ArrayList<Integer>()).size();
     }
 
     public int isPlaylistNameValidated(String playlistName) {

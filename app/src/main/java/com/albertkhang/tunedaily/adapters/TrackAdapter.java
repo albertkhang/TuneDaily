@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.MainActivity;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.albertkhang.tunedaily.views.RoundImageView;
@@ -73,13 +74,32 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
         });
 
         handleMoreIconColor(holder.imgMore);
-        handleFavouriteIconColor(holder.imgFavourite);
+        handleFavouriteIconColor(holder.imgFavourite, position);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 EventBus.getDefault().post(tracks.get(position));
                 EventBus.getDefault().post(MainActivity.SHOW_MINI_PLAYER_ACTION);
+            }
+        });
+
+        holder.imgFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (PlaylistManager.getInstance().isContainInLikedSongs(tracks.get(position).getId())) {
+                    PlaylistManager.getInstance().removeFromLikedSongs(tracks.get(position).getId());
+                    holder.imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+                    if (settingManager.isDarkTheme()) {
+                        holder.imgFavourite.setColorFilter(context.getResources().getColor(R.color.colorLight5));
+                    } else {
+                        holder.imgFavourite.setColorFilter(context.getResources().getColor(R.color.colorDark5));
+                    }
+                } else {
+                    PlaylistManager.getInstance().addToLikedSongs(tracks.get(position).getId());
+                    holder.imgFavourite.setColorFilter(context.getResources().getColor(R.color.colorMain3));
+                    holder.imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+                }
             }
         });
     }
@@ -92,11 +112,18 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
         }
     }
 
-    private void handleFavouriteIconColor(ImageView imageView) {
-        if (settingManager.isDarkTheme()) {
-            imageView.setColorFilter(context.getResources().getColor(R.color.colorLight5));
+    private void handleFavouriteIconColor(ImageView imageView, int position) {
+        if (PlaylistManager.getInstance().isContainInLikedSongs(tracks.get(position).getId())) {
+            imageView.setColorFilter(context.getResources().getColor(R.color.colorMain3));
+            imageView.setImageResource(R.drawable.ic_favourite_blue);
         } else {
-            imageView.setColorFilter(context.getResources().getColor(R.color.colorDark5));
+            imageView.setImageResource(R.drawable.ic_not_favourite);
+
+            if (settingManager.isDarkTheme()) {
+                imageView.setColorFilter(context.getResources().getColor(R.color.colorLight5));
+            } else {
+                imageView.setColorFilter(context.getResources().getColor(R.color.colorDark5));
+            }
         }
     }
 

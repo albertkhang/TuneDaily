@@ -30,7 +30,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
 
     public PlaylistAdapter(Context context) {
         this.context = context;
-        this.playlistManager = PlaylistManager.getInstance(context);
+        this.playlistManager = PlaylistManager.getInstance();
         this.settingManager = SettingManager.getInstance(context);
     }
 

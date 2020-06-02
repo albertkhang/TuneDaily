@@ -105,7 +105,7 @@ public class LibraryFragment extends Fragment {
 
         updateTheme();
 
-        playlistManager = PlaylistManager.getInstance(getContext());
+        playlistManager = PlaylistManager.getInstance();
 
         rvPlaylist = view.findViewById(R.id.rvPlaylist);
         playlistAdapter = new PlaylistAdapter(getContext());
@@ -144,6 +144,8 @@ public class LibraryFragment extends Fragment {
                 intent.putExtra("name", txtLikedSongs.getText().toString());
                 intent.putExtra("cover", "");
                 startActivity(intent);
+
+//                PlaylistManager.getInstance().removeFromLikedSongs(86);
             }
         });
 
@@ -270,6 +272,7 @@ public class LibraryFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateTheme();
+        txtTotal.setText(String.valueOf(PlaylistManager.getInstance().getLikedSongsSize()));
     }
 
     private void updateTheme() {

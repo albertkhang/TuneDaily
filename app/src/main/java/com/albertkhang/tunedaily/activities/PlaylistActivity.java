@@ -148,7 +148,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
 
                 txtTitle.setText(name);
 
-                tracks = PlaylistManager.getInstance(this).getPlaylistTracks(name);
+                tracks = PlaylistManager.getInstance().getPlaylistTracks(name);
                 Log.d("updateIntentData", tracks.toString());
 
                 imgMore.setOnClickListener(new View.OnClickListener() {

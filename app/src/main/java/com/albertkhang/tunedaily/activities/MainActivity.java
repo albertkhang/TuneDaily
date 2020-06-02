@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity {
 
         settingManager = SettingManager.getInstance(this);
         connectHelper = new MediaPlaybackConnectHelper(this);
-        Paper.init(this);
 
         addMiniPlayer();
     }
