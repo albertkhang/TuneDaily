@@ -3,6 +3,7 @@ package com.albertkhang.tunedaily.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ConstraintLayout splash_screen;
     private static final int SHOWING_INTERVAL = 2000;
     public static final String SHOW_MINI_PLAYER_ACTION = "com.albertkhang.activities.showminiplayer";
+    public static final String MINI_PLAYER_TAG = "com.albertkhang.activities.mainactivity.miniplayer";
 
     //This is our viewPager
     private ViewPager viewPager;
@@ -88,18 +90,22 @@ public class MainActivity extends AppCompatActivity {
         connectHelper.setOnPlayingListener(new MediaPlaybackConnectHelper.OnPlayingListener() {
             @Override
             public void onPlayingListener(boolean isPlaying) {
-                if (isPlaying) {
-                    miniPlayer_frame.setVisibility(View.VISIBLE);
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(MINI_PLAYER_TAG);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putBoolean("isPlaying", true);
-                    miniPlayerFragment.setArguments(bundle);
+                if (fragment == null) {
+                    if (isPlaying) {
+                        miniPlayer_frame.setVisibility(View.VISIBLE);
 
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.miniPlayer_frame, miniPlayerFragment).commit();
-                } else {
-                    getSupportFragmentManager().beginTransaction()
-                            .add(R.id.miniPlayer_frame, miniPlayerFragment).commit();
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("isPlaying", true);
+                        miniPlayerFragment.setArguments(bundle);
+
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
+                    } else {
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
+                    }
                 }
             }
         });
