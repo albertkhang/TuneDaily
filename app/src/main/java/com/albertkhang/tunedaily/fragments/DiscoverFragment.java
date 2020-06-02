@@ -236,6 +236,10 @@ public class DiscoverFragment extends Fragment {
                     .load(user.getPhotoUrl())
                     .centerCrop()
                     .into(imgCover);
+
+            if (getDate(user.getMetadata().getCreationTimestamp()).equals(getDate(user.getMetadata().getLastSignInTimestamp()))) {
+                FirebaseManager.getInstance().createDefaultUserSetting(user.getUid());
+            }
         } else {
             Log.d(LOG_TAG, "user == null");
             imgCover.setImageResource(0);
