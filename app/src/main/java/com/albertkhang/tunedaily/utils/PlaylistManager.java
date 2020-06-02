@@ -32,6 +32,18 @@ public class PlaylistManager {
         mAuth = FirebaseAuth.getInstance();
     }
 
+    public void deleteAllPlaylist() {
+        List<String> arrayList = getAllPlaylist();
+        Log.d("deleteAllPlaylist", "before: " + arrayList.toString());
+
+        Paper.book().destroy();
+
+        arrayList = getAllPlaylist();
+        Log.d("deleteAllPlaylist", "after: " + arrayList.toString());
+
+        Paper.book("liked_songs").destroy();
+    }
+
     public static PlaylistManager getInstance() {
         if (instance == null) {
             synchronized (FirebaseManager.class) {

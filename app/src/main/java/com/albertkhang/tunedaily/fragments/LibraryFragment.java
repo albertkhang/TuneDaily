@@ -120,8 +120,6 @@ public class LibraryFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         rvPlaylist.setLayoutManager(linearLayoutManager);
 
-        updatePlaylist();
-
         playlistAdapter.setOnMoreListener(new PlaylistAdapter.OnMoreListener() {
             @Override
             public void onMoreListener(View view, int position) {
@@ -273,6 +271,7 @@ public class LibraryFragment extends Fragment {
         super.onResume();
         updateTheme();
         txtTotal.setText(String.valueOf(PlaylistManager.getInstance().getLikedSongsSize()));
+        updatePlaylist();
     }
 
     private void updateTheme() {
