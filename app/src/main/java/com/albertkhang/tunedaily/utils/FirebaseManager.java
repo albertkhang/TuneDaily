@@ -43,6 +43,8 @@ public class FirebaseManager {
         return instance;
     }
 
+    
+
     public interface ReadTopTrackIdsListener {
         void updateTopTrackListener(ArrayList<TopTrack> topChartIdsOrdered);
     }

@@ -63,6 +63,7 @@ import java.util.concurrent.Executor;
 public class DiscoverFragment extends Fragment {
     private ImageView imgSettings;
     private CircleImageView imgUser;
+    private CircleImageView imgCover;
     private ShimmerFrameLayout shimmer_top_chart;
     private ShimmerFrameLayout shimmer_popular_albums;
     private ShimmerFrameLayout shimmer_best_of_artists;
@@ -112,6 +113,7 @@ public class DiscoverFragment extends Fragment {
     private void addControl(View view) {
         imgSettings = view.findViewById(R.id.imgSettings);
         imgUser = view.findViewById(R.id.imgUser);
+        imgCover = view.findViewById(R.id.imgCover);
         root_view = view.findViewById(R.id.root_view);
         top_frame = view.findViewById(R.id.top_frame);
         txtTopChart = view.findViewById(R.id.txtTopChart);
@@ -178,13 +180,6 @@ public class DiscoverFragment extends Fragment {
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
 
-    private void signOut() {
-        mAuth.signOut();
-        mGoogleSignInClient.signOut();
-
-        updateUI(null);
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -240,10 +235,10 @@ public class DiscoverFragment extends Fragment {
             Glide.with(this)
                     .load(user.getPhotoUrl())
                     .centerCrop()
-                    .into(imgUser);
+                    .into(imgCover);
         } else {
             Log.d(LOG_TAG, "user == null");
-            imgUser.setImageResource(R.drawable.ic_user);
+            imgCover.setImageResource(0);
         }
     }
 
@@ -433,17 +428,19 @@ public class DiscoverFragment extends Fragment {
         imgSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-//                startActivity(intent);
-//                requireActivity().overridePendingTransition(R.anim.animation_start_enter, R.anim.animation_start_leave);
-                signOut();
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
+                requireActivity().overridePendingTransition(R.anim.animation_start_enter, R.anim.animation_start_leave);
             }
         });
 
         imgUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                signIn();
+                FirebaseUser user = mAuth.getCurrentUser();
+                if (user == null) {
+                    signIn();
+                }
             }
         });
     }

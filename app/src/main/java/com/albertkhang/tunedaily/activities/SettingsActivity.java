@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -13,6 +14,11 @@ import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.views.RoundImageView;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -29,8 +35,13 @@ public class SettingsActivity extends AppCompatActivity {
     private TextView txtLanguageTitle;
     private TextView txtEnglish;
     private TextView txtVietnamese;
+    private FrameLayout sign_out_frame;
+    private RoundImageView imgSignOutBackground;
 
     private SettingManager settingManager = SettingManager.getInstance(this);
+
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +56,17 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         updateTheme();
-
         updateLanguage();
+        updateUI();
+    }
+
+    private void updateUI() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            sign_out_frame.setVisibility(View.VISIBLE);
+        } else {
+            sign_out_frame.setVisibility(View.GONE);
+        }
     }
 
     private void addControl() {
@@ -62,6 +82,19 @@ public class SettingsActivity extends AppCompatActivity {
         txtLanguageTitle = findViewById(R.id.txtLanguageTitle);
         txtEnglish = findViewById(R.id.txtEnglish);
         txtVietnamese = findViewById(R.id.txtVietnamese);
+        sign_out_frame = findViewById(R.id.sign_out_frame);
+        imgSignOutBackground = findViewById(R.id.imgSignOutBackground);
+
+        mAuth = FirebaseAuth.getInstance();
+        initialGoogleSignIn();
+    }
+
+    private void initialGoogleSignIn() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getApplicationContext(), gso);
     }
 
     private void addEvent() {
@@ -108,6 +141,15 @@ public class SettingsActivity extends AppCompatActivity {
                 updateTheme();
             }
         });
+
+        sign_out_frame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mAuth.signOut();
+                mGoogleSignInClient.signOut();
+                finish();
+            }
+        });
     }
 
     private void updateLanguage() {
@@ -140,6 +182,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             imgDarkTheme.setImageResource(R.color.colorDark3);
             imgLightTheme.setImageResource(R.color.colorLight1);
+
+            imgSignOutBackground.setImageResource(R.color.colorDark2);
         } else {
             imgDarkChecked.setVisibility(View.INVISIBLE);
             imgLightChecked.setVisibility(View.VISIBLE);
@@ -157,6 +201,8 @@ public class SettingsActivity extends AppCompatActivity {
 
             imgDarkTheme.setImageResource(R.color.colorDark1);
             imgLightTheme.setImageResource(R.color.colorLight2);
+
+            imgSignOutBackground.setImageResource(R.color.colorLight2);
         }
     }
 
