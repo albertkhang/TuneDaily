@@ -118,4 +118,6 @@ Cần gì hơn) x 4\n</string>
     <string name="playlist_name">Playlist Name</string>
     <string name="create">Create</string>
     <string name="cancel">Cancel</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="do_you_want_to_sign_out">Do you want to sign out?</string>
 </resources>

@@ -2,17 +2,25 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
+import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
 import com.albertkhang.tunedaily.views.RoundImageView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -21,6 +29,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.util.Random;
 
 public class SettingsActivity extends AppCompatActivity {
     private ImageView imgBack;
@@ -145,11 +155,58 @@ public class SettingsActivity extends AppCompatActivity {
         sign_out_frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mAuth.signOut();
-                mGoogleSignInClient.signOut();
+                showConfirmSignOut();
+            }
+        });
+    }
+
+    private void showConfirmSignOut() {
+        final Dialog dialog = new Dialog(this, R.style.RoundCornerDialogFragment);
+        dialog.setContentView(R.layout.fragment_confirm_sign_out);
+
+        TextView txtTitle = dialog.findViewById(R.id.txtTitle);
+
+        Button cancel = dialog.findViewById(R.id.btnCancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.cancel();
+            }
+        });
+
+        Button signOut = dialog.findViewById(R.id.btnCreate);
+        signOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                signOut();
                 finish();
             }
         });
+
+        if (settingManager.isDarkTheme()) {
+            dialog.findViewById(R.id.root_view).setBackgroundResource(R.drawable.round_dark_dialog_background);
+            txtTitle.setTextColor(getResources().getColor(R.color.colorLight1));
+
+            cancel.setBackgroundResource(R.drawable.round_dark_dialog_button);
+            signOut.setBackgroundResource(R.drawable.round_dark_dialog_button);
+
+            cancel.setTextColor(getResources().getColor(R.color.colorLight1));
+        } else {
+            dialog.findViewById(R.id.root_view).setBackgroundResource(R.drawable.round_light_dialog_background);
+            txtTitle.setTextColor(getResources().getColor(R.color.colorDark1));
+
+            cancel.setBackgroundResource(R.drawable.round_light_dialog_button);
+            signOut.setBackgroundResource(R.drawable.round_light_dialog_button);
+
+            cancel.setTextColor(getResources().getColor(R.color.colorDark1));
+        }
+
+        dialog.show();
+    }
+
+    private void signOut() {
+        mAuth.signOut();
+        mGoogleSignInClient.signOut();
     }
 
     private void updateLanguage() {
