@@ -3,24 +3,19 @@ package com.albertkhang.tunedaily.activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
-import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
 import com.albertkhang.tunedaily.views.RoundImageView;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -29,8 +24,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import org.greenrobot.eventbus.EventBus;
-
-import java.util.Random;
 
 public class SettingsActivity extends AppCompatActivity {
     private ImageView imgBack;
@@ -121,6 +114,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 settingManager.setTheme(true);
                 updateTheme();
+                settingManager.updateThemeFirebase();
             }
         });
 
@@ -129,6 +123,7 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(View view) {
                 settingManager.setTheme(false);
                 updateTheme();
+                settingManager.updateThemeFirebase();
             }
         });
 
@@ -139,6 +134,7 @@ public class SettingsActivity extends AppCompatActivity {
                 EventBus.getDefault().post(new UpdateLanguageEvent());
                 updateLanguage();
                 updateTheme();
+                settingManager.updateLanguageFirebase();
             }
         });
 
@@ -149,6 +145,7 @@ public class SettingsActivity extends AppCompatActivity {
                 EventBus.getDefault().post(new UpdateLanguageEvent());
                 updateLanguage();
                 updateTheme();
+                settingManager.updateLanguageFirebase();
             }
         });
 

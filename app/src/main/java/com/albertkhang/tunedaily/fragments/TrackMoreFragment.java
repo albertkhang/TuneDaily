@@ -4,15 +4,19 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.albertkhang.tunedaily.views.RoundImageView;
@@ -34,6 +38,7 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
     private TextView txtPlaylist;
     private TextView txtDownload;
     private TextView txtBroadcast;
+    private ConstraintLayout add_to_library_frame;
 
     public TrackMoreFragment(Track track) {
         this.track = track;
@@ -69,6 +74,7 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
         txtPlaylist = view.findViewById(R.id.txtPlaylist);
         txtDownload = view.findViewById(R.id.txtDownload);
         txtBroadcast = view.findViewById(R.id.txtBroadcast);
+        add_to_library_frame = view.findViewById(R.id.add_to_library_frame);
 
         handleCoverPlaceholderColor(imgCover);
         txtTitle.setText(track.getTitle());
@@ -117,7 +123,24 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
     }
 
     private void addEvent() {
+        add_to_library_frame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (PlaylistManager.getInstance().isContainInLikedSongs(track.getId())) {
+                    PlaylistManager.getInstance().removeFromLikedSongs(track.getId());
+                    Toast.makeText(getContext(), "Removed from liked songs.", Toast.LENGTH_LONG).show();
+                } else {
+                    PlaylistManager.getInstance().addToLikedSongs(track.getId());
+                    Toast.makeText(getContext(), "Added to liked songs.", Toast.LENGTH_LONG).show();
+                }
 
+                closefragment();
+            }
+        });
+    }
+
+    private void closefragment() {
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
     }
 
     private void handleCoverPlaceholderColor(RoundImageView imgCover) {

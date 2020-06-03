@@ -17,9 +17,9 @@
     <string name="liked_songs">Những bài hát đã thích</string>
     <string name="songs_library"> bài hát</string>
     <string name="create_new_playlist">Tạo danh sách phát mới</string>
-    <string name="add_all_to_library">Thêm tất cả vào thư viện</string>
+    <string name="add_all_to_library">Thêm tất cả vào thư viện </string>
     <string name="add_all_to_playlist">Thêm tất cả vào danh sách</string>
-    <string name="add_to_library">Thêm vào thư viện</string>
+    <string name="add_to_liked_songs">Thêm vào bài hát đã thích</string>
     <string name="add_to_playlist">Thêm vào danh sách</string>
     <string name="artist">Nghệ sỹ:</string>
     <string name="artist_detail">Nghệ sỹ</string>

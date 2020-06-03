@@ -142,8 +142,6 @@ public class LibraryFragment extends Fragment {
                 intent.putExtra("name", txtLikedSongs.getText().toString());
                 intent.putExtra("cover", "");
                 startActivity(intent);
-
-//                PlaylistManager.getInstance().removeFromLikedSongs(86);
             }
         });
 

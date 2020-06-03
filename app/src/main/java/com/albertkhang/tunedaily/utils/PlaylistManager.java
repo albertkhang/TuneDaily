@@ -2,8 +2,14 @@ package com.albertkhang.tunedaily.utils;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +20,7 @@ public class PlaylistManager {
     private static final String PLAYLIST_REGEX = "[a-zA-Z0-9]([a-zA-Z0-9 ])*";
     private static PlaylistManager instance;
     private FirebaseAuth mAuth;
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public interface NAME {
         int EMPTY = 0;
@@ -60,12 +67,20 @@ public class PlaylistManager {
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            addToLikedSongsFirebase();
+            addToLikedSongsFirebase(user);
         }
     }
 
-    private void addToLikedSongsFirebase() {
-
+    private void addToLikedSongsFirebase(FirebaseUser user) {
+        DocumentReference ref = db.collection("users").document(user.getUid());
+        ref
+                .update("liked_songs", getLikedSongsIds())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("addToLikedSongsFirebase", "onSuccess");
+                    }
+                });
     }
 
     private void addToLikedSongsRef(int id) {
@@ -83,12 +98,20 @@ public class PlaylistManager {
 
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            removeFromLikedSongsFirebase(id);
+            removeFromLikedSongsFirebase(user);
         }
     }
 
-    private void removeFromLikedSongsFirebase(int id) {
-
+    private void removeFromLikedSongsFirebase(FirebaseUser user) {
+        DocumentReference ref = db.collection("users").document(user.getUid());
+        ref
+                .update("liked_songs", getLikedSongsIds())
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d("removeFromLikedSongs", "onSuccess");
+                    }
+                });
     }
 
     private void removeFromLikedSongsRef(int id) {

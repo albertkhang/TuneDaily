@@ -3,10 +3,16 @@ package com.albertkhang.tunedaily.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.util.Log;
 
 import androidx.preference.PreferenceManager;
 
 import com.albertkhang.tunedaily.R;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.Locale;
 
@@ -14,10 +20,42 @@ public class SettingManager {
     private static SettingManager instance;
     private Context context;
     private SharedPreferences prefs;
+    private static FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
     public interface LANGUAGE {
         String VI = "vi";
         String EN = "en";
+    }
+
+    public void updateThemeFirebase() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            DocumentReference ref = db.collection("users").document(user.getUid());
+            ref
+                    .update("dark", isDarkTheme())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("updateThemeFirebase", "onSuccess");
+                        }
+                    });
+        }
+    }
+
+    public void updateLanguageFirebase() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            DocumentReference ref = db.collection("users").document(user.getUid());
+            ref
+                    .update("english", isEnglish())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("updateLanguageFirebase", "onSuccess");
+                        }
+                    });
+        }
     }
 
     private SettingManager(Context context) {
@@ -83,4 +121,5 @@ public class SettingManager {
         config.locale = locale;
         context.getResources().updateConfiguration(config, context.getResources().getDisplayMetrics());
     }
+
 }
