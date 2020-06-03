@@ -7,20 +7,16 @@ import androidx.annotation.Nullable;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.google.firebase.ktx.Firebase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,7 +69,7 @@ public class FirebaseManager {
     }
 
     public interface ReadRandomAlbumListener {
-        void readRandomAlbumListener(ArrayList<Album> albums);
+        void readRandomAlbumListener(ArrayList<Playlist> playlists);
     }
 
     private ReadRandomAlbumListener readRandomAlbumListener;
@@ -83,7 +79,7 @@ public class FirebaseManager {
     }
 
     public interface ReadPopularAlbumsListener {
-        void readPopularAlbumsListener(ArrayList<Album> albums);
+        void readPopularAlbumsListener(ArrayList<Playlist> playlists);
     }
 
     private ReadPopularAlbumsListener readPopularAlbumsListener;
@@ -93,7 +89,7 @@ public class FirebaseManager {
     }
 
     public interface ReadBestOfArtistListener {
-        void readBestOfArtistListener(ArrayList<Album> albums);
+        void readBestOfArtistListener(ArrayList<Playlist> playlists);
     }
 
     private ReadBestOfArtistListener readBestOfArtistListener;
@@ -103,7 +99,7 @@ public class FirebaseManager {
     }
 
     public interface ReadRandomArtistsListener {
-        void readRandomArtistsListener(ArrayList<Album> albums);
+        void readRandomArtistsListener(ArrayList<Playlist> playlists);
     }
 
     private ReadRandomArtistsListener readRandomArtistsListener;
@@ -125,7 +121,7 @@ public class FirebaseManager {
     public interface ReadByTitleListener {
         void readTrackByTitleListener(ArrayList<Track> tracks);
 
-        void readAlbumByTitleListener(ArrayList<Album> albums);
+        void readAlbumByTitleListener(ArrayList<Playlist> playlists);
 
         void handleSearchIsEmptyListener();
     }
@@ -209,7 +205,7 @@ public class FirebaseManager {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot documents, @Nullable FirebaseFirestoreException e) {
                             Log.d("searchAlbumByTitle", "size: " + documents.size());
-                            ArrayList<Album> albums = new ArrayList<>();
+                            ArrayList<Playlist> playlists = new ArrayList<>();
 
                             for (QueryDocumentSnapshot document : documents) {
                                 Log.d("searchAlbumByTitle", document.getId() + "=> " + document.get("title"));
@@ -219,10 +215,10 @@ public class FirebaseManager {
                                 List<Integer> tracks = (List<Integer>) document.get("tracks");
                                 String cover = (String) document.get("cover");
 
-                                albums.add(new Album(id, title, cover, tracks));
+                                playlists.add(new Playlist(id, title, cover, tracks));
                             }
 
-                            if (albums.size() == 0) {
+                            if (playlists.size() == 0) {
                                 isSearchAlbumsEmpty = true;
 
                                 if (isSearchTracksEmpty) {
@@ -230,7 +226,7 @@ public class FirebaseManager {
                                 }
                             }
 
-                            readByTitleListener.readAlbumByTitleListener(albums);
+                            readByTitleListener.readAlbumByTitleListener(playlists);
                         }
                     });
         }
@@ -329,7 +325,7 @@ public class FirebaseManager {
 
     public void getPopularAlbums() {
         final List<Integer> ids = new ArrayList<>();
-        final ArrayList<Album> results = new ArrayList<>();
+        final ArrayList<Playlist> results = new ArrayList<>();
 
         for (int i = 0; i < LIMIT_RANDOM_ALBUM; i++) {
             Random rn = new Random();
@@ -363,7 +359,7 @@ public class FirebaseManager {
                             List<Integer> tracks = (List<Integer>) document.get("tracks");
                             String cover = (String) document.get("cover");
 
-                            results.add(new Album(id, title, cover, tracks));
+                            results.add(new Playlist(id, title, cover, tracks));
                         }
 
                         readPopularAlbumsListener.readPopularAlbumsListener(results);
@@ -374,7 +370,7 @@ public class FirebaseManager {
 
     public void getBestOfArtist() {
         final List<Integer> ids = new ArrayList<>();
-        final ArrayList<Album> results = new ArrayList<>();
+        final ArrayList<Playlist> results = new ArrayList<>();
 
         for (int i = 0; i < LIMIT_RANDOM_ALBUM; i++) {
             Random rn = new Random();
@@ -408,7 +404,7 @@ public class FirebaseManager {
                             List<Integer> tracks = (List<Integer>) document.get("tracks");
                             String cover = (String) document.get("cover");
 
-                            results.add(new Album(id, title, cover, tracks));
+                            results.add(new Playlist(id, title, cover, tracks));
                         }
 
                         readBestOfArtistListener.readBestOfArtistListener(results);
@@ -419,7 +415,7 @@ public class FirebaseManager {
 
     public void getRandomArtist() {
         final List<Integer> ids = new ArrayList<>();
-        final ArrayList<Album> results = new ArrayList<>();
+        final ArrayList<Playlist> results = new ArrayList<>();
 
         for (int i = 0; i < LIMIT_RANDOM_ALBUM; i++) {
             Random rn = new Random();
@@ -453,7 +449,7 @@ public class FirebaseManager {
                             List<Integer> tracks = (List<Integer>) document.get("tracks");
                             String cover = (String) document.get("cover");
 
-                            results.add(new Album(id, title, cover, tracks));
+                            results.add(new Playlist(id, title, cover, tracks));
                         }
 
                         readRandomArtistsListener.readRandomArtistsListener(results);

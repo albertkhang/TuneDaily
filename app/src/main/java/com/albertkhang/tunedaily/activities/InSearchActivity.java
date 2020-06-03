@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
@@ -23,9 +22,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
-import com.albertkhang.tunedaily.adapters.AlbumAdapter;
+import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
-import com.albertkhang.tunedaily.utils.Album;
+import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
@@ -52,7 +51,7 @@ public class InSearchActivity extends AppCompatActivity {
     private LinearLayout artist_frame;
     private LinearLayout songs_frame;
 
-    private AlbumAdapter artistsAdapter;
+    private PlaylistAdapter artistsAdapter;
     private TrackAdapter tracksAdapter;
 
     private static final long DELAY_GETTING_TEXT_DURATION = 1000;
@@ -83,7 +82,7 @@ public class InSearchActivity extends AppCompatActivity {
         artist_frame = findViewById(R.id.artist_frame);
         songs_frame = findViewById(R.id.songs_frame);
 
-        artistsAdapter = new AlbumAdapter(this);
+        artistsAdapter = new PlaylistAdapter(this);
         rvArtist.setAdapter(artistsAdapter);
 
         tracksAdapter = new TrackAdapter(this);
@@ -181,7 +180,7 @@ public class InSearchActivity extends AppCompatActivity {
                                 }
 
                                 @Override
-                                public void readAlbumByTitleListener(final ArrayList<Album> albums) {
+                                public void readAlbumByTitleListener(final ArrayList<Playlist> albums) {
                                     Log.d("afterTextChanged", "albums: " + albums.size());
 
                                     if (albums.size() == 0) {

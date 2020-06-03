@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +42,7 @@ public class PlaylistMoreFragment extends BottomSheetDialogFragment {
     }
 
     private void updateDataIntent() {
-        txtTitle.setText(playlist.getName());
+        txtTitle.setText(playlist.getTitle());
         Glide.with(this).load(playlist.getCover()).placeholder(R.drawable.ic_favourite_red).into(imgCover);
     }
 

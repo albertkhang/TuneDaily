@@ -1,40 +1,51 @@
 package com.albertkhang.tunedaily.utils;
 
-public class Playlist {
-    private String name;
-    private int total;
-    private String cover;
+import java.io.Serializable;
+import java.util.List;
 
-    public Playlist(String name, int total, String cover) {
-        this.name = name;
-        this.total = total;
+public class Playlist implements Serializable {
+    private int id;
+    private String title;
+    private String cover;
+    private List<Integer> tracks;
+
+    public Playlist(int id, String titile, String cover, List<Integer> tracks) {
+        this.id = id;
+        this.title = titile;
         this.cover = cover;
+        this.tracks = tracks;
     }
 
     public Playlist(Playlist playlist) {
-        this.name = playlist.name;
-        this.total = playlist.total;
+        this.id = playlist.id;
+        this.title = playlist.title;
         this.cover = playlist.cover;
+        this.tracks = playlist.tracks;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String toString() {
+        return "Album{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", cover='" + cover + '\'' +
+                ", tracks=" + tracks +
+                '}';
     }
 
-    public int getTotal() {
-        return total;
+    public int getId() {
+        return id;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public String getCover() {
         return cover;
     }
 
-    @Override
-    public String toString() {
-        return "Playlist{" +
-                "name='" + name + '\'' +
-                ", total=" + total +
-                ", cover='" + cover + '\'' +
-                '}';
+    public List<Integer> getTracks() {
+        return tracks;
     }
 }

@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
-import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
+import com.albertkhang.tunedaily.adapters.LibraryPlaylistAdapter;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
@@ -61,7 +61,7 @@ public class LibraryFragment extends Fragment {
     private PlaylistManager playlistManager;
 
     private RecyclerView rvPlaylist;
-    private PlaylistAdapter playlistAdapter;
+    private LibraryPlaylistAdapter libraryPlaylistAdapter;
     private ArrayList<Playlist> playlists;
 
     @Override
@@ -108,8 +108,8 @@ public class LibraryFragment extends Fragment {
         playlistManager = PlaylistManager.getInstance();
 
         rvPlaylist = view.findViewById(R.id.rvPlaylist);
-        playlistAdapter = new PlaylistAdapter(getContext());
-        rvPlaylist.setAdapter(playlistAdapter);
+        libraryPlaylistAdapter = new LibraryPlaylistAdapter(getContext());
+        rvPlaylist.setAdapter(libraryPlaylistAdapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext()) {
             @Override
@@ -120,7 +120,7 @@ public class LibraryFragment extends Fragment {
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         rvPlaylist.setLayoutManager(linearLayoutManager);
 
-        playlistAdapter.setOnMoreListener(new PlaylistAdapter.OnMoreListener() {
+        libraryPlaylistAdapter.setOnMoreListener(new LibraryPlaylistAdapter.OnMoreListener() {
             @Override
             public void onMoreListener(View view, int position) {
                 showMoreItem(playlists.get(position));
@@ -138,9 +138,10 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), PlaylistActivity.class);
-                intent.putExtra("type", PlaylistActivity.TYPE.PLAYLIST);
-                intent.putExtra("name", txtLikedSongs.getText().toString());
-                intent.putExtra("cover", "");
+                ArrayList<Integer> ids = (ArrayList<Integer>) PlaylistManager.getInstance().getLikedSongsIds();
+                Bundle bundle = new Bundle();
+                bundle.putIntegerArrayList("ids", ids);
+                intent.putExtra("ids", bundle);
                 startActivity(intent);
             }
         });
@@ -165,8 +166,8 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 SoftKeyboardManager.hideSoftKeyboard(getActivity(), txtPlaylistName);
-                playlistManager.addToFirstPlaylist("b", (new Random()).nextInt(100 + 1));
-                updatePlaylist();
+//                playlistManager.addToFirstPlaylist("b", (new Random()).nextInt(100 + 1));
+//                updatePlaylist();
 
                 dialog.cancel();
             }
@@ -258,10 +259,10 @@ public class LibraryFragment extends Fragment {
             Log.d("getAllPlayList", "[" + i + "] cover: " + cover);
             Log.d("getAllPlayList", "[" + i + "] tracks: " + tracks);
 
-            playlists.add(new Playlist(name, total, cover));
+//            playlists.add(new Playlist());
         }
 
-        playlistAdapter.update(playlists);
+        libraryPlaylistAdapter.update(playlists);
     }
 
     @Override
@@ -317,7 +318,7 @@ public class LibraryFragment extends Fragment {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateThemeEvent updateThemeEvent) {
         updateTheme();
-        playlistAdapter.notifyDataSetChanged();
+        libraryPlaylistAdapter.notifyDataSetChanged();
     }
 
     @Subscribe

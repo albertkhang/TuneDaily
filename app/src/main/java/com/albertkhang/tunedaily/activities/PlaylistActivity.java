@@ -17,9 +17,8 @@ import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.PlaylistMoreFragment;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
-import com.albertkhang.tunedaily.utils.Album;
-import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.Playlist;
+import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
@@ -138,43 +137,9 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     }
 
     private void updateIntentData() {
-        String type = getIntent().getStringExtra("type");
-
-        switch (type) {
-            case TYPE.PLAYLIST:
-                final String name = getIntent().getStringExtra("name");
-                final String cover = getIntent().getStringExtra("cover");
-                Log.d("updateIntentData", "name: " + name);
-
-                txtTitle.setText(name);
-
-                tracks = PlaylistManager.getInstance().getPlaylistTracks(name);
-                Log.d("updateIntentData", tracks.toString());
-
-                imgMore.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showMoreItem(new Playlist(name, -1, cover));
-                    }
-                });
-
-                break;
-
-            case TYPE.ALBUM:
-                final Album album = (Album) getIntent().getSerializableExtra("album");
-                Log.d("updateIntentData", album.toString());
-                txtTitle.setText(album.getTitle());
-
-                tracks = (ArrayList<Integer>) album.getTracks();
-
-                imgMore.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        showMoreItem(new Playlist(album.getTitle(), -1, album.getCover()));
-                    }
-                });
-                break;
-        }
+        Bundle bundle = getIntent().getBundleExtra("ids");
+        tracks = bundle.getIntegerArrayList("ids");
+        Log.d("PlaylistActivity", "tracks: " + tracks.toString());
     }
 
     private void addEvent() {

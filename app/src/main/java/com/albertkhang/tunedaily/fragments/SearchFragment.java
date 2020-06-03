@@ -21,10 +21,10 @@ import android.widget.TextView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.InSearchActivity;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
-import com.albertkhang.tunedaily.adapters.AlbumAdapter;
+import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
-import com.albertkhang.tunedaily.utils.Album;
+import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
@@ -33,7 +33,6 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -51,7 +50,7 @@ public class SearchFragment extends Fragment implements Serializable {
     private ShimmerFrameLayout shimmer_random_songs;
     private RecyclerView rvRandomArtists;
     private RecyclerView rvRandomSongs;
-    private AlbumAdapter randomArtistsAdapter;
+    private PlaylistAdapter randomArtistsAdapter;
     private TrackAdapter randomSongsAdapter;
 
     @Override
@@ -103,7 +102,7 @@ public class SearchFragment extends Fragment implements Serializable {
         settingManager = SettingManager.getInstance(getContext());
 
         //Random Artists
-        randomArtistsAdapter = new AlbumAdapter(getContext());
+        randomArtistsAdapter = new PlaylistAdapter(getContext());
         rvRandomArtists.setAdapter(randomArtistsAdapter);
 
         LinearLayoutManager managerArtists = new LinearLayoutManager(getContext()) {
@@ -177,23 +176,23 @@ public class SearchFragment extends Fragment implements Serializable {
 
         firebaseManager.setReadRandomArtistsListener(new FirebaseManager.ReadRandomArtistsListener() {
             @Override
-            public void readRandomArtistsListener(final ArrayList<Album> albums) {
-                Log.d("firebaseManager", albums.toString());
+            public void readRandomArtistsListener(final ArrayList<Playlist> playlists) {
+                Log.d("firebaseManager", playlists.toString());
 
                 shimmer_random_artists.setVisibility(View.GONE);
                 rvRandomArtists.setVisibility(View.VISIBLE);
 
-                randomArtistsAdapter.setOnItemClickListener(new AlbumAdapter.OnItemClickListener() {
+                randomArtistsAdapter.setOnItemClickListener(new PlaylistAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClickListener(View view, int position) {
                         Intent intent = new Intent(getActivity(), PlaylistActivity.class);
                         intent.putExtra("type", PlaylistActivity.TYPE.ALBUM);
-                        intent.putExtra("album", albums.get(position));
+                        intent.putExtra("album", playlists.get(position));
                         startActivity(intent);
                     }
                 });
 
-                randomArtistsAdapter.update(albums);
+                randomArtistsAdapter.update(playlists);
             }
         });
 

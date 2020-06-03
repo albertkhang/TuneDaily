@@ -21,7 +21,7 @@
     <string name="library_menu">Library</string>
 
     <!--SearchFragment-->
-    <string name="artist_songs_or_album">Artist, songs or album</string>
+    <string name="artist_songs_or_album">Artist, songs or playlist</string>
     <string name="random_artists">RANDOM ARTISTS</string>
     <string name="random_songs">RANDOM SONGS</string>
     <string name="search">Search</string>

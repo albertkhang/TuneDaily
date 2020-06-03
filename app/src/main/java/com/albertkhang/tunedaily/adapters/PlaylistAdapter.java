@@ -1,21 +1,16 @@
 package com.albertkhang.tunedaily.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.albertkhang.tunedaily.R;
-import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.utils.Playlist;
-import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.views.RoundImageView;
 import com.bumptech.glide.Glide;
@@ -25,12 +20,10 @@ import java.util.ArrayList;
 public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHolder> {
     private ArrayList<Playlist> playlists = new ArrayList<>();
     private Context context;
-    private PlaylistManager playlistManager;
     private SettingManager settingManager;
 
     public PlaylistAdapter(Context context) {
         this.context = context;
-        this.playlistManager = PlaylistManager.getInstance();
         this.settingManager = SettingManager.getInstance(context);
     }
 
@@ -40,80 +33,66 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         notifyDataSetChanged();
     }
 
-    public interface OnMoreListener {
-        void onMoreListener(View view, int position);
+    public interface OnItemClickListener {
+        void onItemClickListener(View view, int position);
     }
 
-    private OnMoreListener onMoreListener;
+    private OnItemClickListener onItemClickListener;
 
-    public void setOnMoreListener(OnMoreListener onMoreListener) {
-        this.onMoreListener = onMoreListener;
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
     @Override
-    public PlaylistAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.item_playlist, parent, false);
+        View view = inflater.inflate(R.layout.item_album, parent, false);
 
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull PlaylistAdapter.ViewHolder holder, final int position) {
-        Log.d("PlaylistAdapter", playlists.get(position).getName() + ": " + playlists.get(position));
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+        holder.txtAlbum.setText(playlists.get(position).getTitle());
+        handleTitleColor(holder.txtAlbum);
 
-        String cover = playlistManager.getPlaylistCover(playlists.get(position).getName());
-        if (!cover.equals("")) {
-            Glide.with(context).load(cover).placeholder(R.drawable.ic_playlist_cover).into(holder.imgCover);
-        }
-        handleAddToPlaylistListener(holder.imgCover);
+        holder.txtArtist.setText("Various Artists");
+        handleArtistColor(holder.txtArtist);
 
-        holder.txtPlaylist.setText(playlists.get(position).getName());
-        holder.txtTotal.setText(String.valueOf(playlists.get(position).getTotal()));
+        handleCoverPlaceholderColor(holder.imgCover, position);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, PlaylistActivity.class);
-                intent.putExtra("type", PlaylistActivity.TYPE.PLAYLIST);
-                intent.putExtra("name", playlists.get(position).getName());
-                intent.putExtra("cover", playlists.get(position).getCover());
-                context.startActivity(intent);
+                onItemClickListener.onItemClickListener(view, position);
             }
         });
 
-        holder.imgMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onMoreListener.onMoreListener(view, position);
-            }
-        });
-
-        updateTheme(holder);
     }
 
-    private void updateTheme(ViewHolder holder) {
+    private void handleArtistColor(TextView textView) {
         if (settingManager.isDarkTheme()) {
-            holder.txtPlaylist.setTextColor(context.getResources().getColor(R.color.colorLight1));
-            holder.txtTotal.setTextColor(context.getResources().getColor(R.color.colorLight5));
-
-            holder.imgMore.setColorFilter(context.getResources().getColor(R.color.colorLight5));
+            textView.setTextColor(context.getResources().getColor(R.color.colorLight4));
         } else {
-            holder.txtPlaylist.setTextColor(context.getResources().getColor(R.color.colorDark1));
-            holder.txtTotal.setTextColor(context.getResources().getColor(R.color.colorDark5));
-
-            holder.imgMore.setColorFilter(context.getResources().getColor(R.color.colorDark5));
+            textView.setTextColor(context.getResources().getColor(R.color.colorDark4));
         }
     }
 
-    private void handleAddToPlaylistListener(final RoundImageView view) {
-        playlistManager.setOnCompletePlaylistCoverListener(new PlaylistManager.OnCompletePlaylistCoverListener() {
-            @Override
-            public void onCompletePlaylistCoverListener(String cover) {
-                Glide.with(context).load(cover).placeholder(view.getDrawable()).into(view);
-            }
-        });
+    private void handleTitleColor(TextView textView) {
+        if (settingManager.isDarkTheme()) {
+            textView.setTextColor(context.getResources().getColor(R.color.colorLight1));
+        } else {
+            textView.setTextColor(context.getResources().getColor(R.color.colorDark1));
+        }
+    }
+
+    private void handleCoverPlaceholderColor(RoundImageView imgCover, int position) {
+        if (settingManager.isDarkTheme()) {
+            Glide.with(context).load(playlists.get(position).getCover()).placeholder(R.color.colorLight5).into(imgCover);
+        } else {
+            Glide.with(context).load(playlists.get(position).getCover()).placeholder(R.color.colorDark5).into(imgCover);
+        }
     }
 
     @Override
@@ -121,19 +100,17 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         return playlists.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private RoundImageView imgCover;
-        private TextView txtPlaylist;
-        private TextView txtTotal;
-        private ImageView imgMore;
+        private TextView txtAlbum;
+        private TextView txtArtist;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             imgCover = itemView.findViewById(R.id.imgCover);
-            txtPlaylist = itemView.findViewById(R.id.txtPlaylist);
-            txtTotal = itemView.findViewById(R.id.txtTotal);
-            imgMore = itemView.findViewById(R.id.imgMore);
+            txtAlbum = itemView.findViewById(R.id.txtAlbum);
+            txtArtist = itemView.findViewById(R.id.txtArtist);
         }
     }
 }

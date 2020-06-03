@@ -110,7 +110,7 @@ tools:context=".fragments.DetailFragment">
                 android:id="@+id/txtAlbum"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="album"
+                android:text="playlist"
                 style="@style/DetailValueStyle"
 
                 app:layout_constraintTop_toTopOf="@id/txtAlbumTitle"

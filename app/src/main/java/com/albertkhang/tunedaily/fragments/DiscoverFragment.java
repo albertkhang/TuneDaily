@@ -2,7 +2,6 @@ package com.albertkhang.tunedaily.fragments;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -24,20 +23,17 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
-import com.albertkhang.tunedaily.adapters.AlbumAdapter;
+import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
 import com.albertkhang.tunedaily.adapters.TopChartAdapter;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
-import com.albertkhang.tunedaily.utils.Album;
+import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.TopTrack;
 import com.albertkhang.tunedaily.utils.Track;
 import com.albertkhang.tunedaily.events.UpdateThemeEvent;
 import com.albertkhang.tunedaily.views.CircleImageView;
-import com.albertkhang.tunedaily.views.RoundImageView;
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.CustomTarget;
-import com.bumptech.glide.request.transition.Transition;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -58,7 +54,6 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.concurrent.Executor;
 
 public class DiscoverFragment extends Fragment {
     private ImageView imgSettings;
@@ -71,8 +66,8 @@ public class DiscoverFragment extends Fragment {
     private RecyclerView rvPopularAlbums;
     private RecyclerView rvBestOfArtists;
     private TopChartAdapter topChartAdapter;
-    private AlbumAdapter popularAlbumAdapter;
-    private AlbumAdapter bestOfArtistAlbumAdapter;
+    private PlaylistAdapter popularPlaylistAdapter;
+    private PlaylistAdapter bestOfArtistPlaylistAdapter;
     private LinearLayout root_view;
     private RelativeLayout top_frame;
     private TextView txtTopChart;
@@ -144,16 +139,16 @@ public class DiscoverFragment extends Fragment {
         rvTopChart.setLayoutManager(managerTopChart);
 
         //Popular Albums
-        popularAlbumAdapter = new AlbumAdapter(getContext());
-        rvPopularAlbums.setAdapter(popularAlbumAdapter);
+        popularPlaylistAdapter = new PlaylistAdapter(getContext());
+        rvPopularAlbums.setAdapter(popularPlaylistAdapter);
 
         LinearLayoutManager managerAlbums = new LinearLayoutManager(getContext());
         managerAlbums.setOrientation(RecyclerView.HORIZONTAL);
         rvPopularAlbums.setLayoutManager(managerAlbums);
 
         //BestOfArtists
-        bestOfArtistAlbumAdapter = new AlbumAdapter(getContext());
-        rvBestOfArtists.setAdapter(bestOfArtistAlbumAdapter);
+        bestOfArtistPlaylistAdapter = new PlaylistAdapter(getContext());
+        rvBestOfArtists.setAdapter(bestOfArtistPlaylistAdapter);
 
         LinearLayoutManager managerArtist = new LinearLayoutManager(getContext());
         managerArtist.setOrientation(RecyclerView.HORIZONTAL);
@@ -278,21 +273,21 @@ public class DiscoverFragment extends Fragment {
 
         firebaseManager.setReadBestOfArtistListener(new FirebaseManager.ReadBestOfArtistListener() {
             @Override
-            public void readBestOfArtistListener(final ArrayList<Album> albums) {
+            public void readBestOfArtistListener(final ArrayList<Playlist> playlists) {
                 shimmer_best_of_artists.setVisibility(View.GONE);
                 rvBestOfArtists.setVisibility(View.VISIBLE);
 
-                bestOfArtistAlbumAdapter.setOnItemClickListener(new AlbumAdapter.OnItemClickListener() {
+                bestOfArtistPlaylistAdapter.setOnItemClickListener(new PlaylistAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClickListener(View view, int position) {
                         Intent intent = new Intent(getActivity(), PlaylistActivity.class);
                         intent.putExtra("type", PlaylistActivity.TYPE.ALBUM);
-                        intent.putExtra("album", albums.get(position));
+                        intent.putExtra("album", playlists.get(position));
                         startActivity(intent);
                     }
                 });
 
-                bestOfArtistAlbumAdapter.update(albums);
+                bestOfArtistPlaylistAdapter.update(playlists);
             }
         });
 
@@ -307,22 +302,22 @@ public class DiscoverFragment extends Fragment {
 
         firebaseManager.setReadPopularAlbumsListener(new FirebaseManager.ReadPopularAlbumsListener() {
             @Override
-            public void readPopularAlbumsListener(final ArrayList<Album> albums) {
+            public void readPopularAlbumsListener(final ArrayList<Playlist> playlists) {
 
                 shimmer_popular_albums.setVisibility(View.GONE);
                 rvPopularAlbums.setVisibility(View.VISIBLE);
 
-                popularAlbumAdapter.setOnItemClickListener(new AlbumAdapter.OnItemClickListener() {
+                popularPlaylistAdapter.setOnItemClickListener(new PlaylistAdapter.OnItemClickListener() {
                     @Override
                     public void onItemClickListener(View view, int position) {
                         Intent intent = new Intent(getActivity(), PlaylistActivity.class);
                         intent.putExtra("type", PlaylistActivity.TYPE.ALBUM);
-                        intent.putExtra("album", albums.get(position));
+                        intent.putExtra("album", playlists.get(position));
                         startActivity(intent);
                     }
                 });
 
-                popularAlbumAdapter.update(albums);
+                popularPlaylistAdapter.update(playlists);
             }
         });
 
@@ -399,8 +394,8 @@ public class DiscoverFragment extends Fragment {
         }
 
         topChartAdapter.notifyDataSetChanged();
-        popularAlbumAdapter.notifyDataSetChanged();
-        bestOfArtistAlbumAdapter.notifyDataSetChanged();
+        popularPlaylistAdapter.notifyDataSetChanged();
+        bestOfArtistPlaylistAdapter.notifyDataSetChanged();
     }
 
     private void updateLanguage() {
