@@ -28,6 +28,7 @@ import com.albertkhang.tunedaily.adapters.TopChartAdapter;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.TopTrack;
 import com.albertkhang.tunedaily.utils.Track;
@@ -281,8 +282,10 @@ public class DiscoverFragment extends Fragment {
                     @Override
                     public void onItemClickListener(View view, int position) {
                         Intent intent = new Intent(getActivity(), PlaylistActivity.class);
-                        intent.putExtra("type", PlaylistActivity.TYPE.ALBUM);
-                        intent.putExtra("album", playlists.get(position));
+                        Bundle bundle = new Bundle();
+                        bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
+                        intent.putExtra("ids", bundle);
+                        intent.putExtra("title", playlists.get(position).getTitle());
                         startActivity(intent);
                     }
                 });
@@ -311,8 +314,10 @@ public class DiscoverFragment extends Fragment {
                     @Override
                     public void onItemClickListener(View view, int position) {
                         Intent intent = new Intent(getActivity(), PlaylistActivity.class);
-                        intent.putExtra("type", PlaylistActivity.TYPE.ALBUM);
-                        intent.putExtra("album", playlists.get(position));
+                        Bundle bundle = new Bundle();
+                        bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
+                        intent.putExtra("ids", bundle);
+                        intent.putExtra("title", playlists.get(position).getTitle());
                         startActivity(intent);
                     }
                 });

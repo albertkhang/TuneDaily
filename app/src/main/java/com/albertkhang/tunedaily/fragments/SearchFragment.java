@@ -186,8 +186,10 @@ public class SearchFragment extends Fragment implements Serializable {
                     @Override
                     public void onItemClickListener(View view, int position) {
                         Intent intent = new Intent(getActivity(), PlaylistActivity.class);
-                        intent.putExtra("type", PlaylistActivity.TYPE.ALBUM);
-                        intent.putExtra("album", playlists.get(position));
+                        Bundle bundle = new Bundle();
+                        bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
+                        intent.putExtra("ids", bundle);
+                        intent.putExtra("title", playlists.get(position).getTitle());
                         startActivity(intent);
                     }
                 });

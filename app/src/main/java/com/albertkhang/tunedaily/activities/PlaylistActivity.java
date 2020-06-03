@@ -139,6 +139,10 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     private void updateIntentData() {
         Bundle bundle = getIntent().getBundleExtra("ids");
         tracks = bundle.getIntegerArrayList("ids");
+        String title = getIntent().getStringExtra("title");
+        if (title != null) {
+            txtTitle.setText(title);
+        }
         Log.d("PlaylistActivity", "tracks: " + tracks.toString());
     }
 

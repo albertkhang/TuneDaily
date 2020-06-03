@@ -394,11 +394,6 @@ public class FirebaseManager {
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             Log.d("getRandomAlbum", document.getId());
 
-//                            Log.d("getRandomAlbum", "id: " + document.get("id"));
-//                            Log.d("getRandomAlbum", "title: " + document.get("title"));
-//                            Log.d("getRandomAlbum", "tracks: " + document.get("tracks"));
-//                            Log.d("getRandomAlbum", "cover: " + document.get("cover"));
-
                             int id = (int) (long) document.get("id");
                             String title = (String) document.get("title");
                             List<Integer> tracks = (List<Integer>) document.get("tracks");
