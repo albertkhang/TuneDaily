@@ -28,6 +28,7 @@ import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.adapters.LibraryPlaylistAdapter;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
+import com.albertkhang.tunedaily.events.UpdatePlaylistLibrary;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -138,6 +139,9 @@ public class LibraryFragment extends Fragment {
 
     private void showMoreItem(Playlist playlist) {
         PlaylistMoreFragment playlistMoreFragment = new PlaylistMoreFragment(playlist);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isShowDeletePlaylist", true);
+        playlistMoreFragment.setArguments(bundle);
         playlistMoreFragment.show(requireActivity().getSupportFragmentManager(), "PlaylistMoreFragment");
     }
 
@@ -175,8 +179,13 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 SoftKeyboardManager.hideSoftKeyboard(getActivity(), txtPlaylistName);
-                playlistManager.addToFirstPlaylist("albert", (new Random()).nextInt(100 + 1));
-                updatePlaylist();
+                //TODO: Remove comment to test add track to "albert" playlist
+//                ArrayList list = playlistManager.getPlaylistTracks("albert");
+//                if (list != null) {
+//                    Log.d("cancel", "run");
+//                    playlistManager.addToFirstPlaylist("albert", (new Random()).nextInt(100 + 1));
+//                    updatePlaylist();
+//                }
 
                 dialog.cancel();
             }
@@ -322,7 +331,12 @@ public class LibraryFragment extends Fragment {
         txtPlaylist.setText(getString(R.string.create_new_playlist));
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe
+    public void onPlayAction(UpdatePlaylistLibrary updatePlaylistLibrary) {
+        updatePlaylist();
+    }
+
+    @Subscribe
     public void onPlayAction(UpdateThemeEvent updateThemeEvent) {
         updateTheme();
         libraryPlaylistAdapter.notifyDataSetChanged();

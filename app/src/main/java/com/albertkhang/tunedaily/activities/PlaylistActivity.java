@@ -133,6 +133,9 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
 
     private void showPlaylistMore(Playlist playlist) {
         PlaylistMoreFragment playlistMoreFragment = new PlaylistMoreFragment(playlist);
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("isShowDeletePlaylist", false);
+        playlistMoreFragment.setArguments(bundle);
         playlistMoreFragment.show(getSupportFragmentManager(), "PlaylistMoreFragment");
     }
 

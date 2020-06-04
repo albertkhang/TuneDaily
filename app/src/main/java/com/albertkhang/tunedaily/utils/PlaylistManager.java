@@ -51,6 +51,14 @@ public class PlaylistManager {
         Paper.book("liked_songs").destroy();
     }
 
+    public void deletePlaylist(String name) {
+        Paper.book(name).destroy();
+
+        List<String> arrayList = getAllPlaylist();
+        arrayList.remove(name);
+        Paper.book().write(PLAYLIST.PLAYLIST_NAMES, arrayList);
+    }
+
     public static PlaylistManager getInstance() {
         if (instance == null) {
             synchronized (FirebaseManager.class) {
