@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
@@ -54,6 +55,30 @@ public class PlaylistManager {
     }
 
     public void deletePlaylist(String name) {
+        deletePlaylistRef(name);
+        deletePlaylistFirebase();
+    }
+
+    private void deletePlaylistFirebase() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            List<String> listName = PlaylistManager.getInstance().getAllPlaylist();
+
+            Map<String, Playlist> data = new HashMap<>();
+            for (int i = 0; i < listName.size(); i++) {
+                String title = listName.get(i);
+                String cover = PlaylistManager.getInstance().getPlaylistCover(listName.get(i));
+                ArrayList<Integer> tracks = PlaylistManager.getInstance().getPlaylistTracks(listName.get(i));
+
+                data.put(listName.get(i), new Playlist(-1, title, cover, tracks));
+            }
+
+            UserSettings userSettings = new UserSettings(true, true, new ArrayList<Integer>(), data);
+            db.collection("users").document(user.getUid()).set(userSettings);
+        }
+    }
+
+    private void deletePlaylistRef(String name) {
         Paper.book(name).destroy();
 
         List<String> arrayList = getAllPlaylist();
@@ -175,23 +200,25 @@ public class PlaylistManager {
 
     public void createNewPlaylist(String name) {
         createNewPlaylistRef(name);
-        createNewPlaylistFirebase(name);
+        createNewPlaylistFirebase();
     }
 
-    private void createNewPlaylistFirebase(String name) {
+    private void createNewPlaylistFirebase() {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
+            List<String> listName = PlaylistManager.getInstance().getAllPlaylist();
+
             Map<String, Playlist> data = new HashMap<>();
+            for (int i = 0; i < listName.size(); i++) {
+                String title = listName.get(i);
+                String cover = PlaylistManager.getInstance().getPlaylistCover(listName.get(i));
+                ArrayList<Integer> tracks = PlaylistManager.getInstance().getPlaylistTracks(listName.get(i));
 
-            String title = name;
-            String cover = "";
-            ArrayList<Integer> tracks = new ArrayList<>();
-            data.put(title, new Playlist(-1, title, cover, tracks));
+                data.put(listName.get(i), new Playlist(-1, title, cover, tracks));
+            }
 
-            db.collection("users")
-                    .document(user.getUid())
-                    .collection("playlists")
-                    .add(data);
+            UserSettings userSettings = new UserSettings(true, true, new ArrayList<Integer>(), data);
+            db.collection("users").document(user.getUid()).set(userSettings);
         }
     }
 
