@@ -65,6 +65,7 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<LibraryPlaylist
         Log.d("PlaylistAdapter", playlists.get(position).getTitle() + ": " + playlists.get(position));
 
         String cover = playlistManager.getPlaylistCover(playlists.get(position).getTitle());
+        holder.imgCover.setImageResource(R.drawable.ic_playlist_cover);
         if (!cover.equals("")) {
             Glide.with(context).load(cover).placeholder(R.drawable.ic_playlist_cover).into(holder.imgCover);
         }
