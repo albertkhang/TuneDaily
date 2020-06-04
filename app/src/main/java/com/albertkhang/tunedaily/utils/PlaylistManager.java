@@ -56,10 +56,10 @@ public class PlaylistManager {
 
     public void deletePlaylist(String name) {
         deletePlaylistRef(name);
-        deletePlaylistFirebase();
+        uploadRefToFirebase();
     }
 
-    private void deletePlaylistFirebase() {
+    private void uploadRefToFirebase() {
         FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
             List<String> listName = PlaylistManager.getInstance().getAllPlaylist();
@@ -200,26 +200,7 @@ public class PlaylistManager {
 
     public void createNewPlaylist(String name) {
         createNewPlaylistRef(name);
-        createNewPlaylistFirebase();
-    }
-
-    private void createNewPlaylistFirebase() {
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            List<String> listName = PlaylistManager.getInstance().getAllPlaylist();
-
-            Map<String, Playlist> data = new HashMap<>();
-            for (int i = 0; i < listName.size(); i++) {
-                String title = listName.get(i);
-                String cover = PlaylistManager.getInstance().getPlaylistCover(listName.get(i));
-                ArrayList<Integer> tracks = PlaylistManager.getInstance().getPlaylistTracks(listName.get(i));
-
-                data.put(listName.get(i), new Playlist(-1, title, cover, tracks));
-            }
-
-            UserSettings userSettings = new UserSettings(true, true, new ArrayList<Integer>(), data);
-            db.collection("users").document(user.getUid()).set(userSettings);
-        }
+        uploadRefToFirebase();
     }
 
     private void createNewPlaylistRef(String name) {
@@ -231,7 +212,12 @@ public class PlaylistManager {
         Paper.book().write(PLAYLIST.PLAYLIST_NAMES, arrayList);
     }
 
-    public void addToFirstPlaylist(final String name, int trackId) {
+    public void addToFirstPlaylist(String name, int trackId) {
+        addToFirstPlaylistRef(name, trackId);
+        uploadRefToFirebase();
+    }
+
+    private void addToFirstPlaylistRef(String name, int trackId) {
         ArrayList ids = new ArrayList();
         ids.add(trackId);
         ids.addAll(getPlaylistTracks(name));
