@@ -2,6 +2,7 @@ package com.albertkhang.tunedaily.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,16 +71,16 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<LibraryPlaylist
         handleAddToPlaylistListener(holder.imgCover);
 
         holder.txtPlaylist.setText(playlists.get(position).getTitle());
-        //TODO: handle this
-//        holder.txtTotal.setText(String.valueOf(playlists.get(position).getTotal()));
+        holder.txtTotal.setText(String.valueOf(playlistManager.getPlaylistTotal(playlists.get(position).getTitle())));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(context, PlaylistActivity.class);
-                intent.putExtra("type", PlaylistActivity.TYPE.PLAYLIST);
-                intent.putExtra("name", playlists.get(position).getTitle());
-                intent.putExtra("cover", playlists.get(position).getCover());
+                Bundle bundle = new Bundle();
+                bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
+                intent.putExtra("ids", bundle);
+                intent.putExtra("title", playlists.get(position).getTitle());
                 context.startActivity(intent);
             }
         });

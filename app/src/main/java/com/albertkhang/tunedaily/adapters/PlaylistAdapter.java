@@ -1,6 +1,8 @@
 package com.albertkhang.tunedaily.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.views.RoundImageView;
@@ -31,16 +34,6 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         this.playlists.clear();
         this.playlists.addAll(playlists);
         notifyDataSetChanged();
-    }
-
-    public interface OnItemClickListener {
-        void onItemClickListener(View view, int position);
-    }
-
-    private OnItemClickListener onItemClickListener;
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -65,7 +58,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onItemClickListener.onItemClickListener(view, position);
+                Intent intent = new Intent(context, PlaylistActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
+                intent.putExtra("ids", bundle);
+                intent.putExtra("title", playlists.get(position).getTitle());
+                context.startActivity(intent);
             }
         });
 

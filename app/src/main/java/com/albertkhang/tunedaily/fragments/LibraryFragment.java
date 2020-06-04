@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Random;
 
 public class LibraryFragment extends Fragment {
+    private static final String LOG_TAG = "LibraryFragment";
 
     private SettingManager settingManager;
     private ConstraintLayout liked_songs_frame;
@@ -126,6 +127,13 @@ public class LibraryFragment extends Fragment {
                 showMoreItem(playlists.get(position));
             }
         });
+
+        List<String> allpplaylists = playlistManager.getAllPlaylist();
+        Log.d(LOG_TAG, "playlist size: " + allpplaylists.size());
+
+        for (int i = 0; i < allpplaylists.size(); i++) {
+            Log.d(LOG_TAG, allpplaylists.get(i));
+        }
     }
 
     private void showMoreItem(Playlist playlist) {
@@ -166,8 +174,8 @@ public class LibraryFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 SoftKeyboardManager.hideSoftKeyboard(getActivity(), txtPlaylistName);
-//                playlistManager.addToFirstPlaylist("b", (new Random()).nextInt(100 + 1));
-//                updatePlaylist();
+                playlistManager.addToFirstPlaylist("b", (new Random()).nextInt(100 + 1));
+                updatePlaylist();
 
                 dialog.cancel();
             }
@@ -244,22 +252,20 @@ public class LibraryFragment extends Fragment {
     }
 
     private void updatePlaylist() {
-        List<String> getAllPlaylistName = playlistManager.getAllPlaylist();
-        Log.d("getAllPlayList", "size: " + getAllPlaylistName.size());
+        List<String> allPlaylist = playlistManager.getAllPlaylist();
+        Log.d("getAllPlayList", "size: " + allPlaylist.size());
 
         playlists = new ArrayList<>();
-        for (int i = 0; i < getAllPlaylistName.size(); i++) {
-            String name = getAllPlaylistName.get(i);
-            int total = playlistManager.getPlaylistTotal(getAllPlaylistName.get(i));
-            String cover = playlistManager.getPlaylistCover(getAllPlaylistName.get(i));
-            ArrayList<Integer> tracks = playlistManager.getPlaylistTracks(getAllPlaylistName.get(i));
+        for (int i = 0; i < allPlaylist.size(); i++) {
+            String title = allPlaylist.get(i);
+            String cover = playlistManager.getPlaylistCover(allPlaylist.get(i));
+            ArrayList<Integer> tracks = playlistManager.getPlaylistTracks(allPlaylist.get(i));
 
-            Log.d("getAllPlayList", "[" + i + "] name: " + name);
-            Log.d("getAllPlayList", "[" + i + "] total: " + total);
-            Log.d("getAllPlayList", "[" + i + "] cover: " + cover);
-            Log.d("getAllPlayList", "[" + i + "] tracks: " + tracks);
+            Log.d(LOG_TAG, "[" + i + "] title: " + title);
+            Log.d(LOG_TAG, "[" + i + "] cover: " + cover);
+            Log.d(LOG_TAG, "[" + i + "] tracks: " + tracks);
 
-//            playlists.add(new Playlist());
+            playlists.add(new Playlist(-1, title, cover, tracks));
         }
 
         libraryPlaylistAdapter.update(playlists);

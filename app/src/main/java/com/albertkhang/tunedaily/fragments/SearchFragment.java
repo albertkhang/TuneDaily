@@ -182,18 +182,6 @@ public class SearchFragment extends Fragment implements Serializable {
                 shimmer_random_artists.setVisibility(View.GONE);
                 rvRandomArtists.setVisibility(View.VISIBLE);
 
-                randomArtistsAdapter.setOnItemClickListener(new PlaylistAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClickListener(View view, int position) {
-                        Intent intent = new Intent(getActivity(), PlaylistActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
-                        intent.putExtra("ids", bundle);
-                        intent.putExtra("title", playlists.get(position).getTitle());
-                        startActivity(intent);
-                    }
-                });
-
                 randomArtistsAdapter.update(playlists);
             }
         });

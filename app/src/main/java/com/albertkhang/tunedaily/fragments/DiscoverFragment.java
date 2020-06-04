@@ -278,18 +278,6 @@ public class DiscoverFragment extends Fragment {
                 shimmer_best_of_artists.setVisibility(View.GONE);
                 rvBestOfArtists.setVisibility(View.VISIBLE);
 
-                bestOfArtistPlaylistAdapter.setOnItemClickListener(new PlaylistAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClickListener(View view, int position) {
-                        Intent intent = new Intent(getActivity(), PlaylistActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
-                        intent.putExtra("ids", bundle);
-                        intent.putExtra("title", playlists.get(position).getTitle());
-                        startActivity(intent);
-                    }
-                });
-
                 bestOfArtistPlaylistAdapter.update(playlists);
             }
         });
@@ -309,18 +297,6 @@ public class DiscoverFragment extends Fragment {
 
                 shimmer_popular_albums.setVisibility(View.GONE);
                 rvPopularAlbums.setVisibility(View.VISIBLE);
-
-                popularPlaylistAdapter.setOnItemClickListener(new PlaylistAdapter.OnItemClickListener() {
-                    @Override
-                    public void onItemClickListener(View view, int position) {
-                        Intent intent = new Intent(getActivity(), PlaylistActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
-                        intent.putExtra("ids", bundle);
-                        intent.putExtra("title", playlists.get(position).getTitle());
-                        startActivity(intent);
-                    }
-                });
 
                 popularPlaylistAdapter.update(playlists);
             }
