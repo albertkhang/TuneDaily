@@ -81,6 +81,7 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<LibraryPlaylist
                 bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
                 intent.putExtra("ids", bundle);
                 intent.putExtra("title", playlists.get(position).getTitle());
+                intent.putExtra("cover", playlists.get(position).getCover());
                 context.startActivity(intent);
             }
         });

@@ -17,9 +17,8 @@ import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.PlaylistMoreFragment;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
-import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
-import com.albertkhang.tunedaily.utils.PlaylistManager;
+import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -45,6 +44,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     private FrameLayout miniPlayer_frame;
 
     private ArrayList<Integer> tracks;
+    private Playlist currentPlaylist;
 
     public interface TYPE {
         String PLAYLIST = "playlist";
@@ -110,7 +110,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
                     trackAdapter.setOnMoreListener(new TrackAdapter.OnMoreListener() {
                         @Override
                         public void onMoreListener(View view, int position) {
-                            showMoreItem(tracks.get(position));
+                            showTrackMoreItem(tracks.get(position));
                         }
                     });
 
@@ -126,12 +126,12 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         }
     }
 
-    private void showMoreItem(Track track) {
+    private void showTrackMoreItem(Track track) {
         TrackMoreFragment trackMoreFragment = new TrackMoreFragment(track);
         trackMoreFragment.show(getSupportFragmentManager(), "FragmentTrackMore");
     }
 
-    private void showMoreItem(Playlist playlist) {
+    private void showPlaylistMore(Playlist playlist) {
         PlaylistMoreFragment playlistMoreFragment = new PlaylistMoreFragment(playlist);
         playlistMoreFragment.show(getSupportFragmentManager(), "PlaylistMoreFragment");
     }
@@ -140,6 +140,14 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         Bundle bundle = getIntent().getBundleExtra("ids");
         tracks = bundle.getIntegerArrayList("ids");
         String title = getIntent().getStringExtra("title");
+
+        String cover = getIntent().getStringExtra("cover");
+        if (cover != null) {
+            currentPlaylist = new Playlist(-1, title, cover, tracks);
+        } else {
+            currentPlaylist = new Playlist(-1, title, getString(R.string.liked_songs), tracks);
+        }
+
         if (title != null) {
             txtTitle.setText(title);
         }
@@ -151,6 +159,13 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        imgMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPlaylistMore(currentPlaylist);
             }
         });
     }

@@ -43,7 +43,12 @@ public class PlaylistMoreFragment extends BottomSheetDialogFragment {
 
     private void updateDataIntent() {
         txtTitle.setText(playlist.getTitle());
-        Glide.with(this).load(playlist.getCover()).placeholder(R.drawable.ic_favourite_red).into(imgCover);
+
+        if (playlist.getTitle().equals(getString(R.string.liked_songs))) {
+            Glide.with(this).load(playlist.getCover()).placeholder(R.drawable.ic_favourite_red).into(imgCover);
+        } else {
+            Glide.with(this).load(playlist.getCover()).placeholder(R.drawable.ic_playlist_cover).into(imgCover);
+        }
     }
 
     private void addControl(View view) {
