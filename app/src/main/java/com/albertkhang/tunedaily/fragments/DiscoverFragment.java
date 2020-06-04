@@ -212,8 +212,6 @@ public class DiscoverFragment extends Fragment {
                             Log.w(LOG_TAG, "signInWithCredential:failure", task.getException());
                             updateUI(null);
                         }
-
-                        // ...
                     }
                 });
     }

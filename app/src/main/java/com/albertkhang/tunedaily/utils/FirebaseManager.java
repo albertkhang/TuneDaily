@@ -20,7 +20,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class FirebaseManager {
@@ -43,7 +45,18 @@ public class FirebaseManager {
 
     public static void createDefaultUserSetting(String uid) {
         if (!uid.equals("")) {
-            UserSettings userSettings = new UserSettings(true, true, new ArrayList<Integer>());
+            List<String> listName = PlaylistManager.getInstance().getAllPlaylist();
+
+            Map<String, Playlist> data = new HashMap<>();
+            for (int i = 0; i < listName.size(); i++) {
+                String title = listName.get(i);
+                String cover = PlaylistManager.getInstance().getPlaylistCover(listName.get(i));
+                ArrayList<Integer> tracks = PlaylistManager.getInstance().getPlaylistTracks(listName.get(i));
+
+                data.put(listName.get(i), new Playlist(-1, title, cover, tracks));
+            }
+
+            UserSettings userSettings = new UserSettings(true, true, new ArrayList<Integer>(), data);
             db.collection("users").document(uid).set(userSettings);
         }
     }

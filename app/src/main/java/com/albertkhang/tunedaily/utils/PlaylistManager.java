@@ -12,7 +12,9 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import io.paperdb.Paper;
 
@@ -72,23 +74,22 @@ public class PlaylistManager {
 
     public void addToLikedSongs(int id) {
         addToLikedSongsRef(id);
-
-        FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            addToLikedSongsFirebase(user);
-        }
+        addToLikedSongsFirebase();
     }
 
-    private void addToLikedSongsFirebase(FirebaseUser user) {
-        DocumentReference ref = db.collection("users").document(user.getUid());
-        ref
-                .update("liked_songs", getLikedSongsIds())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Log.d("addToLikedSongsFirebase", "onSuccess");
-                    }
-                });
+    private void addToLikedSongsFirebase() {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            DocumentReference ref = db.collection("users").document(user.getUid());
+            ref
+                    .update("liked_songs", getLikedSongsIds())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Log.d("addToLikedSongsFirebase", "onSuccess");
+                        }
+                    });
+        }
     }
 
     private void addToLikedSongsRef(int id) {
@@ -173,6 +174,28 @@ public class PlaylistManager {
     }
 
     public void createNewPlaylist(String name) {
+        createNewPlaylistRef(name);
+        createNewPlaylistFirebase(name);
+    }
+
+    private void createNewPlaylistFirebase(String name) {
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            Map<String, Playlist> data = new HashMap<>();
+
+            String title = name;
+            String cover = "";
+            ArrayList<Integer> tracks = new ArrayList<>();
+            data.put(title, new Playlist(-1, title, cover, tracks));
+
+            db.collection("users")
+                    .document(user.getUid())
+                    .collection("playlists")
+                    .add(data);
+        }
+    }
+
+    private void createNewPlaylistRef(String name) {
         Paper.book(name).write(PLAYLIST.COVER, "");
         Paper.book(name).write(PLAYLIST.TRACKS, new ArrayList<Integer>());
 
