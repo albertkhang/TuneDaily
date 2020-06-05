@@ -28,6 +28,7 @@ import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
 import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.bumptech.glide.Glide;
@@ -48,8 +49,6 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_mini_player, container, false);
     }
-
-    private boolean isFavourite = false;
 
     private ImageView imgCover;
     private ImageView imgFavourite;
@@ -198,12 +197,18 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
             public void onClick(View view) {
                 Log.d(LOG_TAG, "imgFavourite onClick");
 
-                if (isFavourite) {
-                    isFavourite = false;
-                    imgFavourite.setImageResource(R.drawable.ic_favourite);
-                } else {
-                    isFavourite = true;
+                if (PlaylistManager.getInstance().isContainInLikedSongs(currentTrack.getId())) {
+                    PlaylistManager.getInstance().removeFromLikedSongs(currentTrack.getId());
                     imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+                    if (settingManager.isDarkTheme()) {
+                        imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+                    } else {
+                        imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+                    }
+                } else {
+                    PlaylistManager.getInstance().addToLikedSongs(currentTrack.getId());
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
+                    imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
                 }
             }
         });
