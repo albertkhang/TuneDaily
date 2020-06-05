@@ -173,9 +173,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                 currentTrackPosition = tracks.size() - 1;
                 player.setDataSource(tracks.get(currentTrackPosition).getTrack());
                 addMetadata(tracks.get(tracks.size() - 1));
-
-                player.prepareAsync();
-                player.start();
             } catch (IOException e) {
                 Log.d(LOG_TAG, "e: " + e.toString());
             }
@@ -185,9 +182,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
             try {
                 player.setDataSource(tracks.get(currentTrackPosition).getTrack());
                 addMetadata(tracks.get(currentTrackPosition));
-
-                player.prepareAsync();
-                player.start();
             } catch (IOException e) {
                 Log.d(LOG_TAG, "e: " + e.toString());
             }
@@ -496,6 +490,12 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
                 //Notifications
                 stopForeground(true);
+            }
+
+            @Override
+            public void onPrepare() {
+                super.onPrepare();
+                player.prepareAsync();
             }
         };
     }
