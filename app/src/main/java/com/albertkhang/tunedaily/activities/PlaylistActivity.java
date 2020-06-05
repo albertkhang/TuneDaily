@@ -2,6 +2,7 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,7 @@ import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.PlaylistMoreFragment;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
+import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -28,6 +30,8 @@ import java.util.ArrayList;
 
 public class PlaylistActivity extends AppCompatActivity implements Serializable {
     private SettingManager settingManager;
+    public static final String MINI_PLAYER_TAG = "com.albertkhang.activities.playlistactivity.miniplayer";
+    public static final String LOG_TAG = "PlaylistActivity";
 
     private ConstraintLayout root_view;
     private ConstraintLayout top_frame;
@@ -46,10 +50,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     private ArrayList<Integer> tracks;
     private Playlist currentPlaylist;
 
-    public interface TYPE {
-        String PLAYLIST = "playlist";
-        String ALBUM = "album";
-    }
+    private MediaPlaybackConnectHelper connectHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +63,31 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     }
 
     private void addMiniPlayer() {
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.miniPlayer_frame, new MiniPlayerFragment()).commit();
+        miniPlayer_frame.setVisibility(View.GONE);
+        final MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment();
+
+        connectHelper.setOnPlayingListener(new MediaPlaybackConnectHelper.OnPlayingListener() {
+            @Override
+            public void onPlayingListener(boolean isPlaying) {
+                Fragment fragment = getSupportFragmentManager().findFragmentByTag(MINI_PLAYER_TAG);
+
+                if (fragment == null) {
+                    if (isPlaying) {
+                        miniPlayer_frame.setVisibility(View.VISIBLE);
+
+                        Bundle bundle = new Bundle();
+                        bundle.putBoolean("isPlaying", true);
+                        miniPlayerFragment.setArguments(bundle);
+
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
+                    } else {
+                        getSupportFragmentManager().beginTransaction()
+                                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
+                    }
+                }
+            }
+        });
     }
 
     private void addControl() {
@@ -87,6 +111,8 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         rvTracks.setLayoutManager(linearLayoutManager);
+
+        connectHelper = new MediaPlaybackConnectHelper(this);
 
         updateIntentData();
         updateTrackList();
@@ -177,6 +203,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     protected void onResume() {
         super.onResume();
         updateTheme();
+        connectHelper.putInOnResume();
     }
 
     private void updateTheme() {
@@ -201,5 +228,17 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
             top_gradient_frame.setBackground(getResources().getDrawable(R.drawable.lyric_hidden_top_gradient_light));
             bottom_gradient_frame.setBackground(getResources().getDrawable(R.drawable.lyric_hidden_bottom_gradient_light));
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        connectHelper.putInOnStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        connectHelper.putInOnStop();
     }
 }

@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,7 +13,6 @@ import androidx.fragment.app.Fragment;
 
 import android.os.RemoteException;
 import android.support.v4.media.MediaBrowserCompat;
-import android.support.v4.media.MediaDescriptionCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -33,20 +31,14 @@ import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.bumptech.glide.Glide;
-import com.google.common.eventbus.AllowConcurrentEvents;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 
 public class MiniPlayerFragment extends Fragment implements Serializable {
     private static final String LOG_TAG = "MiniPlayerFragment";
-
-    public interface ACTION {
-        String PLAY = "com.albertkhang.action.play";
-    }
 
     private ConstraintLayout miniPlayer_background;
     private SettingManager settingManager;
@@ -67,7 +59,7 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     private TextView txtArtist;
     private ConstraintLayout root_view;
 
-    private Track currentTrack;
+    private static Track currentTrack;
 
     private MediaBrowserCompat mediaBrowser;
     private MediaBrowserCompat.ConnectionCallback connectionCallback;
@@ -231,8 +223,8 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         super.onResume();
         updateTheme();
         updateCurrentTrack();
-        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
         updateCurrentStatus();
+        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     private void updateCurrentStatus() {
@@ -294,7 +286,7 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         Glide.with(this).load(cover).placeholder(R.color.colorLight5).into(imgCover);
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe
     public void onPlayAction(Track track) {
         currentTrack = new Track(track);
         updateCurrentTrack();
