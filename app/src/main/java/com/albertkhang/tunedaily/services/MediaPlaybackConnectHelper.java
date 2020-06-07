@@ -34,6 +34,10 @@ public class MediaPlaybackConnectHelper {
         initialMediaBrowser();
     }
 
+    public MediaControllerCompat getMediaController() {
+        return mediaController;
+    }
+
     public static Track getCurrentTrack() {
         return MediaPlaybackService.getCurrentTrack();
     }

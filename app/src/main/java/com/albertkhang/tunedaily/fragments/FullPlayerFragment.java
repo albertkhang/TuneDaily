@@ -2,6 +2,8 @@ package com.albertkhang.tunedaily.fragments;
 
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +17,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.TimeConverter;
 import com.albertkhang.tunedaily.utils.Track;
@@ -42,6 +45,8 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     private ImageView imgRepeat;
 
     private Track currentTrack;
+
+    private MediaPlaybackConnectHelper connectHelper;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -83,7 +88,23 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         imgFavourite = view.findViewById(R.id.imgFavourite);
         imgRepeat = view.findViewById(R.id.imgRepeat);
 
+        connectHelper = new MediaPlaybackConnectHelper(getActivity());
+
         updateTheme();
+        initialOnPlayingListener();
+    }
+
+    private void initialOnPlayingListener() {
+        connectHelper.setOnPlayingListener(new MediaPlaybackConnectHelper.OnPlayingListener() {
+            @Override
+            public void onPlayingListener(boolean isPlaying) {
+                if (isPlaying) {
+                    imgPlayPause.setImageResource(R.drawable.ic_pause);
+                } else {
+                    imgPlayPause.setImageResource(R.drawable.ic_play);
+                }
+            }
+        });
     }
 
     private void updateTheme() {
@@ -119,7 +140,20 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     }
 
     private void addEvent() {
-
+        imgPlayPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MediaControllerCompat controller = connectHelper.getMediaController();
+                int state = controller.getPlaybackState().getState();
+                if (state == PlaybackStateCompat.STATE_PLAYING) {
+                    controller.getTransportControls().pause();
+                    imgPlayPause.setImageResource(R.drawable.ic_play);
+                } else {
+                    controller.getTransportControls().play();
+                    imgPlayPause.setImageResource(R.drawable.ic_pause);
+                }
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -131,12 +165,20 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        connectHelper.putInOnStart();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        connectHelper.putInOnResume();
     }
 
     @Override
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        connectHelper.putInOnStop();
     }
 }
 
