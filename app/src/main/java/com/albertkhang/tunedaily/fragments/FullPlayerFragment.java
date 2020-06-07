@@ -1,8 +1,14 @@
 package com.albertkhang.tunedaily.fragments;
 
+import android.content.ComponentName;
 import android.content.res.ColorStateList;
+import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +24,7 @@ import androidx.fragment.app.Fragment;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
+import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.TimeConverter;
 import com.albertkhang.tunedaily.utils.Track;
@@ -31,6 +38,8 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.io.Serializable;
 
 public class FullPlayerFragment extends Fragment implements Serializable {
+    private static final String LOG_TAG = "FullPlayerFragment";
+
     private SettingManager settingManager;
     private CircleImageView imgCover;
     private TextView txtTitle;
@@ -46,12 +55,14 @@ public class FullPlayerFragment extends Fragment implements Serializable {
 
     private Track currentTrack;
 
-    private MediaPlaybackConnectHelper connectHelper;
+    private MediaBrowserCompat mediaBrowser;
+    private MediaBrowserCompat.ConnectionCallback connectionCallback;
+    private MediaControllerCompat.Callback controllerCallback;
+    private MediaControllerCompat mediaController;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        currentTrack = (Track) getArguments().getSerializable("current_track");
         return inflater.inflate(R.layout.fragment_full_player, container, false);
     }
 
@@ -65,11 +76,11 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     }
 
     private void updateDataIntent() {
-        Glide.with(this).load(currentTrack.getCover()).into(imgCover);
-        txtTitle.setText(currentTrack.getTitle());
-        txtArtist.setText(currentTrack.getArtist());
+        currentTrack = MediaPlaybackService.getCurrentTrack();
 
-        txtTimeStampEnd.setText(TimeConverter.getInstance().getTimestamp(currentTrack.getDuration()));
+        if (currentTrack != null) {
+            txtTimeStampEnd.setText(TimeConverter.getInstance().getTimestamp(currentTrack.getDuration()));
+        }
     }
 
     private void addControl(View view) {
@@ -88,24 +99,119 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         imgFavourite = view.findViewById(R.id.imgFavourite);
         imgRepeat = view.findViewById(R.id.imgRepeat);
 
-        connectHelper = new MediaPlaybackConnectHelper(getActivity());
+        initialControllerCallback();
+        initialConnectionCallback();
+        initialMediaBrowser();
 
         updateTheme();
-        initialOnPlayingListener();
     }
 
-    private void initialOnPlayingListener() {
-        connectHelper.setOnPlayingListener(new MediaPlaybackConnectHelper.OnPlayingListener() {
+    private void initialMediaBrowser() {
+        mediaBrowser = new MediaBrowserCompat(getContext(),
+                new ComponentName(requireContext(), MediaPlaybackService.class),
+                connectionCallback,
+                null); // optional Bundle
+    }
+
+    private void initialConnectionCallback() {
+        connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
             @Override
-            public void onPlayingListener(boolean isPlaying) {
-                if (isPlaying) {
-                    imgPlayPause.setImageResource(R.drawable.ic_pause);
-                } else {
+            public void onConnected() {
+                super.onConnected();
+                Log.d(LOG_TAG, "onConnected");
+
+                // Get the token for the MediaSession
+                MediaSessionCompat.Token token = mediaBrowser.getSessionToken();
+                Log.d(LOG_TAG, "token: " + token.toString());
+
+                // Create a MediaControllerCompat
+                try {
+                    mediaController =
+                            new MediaControllerCompat(getContext(), // Context
+                                    token);
+
+                    // Save the controller
+                    MediaControllerCompat.setMediaController(getActivity(), mediaController);
+
+                    // Finish building the UI
+                    buildTransportControls();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    private void buildTransportControls() {
+        imgPlayPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pbState = mediaController.getPlaybackState().getState();
+                if (pbState == PlaybackStateCompat.STATE_PLAYING) {
+                    Log.d(LOG_TAG, "STATE_PLAYING");
+                    mediaController.getTransportControls().pause();
                     imgPlayPause.setImageResource(R.drawable.ic_play);
+                } else {
+                    Log.d(LOG_TAG, "STATE_PAUSED");
+                    mediaController.getTransportControls().play();
+                    imgPlayPause.setImageResource(R.drawable.ic_pause);
                 }
             }
         });
+
+        // Display the initial state
+        Log.d(LOG_TAG, "Display the initial state");
+        updateMetadata(mediaController.getMetadata());
+        updatePlaybackState(mediaController.getPlaybackState());
+        currentTrack = MediaPlaybackService.getCurrentTrack();
+
+        // Register a Callback to stay in sync
+        mediaController.registerCallback(controllerCallback);
     }
+
+    private void initialControllerCallback() {
+        Log.d(LOG_TAG, "initialControllerCallback");
+        controllerCallback = new MediaControllerCompat.Callback() {
+            @Override
+            public void onMetadataChanged(MediaMetadataCompat metadata) {
+                super.onMetadataChanged(metadata);
+                updateMetadata(metadata);
+                currentTrack = MediaPlaybackService.getCurrentTrack();
+            }
+
+            @Override
+            public void onPlaybackStateChanged(PlaybackStateCompat state) {
+                super.onPlaybackStateChanged(state);
+                updatePlaybackState(state);
+            }
+        };
+    }
+
+    private void updatePlaybackState(PlaybackStateCompat state) {
+        if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
+            Log.d(LOG_TAG, "controllerCallback STATE_PLAYING");
+            imgPlayPause.setImageResource(R.drawable.ic_pause);
+        } else {
+            Log.d(LOG_TAG, "controllerCallback STATE_PAUSED");
+            imgPlayPause.setImageResource(R.drawable.ic_play);
+        }
+    }
+
+    private void updateMetadata(MediaMetadataCompat metadata) {
+        if (metadata != null) {
+            String cover = metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI);
+            String title = metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
+            String artist = metadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST);
+            Log.d(LOG_TAG, "cover: " + cover);
+            Log.d(LOG_TAG, "title: " + title);
+            Log.d(LOG_TAG, "artist: " + artist);
+
+            Glide.with(getActivity()).load(cover).placeholder(R.color.colorLight5).into(imgCover);
+            txtTitle.setText(title);
+            txtArtist.setText(artist);
+        }
+    }
+
 
     private void updateTheme() {
         if (settingManager.isDarkTheme()) {
@@ -140,20 +246,6 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     }
 
     private void addEvent() {
-        imgPlayPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MediaControllerCompat controller = connectHelper.getMediaController();
-                int state = controller.getPlaybackState().getState();
-                if (state == PlaybackStateCompat.STATE_PLAYING) {
-                    controller.getTransportControls().pause();
-                    imgPlayPause.setImageResource(R.drawable.ic_play);
-                } else {
-                    controller.getTransportControls().play();
-                    imgPlayPause.setImageResource(R.drawable.ic_pause);
-                }
-            }
-        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -165,20 +257,24 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        connectHelper.putInOnStart();
+        mediaBrowser.connect();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        connectHelper.putInOnResume();
+        getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     @Override
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        connectHelper.putInOnStop();
+
+        if (MediaControllerCompat.getMediaController(getActivity()) != null) {
+            MediaControllerCompat.getMediaController(getActivity()).unregisterCallback(controllerCallback);
+        }
+        mediaBrowser.disconnect();
     }
 }
 

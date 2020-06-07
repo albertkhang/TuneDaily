@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
@@ -63,7 +64,6 @@ public class DetailFragment extends Fragment implements Serializable {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        currentTrack = (Track) getArguments().getSerializable("current_track");
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
 
@@ -73,7 +73,6 @@ public class DetailFragment extends Fragment implements Serializable {
 
         addControl(view);
         updateDataIntent();
-        EventBus.getDefault().post(currentTrack);
         addEvent();
     }
 
@@ -193,10 +192,14 @@ public class DetailFragment extends Fragment implements Serializable {
     }
 
     private void updateDataIntent() {
-        txtSong.setText(currentTrack.getTitle());
-        txtAlbum.setText(currentTrack.getAlbum());
-        txtArtist.setText(currentTrack.getArtist());
-        txtGenre.setText(currentTrack.getGenre());
-        txtComposer.setText("N/A");
+        currentTrack = MediaPlaybackService.getCurrentTrack();
+
+        if (currentTrack != null) {
+            txtSong.setText(currentTrack.getTitle());
+            txtAlbum.setText(currentTrack.getAlbum());
+            txtArtist.setText(currentTrack.getArtist());
+            txtGenre.setText(currentTrack.getGenre());
+            txtComposer.setText("N/A");
+        }
     }
 }

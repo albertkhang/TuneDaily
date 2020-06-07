@@ -13,16 +13,19 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
+import com.albertkhang.tunedaily.events.UpdateTitleArtist;
 import com.albertkhang.tunedaily.fragments.DetailFragment;
 import com.albertkhang.tunedaily.fragments.FullPlayerFragment;
 import com.albertkhang.tunedaily.fragments.LyricFragment;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
+import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.rd.PageIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.Serializable;
 
@@ -61,8 +64,12 @@ public class FullPlayerActivity extends AppCompatActivity implements Serializabl
     }
 
     private void updateDataIntent() {
-        txtTitle.setText(currentTrack.getTitle());
-        txtArtist.setText(currentTrack.getArtist());
+        currentTrack = MediaPlaybackService.getCurrentTrack();
+
+        if (currentTrack != null) {
+            txtTitle.setText(currentTrack.getTitle());
+            txtArtist.setText(currentTrack.getArtist());
+        }
     }
 
     private void addControl() {
@@ -75,19 +82,9 @@ public class FullPlayerActivity extends AppCompatActivity implements Serializabl
         top_frame = findViewById(R.id.top_frame);
         miniPlayer_frame = findViewById(R.id.miniPlayer_frame);
 
-        Track track = (Track) getIntent().getSerializableExtra("current_track");
-        currentTrack = new Track(track);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("current_track", track);
-
         fullPlayerFragment = new FullPlayerFragment();
-        fullPlayerFragment.setArguments(bundle);
-
         detailFragment = new DetailFragment();
-        detailFragment.setArguments(bundle);
-
         lyricFragment = new LyricFragment();
-        lyricFragment.setArguments(bundle);
 
         adapter.addFragment(detailFragment);
         adapter.addFragment(fullPlayerFragment);
@@ -172,5 +169,23 @@ public class FullPlayerActivity extends AppCompatActivity implements Serializabl
     private void showMoreItem(Track track) {
         TrackMoreFragment trackMoreFragment = new TrackMoreFragment(track);
         trackMoreFragment.show(getSupportFragmentManager(), "FragmentTrackMore");
+    }
+
+    @Subscribe
+    public void onPlayAction(UpdateTitleArtist updateTitleArtist) {
+        txtTitle.setText(updateTitleArtist.getTitle());
+        txtArtist.setText(updateTitleArtist.getArtist());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

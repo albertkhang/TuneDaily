@@ -13,6 +13,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 
@@ -46,7 +47,6 @@ public class LyricFragment extends Fragment implements Serializable {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        currentTrack = (Track) getArguments().getSerializable("current_track");
         return inflater.inflate(R.layout.fragment_lyric, container, false);
     }
 
@@ -61,22 +61,22 @@ public class LyricFragment extends Fragment implements Serializable {
     }
 
     private void updateDataIntent() {
-        txtTitle.setText(currentTrack.getTitle());
-        txtArtist.setText(currentTrack.getArtist());
+        currentTrack = MediaPlaybackService.getCurrentTrack();
+
+        if (currentTrack != null) {
+            txtTitle.setText(currentTrack.getTitle());
+            txtArtist.setText(currentTrack.getArtist());
+        }
     }
 
     private void addControl(View view) {
         settingManager = SettingManager.getInstance(getContext());
-
         top_gradient_frame = view.findViewById(R.id.top_gradient_frame);
         bottom_gradient_frame = view.findViewById(R.id.bottom_gradient_frame);
-
         txtSongTitle = view.findViewById(R.id.txtSongTitle);
         txtTitle = view.findViewById(R.id.txtTitle);
-
         txtSingerTitle = view.findViewById(R.id.txtSingerTitle);
         txtArtist = view.findViewById(R.id.txtArtist);
-
         txtLyric = view.findViewById(R.id.txtLyric);
     }
 

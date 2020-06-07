@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
+import com.albertkhang.tunedaily.events.UpdateTitleArtist;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -128,9 +129,13 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
             Log.d(LOG_TAG, "title: " + title);
             Log.d(LOG_TAG, "artist: " + artist);
 
-            Glide.with(getActivity()).load(cover).placeholder(R.color.colorLight5).into(imgCover);
-            txtTitle.setText(title);
-            txtArtist.setText(artist);
+            if (getActivity() != null) {
+                Glide.with(getActivity()).load(cover).placeholder(R.color.colorLight5).into(imgCover);
+                txtTitle.setText(title);
+                txtArtist.setText(artist);
+
+                EventBus.getDefault().post(new UpdateTitleArtist(title, artist));
+            }
         }
     }
 
@@ -223,7 +228,6 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FullPlayerActivity.class);
-                intent.putExtra("current_track", currentTrack);
                 startActivity(intent);
             }
         });
@@ -273,9 +277,11 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     @Subscribe
     public void onPlayAction(Track track) {
         MediaPlaybackService.addTrack(track);
-
         mediaController.getTransportControls().prepare();
         mediaController.getTransportControls().play();
+
+        updateMetadata(mediaController.getMetadata());
+        updatePlaybackState(mediaController.getPlaybackState());
     }
 
     @Override
