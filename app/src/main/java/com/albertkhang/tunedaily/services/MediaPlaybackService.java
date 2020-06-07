@@ -58,7 +58,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
     public static ArrayList<Track> tracks = new ArrayList<>();
     private static MediaPlayer player = new MediaPlayer();
-    private Handler handler = new Handler();
     private AudioManager.OnAudioFocusChangeListener afChangeListener;
     private AudioFocusRequest audioFocusRequest;
     private BecomingNoisyReceiver becomingNoisyReceiver;
@@ -84,8 +83,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         });
     }
 
-    static Track getCurrentTrack() {
-        return tracks.get(currentTrackPosition);
+    public static Track getCurrentTrack() {
+        if (currentTrackPosition != -1) {
+            return tracks.get(currentTrackPosition);
+        }
+        return null;
     }
 
     private void initialNotificationChannelId() {
@@ -186,6 +188,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                 Log.d(LOG_TAG, "e: " + e.toString());
             }
         }
+
+        //set metadata
+        MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, tracks.get(currentTrackPosition).getCover())
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, tracks.get(currentTrackPosition).getTitle())
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, tracks.get(currentTrackPosition).getArtist());
+        mediaSession.setMetadata(metadataBuilder.build());
     }
 
     private static void addMetadata(Track track) {

@@ -26,7 +26,6 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
-import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -58,7 +57,7 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     private TextView txtArtist;
     private ConstraintLayout root_view;
 
-    private static Track currentTrack;
+    private Track currentTrack;
 
     private MediaBrowserCompat mediaBrowser;
     private MediaBrowserCompat.ConnectionCallback connectionCallback;
@@ -90,46 +89,49 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         initialControllerCallback();
         initialConnectionCallback();
         initialMediaBrowser();
-
-        updateIfIsPlaying();
-
-        Log.d(LOG_TAG, "addControl");
-    }
-
-    private void updateIfIsPlaying() {
-        Bundle bundle = getArguments();
-        if (bundle != null && bundle.getBoolean("isPlaying")) {
-            Track track = MediaPlaybackConnectHelper.getCurrentTrack();
-
-            txtTitle.setText(track.getTitle());
-            txtArtist.setText(track.getArtist());
-            imgPlayPause.setImageResource(R.drawable.ic_pause);
-            Glide.with(this).load(track.getCover()).into(imgCover);
-        }
     }
 
     private void initialControllerCallback() {
+        Log.d(LOG_TAG, "initialControllerCallback");
         controllerCallback = new MediaControllerCompat.Callback() {
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
                 super.onMetadataChanged(metadata);
-                Log.d(LOG_TAG, "metadata: " + metadata.toString());
+                updateMetadata(metadata);
+                currentTrack = MediaPlaybackService.getCurrentTrack();
             }
 
             @Override
             public void onPlaybackStateChanged(PlaybackStateCompat state) {
                 super.onPlaybackStateChanged(state);
-                Log.d(LOG_TAG, "state: " + state.toString());
-
-                if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-                    Log.d(LOG_TAG, "controllerCallback STATE_PLAYING");
-                    imgPlayPause.setImageResource(R.drawable.ic_pause);
-                } else {
-                    Log.d(LOG_TAG, "controllerCallback STATE_PAUSED");
-                    imgPlayPause.setImageResource(R.drawable.ic_play);
-                }
+                updatePlaybackState(state);
             }
         };
+    }
+
+    private void updatePlaybackState(PlaybackStateCompat state) {
+        if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
+            Log.d(LOG_TAG, "controllerCallback STATE_PLAYING");
+            imgPlayPause.setImageResource(R.drawable.ic_pause);
+        } else {
+            Log.d(LOG_TAG, "controllerCallback STATE_PAUSED");
+            imgPlayPause.setImageResource(R.drawable.ic_play);
+        }
+    }
+
+    private void updateMetadata(MediaMetadataCompat metadata) {
+        if (metadata != null) {
+            String cover = metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI);
+            String title = metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
+            String artist = metadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST);
+            Log.d(LOG_TAG, "cover: " + cover);
+            Log.d(LOG_TAG, "title: " + title);
+            Log.d(LOG_TAG, "artist: " + artist);
+
+            Glide.with(getActivity()).load(cover).placeholder(R.color.colorLight5).into(imgCover);
+            txtTitle.setText(title);
+            txtArtist.setText(artist);
+        }
     }
 
     private void initialConnectionCallback() {
@@ -169,16 +171,20 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
                 if (pbState == PlaybackStateCompat.STATE_PLAYING) {
                     Log.d(LOG_TAG, "STATE_PLAYING");
                     mediaController.getTransportControls().pause();
+                    imgPlayPause.setImageResource(R.drawable.ic_play);
                 } else {
                     Log.d(LOG_TAG, "STATE_PAUSED");
                     mediaController.getTransportControls().play();
+                    imgPlayPause.setImageResource(R.drawable.ic_pause);
                 }
             }
         });
 
         // Display the initial state
-        mediaController.getMetadata();
-        mediaController.getPlaybackState();
+        Log.d(LOG_TAG, "Display the initial state");
+        updateMetadata(mediaController.getMetadata());
+        updatePlaybackState(mediaController.getPlaybackState());
+        currentTrack = MediaPlaybackService.getCurrentTrack();
 
         // Register a Callback to stay in sync
         mediaController.registerCallback(controllerCallback);
@@ -227,30 +233,7 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     public void onResume() {
         super.onResume();
         updateTheme();
-        updateCurrentTrack();
-        updateCurrentStatus();
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
-    }
-
-    private void updateCurrentStatus() {
-        if (mediaController != null) {
-            int pbState = mediaController.getPlaybackState().getState();
-            if (pbState == PlaybackStateCompat.STATE_PLAYING) {
-                Log.d(LOG_TAG, "updateCurrentStatus STATE_PLAYING");
-                imgPlayPause.setImageResource(R.drawable.ic_pause);
-            } else {
-                Log.d(LOG_TAG, "updateCurrentStatus STATE_PAUSED");
-                imgPlayPause.setImageResource(R.drawable.ic_play);
-            }
-        }
-    }
-
-    private void updateCurrentTrack() {
-        if (currentTrack != null) {
-            setCover(currentTrack.getCover());
-            txtTitle.setText(currentTrack.getTitle());
-            txtArtist.setText(currentTrack.getArtist());
-        }
     }
 
     private void updateTheme() {
@@ -287,20 +270,12 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         miniPlayer_background.setBackground(drawable);
     }
 
-    private void setCover(String cover) {
-        Glide.with(this).load(cover).placeholder(R.color.colorLight5).into(imgCover);
-    }
-
     @Subscribe
     public void onPlayAction(Track track) {
-        currentTrack = new Track(track);
-        updateCurrentTrack();
-
-        MediaPlaybackService.addTrack(currentTrack);
+        MediaPlaybackService.addTrack(track);
 
         mediaController.getTransportControls().prepare();
         mediaController.getTransportControls().play();
-        Log.d(LOG_TAG, "play track: " + track.toString());
     }
 
     @Override
