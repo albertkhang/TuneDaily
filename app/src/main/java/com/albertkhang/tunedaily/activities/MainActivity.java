@@ -1,13 +1,16 @@
 package com.albertkhang.tunedaily.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -82,13 +85,8 @@ public class MainActivity extends AppCompatActivity {
 
         MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(MINI_PLAYER_TAG);
-        if (fragment == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
-        } else {
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
-        }
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commitAllowingStateLoss();
     }
 
     private void addEvent() {

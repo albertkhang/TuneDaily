@@ -57,7 +57,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private PlaybackStateCompat.Builder playbackStateBuilder;
 
     public static ArrayList<Track> tracks = new ArrayList<>();
-    private static MediaPlayer player = new MediaPlayer();
+    private static MediaPlayer player;
     private AudioManager.OnAudioFocusChangeListener afChangeListener;
     private AudioFocusRequest audioFocusRequest;
     private BecomingNoisyReceiver becomingNoisyReceiver;
@@ -74,13 +74,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         initialNotificationChannelId();
         initialSession();
 
-        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-            @Override
-            public void onPrepared(MediaPlayer mp) {
-                mp.start();
-            }
-        });
+//        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//            @Override
+//            public void onPrepared(MediaPlayer mp) {
+//                mp.start();
+//            }
+//        });
     }
 
     public static Track getCurrentTrack() {
@@ -177,14 +177,34 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
             currentTrackPosition = tracks.size() - 1;
         }
 
+        initialPlayer();
+
         try {
             player.setDataSource(tracks.get(currentTrackPosition).getTrack());
         } catch (IOException e) {
             Log.d(LOG_TAG, "e: " + e.toString());
         }
 
+        mediaSession.getController().getTransportControls().prepare();
+        mediaSession.getController().getTransportControls().play();
+
         //set metadata
         addMetadata(tracks.get(currentTrackPosition));
+    }
+
+    private static void initialPlayer() {
+        if (player != null) {
+            player = null;
+        }
+
+        player = new MediaPlayer();
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.start();
+            }
+        });
     }
 
     private static void addMetadata(Track track) {

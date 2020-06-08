@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrack;
 import com.albertkhang.tunedaily.events.UpdateTitleArtist;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
@@ -310,11 +311,11 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPlayAction(Track track) {
-        Log.d(LOG_TAG, "onPlayAction: " + track.toString());
-        MediaPlaybackService.addTrack(track);
-        mediaController.getTransportControls().prepare();
-        mediaController.getTransportControls().play();
+    public void onPlayAction(UpdateCurrentTrack updateCurrentTrack) {
+        Log.d(LOG_TAG, "onPlayAction: " + updateCurrentTrack.getTrack().toString());
+        MediaPlaybackService.addTrack(updateCurrentTrack.getTrack());
+//        mediaController.getTransportControls().prepare();
+//        mediaController.getTransportControls().play();
 
         updateMetadata(mediaController.getMetadata());
         updatePlaybackState(mediaController.getPlaybackState());
