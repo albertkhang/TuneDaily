@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.RotateAnimation;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrack;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -183,11 +184,13 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     }
 
     private void updateRotateAnimation() {
-        int pbState = mediaController.getPlaybackState().getState();
-        if (pbState == PlaybackStateCompat.STATE_PLAYING) {
-            rotateAnimation.start();
-        } else {
-            rotateAnimation.stop();
+        if (mediaController != null) {
+            int pbState = mediaController.getPlaybackState().getState();
+            if (pbState == PlaybackStateCompat.STATE_PLAYING) {
+                rotateAnimation.start();
+            } else {
+                rotateAnimation.stop();
+            }
         }
     }
 
@@ -304,8 +307,8 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onReceiveTrack(Track track) {
-        Glide.with(this).load(track.getCover()).into(imgCover);
+    public void onReceiveTrack(UpdateCurrentTrack updateCurrentTrack) {
+        txtTimeStampEnd.setText(TimeConverter.getInstance().getTimestamp(updateCurrentTrack.getTrack().getDuration()));
     }
 
     @Override
@@ -319,6 +322,13 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     public void onResume() {
         super.onResume();
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
+        updateRotateAnimation();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        rotateAnimation.stop();
     }
 
     @Override

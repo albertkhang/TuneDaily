@@ -35,4 +35,8 @@ public class TimeConverter {
 
         return sMin + ":" + sSec;
     }
+
+    public String getTimestamp(long duration) {
+        return getTimestamp((int) duration);
+    }
 }
