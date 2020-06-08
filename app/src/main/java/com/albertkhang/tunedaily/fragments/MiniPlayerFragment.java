@@ -1,7 +1,6 @@
 package com.albertkhang.tunedaily.fragments;
 
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -28,8 +27,8 @@ import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
-import com.albertkhang.tunedaily.events.UpdateCurrentTrack;
-import com.albertkhang.tunedaily.events.UpdateTitleArtist;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
+import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -138,7 +137,7 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
                 txtTitle.setText(title);
                 txtArtist.setText(artist);
 
-                EventBus.getDefault().post(new UpdateTitleArtist(title, artist));
+                EventBus.getDefault().post(new UpdateTitleArtistEvent(title, artist));
             }
         }
     }
@@ -296,9 +295,9 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPlayAction(UpdateCurrentTrack updateCurrentTrack) {
-        Log.d(LOG_TAG, "onPlayAction: " + updateCurrentTrack.getTrack().toString());
-        MediaPlaybackService.addTrack(updateCurrentTrack.getTrack());
+    public void onPlayAction(UpdateCurrentTrackEvent updateCurrentTrackEvent) {
+        Log.d(LOG_TAG, "onPlayAction: " + updateCurrentTrackEvent.getTrack().toString());
+        MediaPlaybackService.addTrack(updateCurrentTrackEvent.getTrack());
 
         updateMetadata(mediaController.getMetadata());
         updatePlaybackState(mediaController.getPlaybackState());

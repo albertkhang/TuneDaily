@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
-import com.albertkhang.tunedaily.events.UpdatePlaylistLibrary;
+import com.albertkhang.tunedaily.events.UpdatePlaylistLibraryEvent;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -106,7 +106,7 @@ public class PlaylistMoreFragment extends BottomSheetDialogFragment {
                 PlaylistManager.getInstance().deletePlaylist(playlist.getTitle());
                 Toast.makeText(getContext(), "Deleted " + playlist.getTitle(), Toast.LENGTH_LONG).show();
                 closefragment();
-                EventBus.getDefault().post(new UpdatePlaylistLibrary());
+                EventBus.getDefault().post(new UpdatePlaylistLibraryEvent());
                 dialog.dismiss();
             }
         });

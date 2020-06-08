@@ -1,10 +1,10 @@
 package com.albertkhang.tunedaily.events;
 
-public class UpdateTitleArtist {
+public class UpdateTitleArtistEvent {
     private String title;
     private String artist;
 
-    public UpdateTitleArtist(String title, String artist) {
+    public UpdateTitleArtistEvent(String title, String artist) {
         this.title = title;
         this.artist = artist;
     }

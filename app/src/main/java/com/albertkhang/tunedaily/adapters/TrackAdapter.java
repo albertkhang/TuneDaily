@@ -12,9 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.albertkhang.tunedaily.R;
-import com.albertkhang.tunedaily.activities.MainActivity;
 import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
-import com.albertkhang.tunedaily.events.UpdateCurrentTrack;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
@@ -82,7 +81,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().post(new UpdateCurrentTrack(tracks.get(position)));
+                EventBus.getDefault().post(new UpdateCurrentTrackEvent(tracks.get(position)));
                 EventBus.getDefault().post(new ShowMiniplayerEvent());
             }
         });

@@ -2,10 +2,10 @@ package com.albertkhang.tunedaily.events;
 
 import com.albertkhang.tunedaily.utils.Track;
 
-public class UpdateCurrentTrack {
+public class UpdateCurrentTrackEvent {
     private Track track;
 
-    public UpdateCurrentTrack(Track track) {
+    public UpdateCurrentTrackEvent(Track track) {
         this.track = track;
     }
 

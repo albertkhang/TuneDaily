@@ -1,4 +1,4 @@
-package com.albertkhang.tunedaily;
+package com.albertkhang.tunedaily.animations;
 
 import android.view.View;
 import android.view.animation.Animation;

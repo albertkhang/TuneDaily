@@ -2,7 +2,6 @@ package com.albertkhang.tunedaily.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,10 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.albertkhang.tunedaily.R;
-import com.albertkhang.tunedaily.activities.MainActivity;
 import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
-import com.albertkhang.tunedaily.events.UpdateCurrentTrack;
-import com.albertkhang.tunedaily.services.MediaPlaybackService;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.albertkhang.tunedaily.views.RoundImageView;
@@ -84,7 +81,7 @@ public class TopChartAdapter extends RecyclerView.Adapter<TopChartAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EventBus.getDefault().post(new UpdateCurrentTrack(tracks.get(position)));
+                EventBus.getDefault().post(new UpdateCurrentTrackEvent(tracks.get(position)));
                 EventBus.getDefault().post(new ShowMiniplayerEvent());
             }
         });

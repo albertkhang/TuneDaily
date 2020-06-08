@@ -18,12 +18,11 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
-import com.albertkhang.tunedaily.events.UpdateCurrentTrack;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
-import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.greenrobot.eventbus.EventBus;
@@ -208,13 +207,13 @@ public class DetailFragment extends Fragment implements Serializable {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPlayAction(UpdateCurrentTrack updateCurrentTrack) {
-        Log.d(LOG_TAG, "onPlayAction: " + updateCurrentTrack.getTrack().toString());
+    public void onPlayAction(UpdateCurrentTrackEvent updateCurrentTrackEvent) {
+        Log.d(LOG_TAG, "onPlayAction: " + updateCurrentTrackEvent.getTrack().toString());
 
-        txtSong.setText(updateCurrentTrack.getTrack().getTitle());
-        txtAlbum.setText(updateCurrentTrack.getTrack().getAlbum());
-        txtArtist.setText(updateCurrentTrack.getTrack().getArtist());
-        txtGenre.setText(updateCurrentTrack.getTrack().getGenre());
+        txtSong.setText(updateCurrentTrackEvent.getTrack().getTitle());
+        txtAlbum.setText(updateCurrentTrackEvent.getTrack().getAlbum());
+        txtArtist.setText(updateCurrentTrackEvent.getTrack().getArtist());
+        txtGenre.setText(updateCurrentTrackEvent.getTrack().getGenre());
     }
 
     @Override

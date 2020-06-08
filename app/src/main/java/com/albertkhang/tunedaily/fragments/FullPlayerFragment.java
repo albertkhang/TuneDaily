@@ -14,8 +14,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -25,8 +23,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.albertkhang.tunedaily.R;
-import com.albertkhang.tunedaily.RotateAnimation;
-import com.albertkhang.tunedaily.events.UpdateCurrentTrack;
+import com.albertkhang.tunedaily.animations.RotateAnimation;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -105,7 +103,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         imgFavourite = view.findViewById(R.id.imgFavourite);
         imgRepeat = view.findViewById(R.id.imgRepeat);
 
-        rotateAnimation = new com.albertkhang.tunedaily.RotateAnimation(imgCover);
+        rotateAnimation = new RotateAnimation(imgCover);
 
         initialControllerCallback();
         initialConnectionCallback();
@@ -307,8 +305,8 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onReceiveTrack(UpdateCurrentTrack updateCurrentTrack) {
-        txtTimeStampEnd.setText(TimeConverter.getInstance().getTimestamp(updateCurrentTrack.getTrack().getDuration()));
+    public void onReceiveTrack(UpdateCurrentTrackEvent updateCurrentTrackEvent) {
+        txtTimeStampEnd.setText(TimeConverter.getInstance().getTimestamp(updateCurrentTrackEvent.getTrack().getDuration()));
     }
 
     @Override

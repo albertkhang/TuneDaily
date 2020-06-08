@@ -5,7 +5,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,7 +12,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
-import com.albertkhang.tunedaily.events.UpdateTitleArtist;
+import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.fragments.DetailFragment;
 import com.albertkhang.tunedaily.fragments.FullPlayerFragment;
 import com.albertkhang.tunedaily.fragments.LyricFragment;
@@ -173,9 +172,9 @@ public class FullPlayerActivity extends AppCompatActivity implements Serializabl
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPlayAction(UpdateTitleArtist updateTitleArtist) {
-        txtTitle.setText(updateTitleArtist.getTitle());
-        txtArtist.setText(updateTitleArtist.getArtist());
+    public void onPlayAction(UpdateTitleArtistEvent updateTitleArtistEvent) {
+        txtTitle.setText(updateTitleArtistEvent.getTitle());
+        txtArtist.setText(updateTitleArtistEvent.getArtist());
     }
 
     @Override

@@ -28,7 +28,7 @@ import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.adapters.LibraryPlaylistAdapter;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
-import com.albertkhang.tunedaily.events.UpdatePlaylistLibrary;
+import com.albertkhang.tunedaily.events.UpdatePlaylistLibraryEvent;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -42,7 +42,6 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class LibraryFragment extends Fragment {
     private static final String LOG_TAG = "LibraryFragment";
@@ -332,7 +331,7 @@ public class LibraryFragment extends Fragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPlayAction(UpdatePlaylistLibrary updatePlaylistLibrary) {
+    public void onPlayAction(UpdatePlaylistLibraryEvent updatePlaylistLibraryEvent) {
         updatePlaylist();
     }
 
