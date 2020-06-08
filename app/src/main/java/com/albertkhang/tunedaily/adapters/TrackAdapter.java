@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.MainActivity;
+import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
@@ -80,7 +81,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
             @Override
             public void onClick(View view) {
                 EventBus.getDefault().post(tracks.get(position));
-                EventBus.getDefault().post(MainActivity.SHOW_MINI_PLAYER_ACTION);
+                EventBus.getDefault().post(new ShowMiniplayerEvent());
             }
         });
 

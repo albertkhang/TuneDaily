@@ -2,11 +2,17 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ComponentName;
 import android.os.Bundle;
+import android.os.RemoteException;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,15 +21,19 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.PlaylistMoreFragment;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
-import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
+import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -50,7 +60,10 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     private ArrayList<Integer> tracks;
     private Playlist currentPlaylist;
 
-    private MediaPlaybackConnectHelper connectHelper;
+    private MediaBrowserCompat mediaBrowser;
+    private MediaBrowserCompat.ConnectionCallback connectionCallback;
+    private MediaControllerCompat.Callback controllerCallback;
+    private MediaControllerCompat mediaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,30 +77,9 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
 
     private void addMiniPlayer() {
         miniPlayer_frame.setVisibility(View.GONE);
-        final MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment();
 
-        connectHelper.setOnPlayingListener(new MediaPlaybackConnectHelper.OnPlayingListener() {
-            @Override
-            public void onPlayingListener(boolean isPlaying) {
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(MINI_PLAYER_TAG);
-
-                if (fragment == null) {
-                    if (isPlaying) {
-                        miniPlayer_frame.setVisibility(View.VISIBLE);
-
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("isPlaying", true);
-                        miniPlayerFragment.setArguments(bundle);
-
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
-                    } else {
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
-                    }
-                }
-            }
-        });
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.miniPlayer_frame, new MiniPlayerFragment(), MINI_PLAYER_TAG).commit();
     }
 
     private void addControl() {
@@ -112,10 +104,87 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         linearLayoutManager.setOrientation(RecyclerView.VERTICAL);
         rvTracks.setLayoutManager(linearLayoutManager);
 
-        connectHelper = new MediaPlaybackConnectHelper(this);
+        mediaController = MediaControllerCompat.getMediaController(this);
+
+        initialControllerCallback();
+        initialConnectionCallback();
+        initialMediaBrowser();
 
         updateIntentData();
         updateTrackList();
+    }
+
+    private void initialMediaBrowser() {
+        mediaBrowser = new MediaBrowserCompat(this,
+                new ComponentName(this, MediaPlaybackService.class),
+                connectionCallback,
+                null); // optional Bundle
+    }
+
+    private void initialConnectionCallback() {
+        connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
+            @Override
+            public void onConnected() {
+                super.onConnected();
+                Log.d(LOG_TAG, "onConnected");
+
+                // Get the token for the MediaSession
+                MediaSessionCompat.Token token = mediaBrowser.getSessionToken();
+                Log.d(LOG_TAG, "token: " + token.toString());
+
+                // Create a MediaControllerCompat
+                try {
+                    mediaController =
+                            new MediaControllerCompat(PlaylistActivity.this, // Context
+                                    token);
+
+                    // Save the controller
+                    MediaControllerCompat.setMediaController(PlaylistActivity.this, mediaController);
+
+                    // Finish building the UI
+                    buildTransportControls();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    private void buildTransportControls() {
+        // Display the initial state
+        Log.d(LOG_TAG, "Display the initial state");
+        if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+            miniPlayer_frame.setVisibility(View.VISIBLE);
+        }
+
+        // Register a Callback to stay in sync
+        mediaController.registerCallback(controllerCallback);
+    }
+
+    private void initialControllerCallback() {
+        Log.d(LOG_TAG, "initialControllerCallback");
+        controllerCallback = new MediaControllerCompat.Callback() {
+            @Override
+            public void onMetadataChanged(MediaMetadataCompat metadata) {
+                super.onMetadataChanged(metadata);
+                String cover = metadata.getString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI);
+                String title = metadata.getString(MediaMetadataCompat.METADATA_KEY_TITLE);
+                String artist = metadata.getString(MediaMetadataCompat.METADATA_KEY_ARTIST);
+                Log.d(LOG_TAG, "cover: " + cover);
+                Log.d(LOG_TAG, "title: " + title);
+                Log.d(LOG_TAG, "artist: " + artist);
+            }
+
+            @Override
+            public void onPlaybackStateChanged(PlaybackStateCompat state) {
+                super.onPlaybackStateChanged(state);
+                if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
+                    Log.d(LOG_TAG, "controllerCallback STATE_PLAYING");
+                } else {
+                    Log.d(LOG_TAG, "controllerCallback STATE_PAUSED");
+                }
+            }
+        };
     }
 
     private void updateTrackList() {
@@ -199,11 +268,15 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         });
     }
 
+    @Subscribe
+    public void onPlayAction(ShowMiniplayerEvent action) {
+        miniPlayer_frame.setVisibility(View.VISIBLE);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         updateTheme();
-        connectHelper.putInOnResume();
     }
 
     private void updateTheme() {
@@ -233,12 +306,15 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     @Override
     protected void onStart() {
         super.onStart();
-        connectHelper.putInOnStart();
+        EventBus.getDefault().register(this);
+        mediaBrowser.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        connectHelper.putInOnStop();
+        EventBus.getDefault().unregister(this);
+        MediaControllerCompat.getMediaController(this).unregisterCallback(controllerCallback);
+        mediaBrowser.disconnect();
     }
 }

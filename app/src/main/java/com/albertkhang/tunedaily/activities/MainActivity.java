@@ -3,7 +3,6 @@ package com.albertkhang.tunedaily.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
@@ -15,29 +14,25 @@ import android.widget.FrameLayout;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
+import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.fragments.DiscoverFragment;
 import com.albertkhang.tunedaily.fragments.LibraryFragment;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.SearchFragment;
-import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
-import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.events.UpdateThemeEvent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
-
-import io.paperdb.Paper;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private ConstraintLayout splash_screen;
     private static final int SHOWING_INTERVAL = 2000;
-    public static final String SHOW_MINI_PLAYER_ACTION = "com.albertkhang.activities.showminiplayer";
     public static final String MINI_PLAYER_TAG = "com.albertkhang.activities.mainactivity.miniplayer";
+    public static final String LOG_TAG = "MainActivity";
 
     //This is our viewPager
     private ViewPager viewPager;
@@ -54,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout bottom_gradient_frame;
     private FrameLayout miniPlayer_frame;
 
-    private MediaPlaybackConnectHelper connectHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,37 +71,15 @@ public class MainActivity extends AppCompatActivity {
         miniPlayer_frame = findViewById(R.id.miniPlayer_frame);
 
         settingManager = SettingManager.getInstance(this);
-        connectHelper = new MediaPlaybackConnectHelper(this);
 
         addMiniPlayer();
     }
 
     private void addMiniPlayer() {
         miniPlayer_frame.setVisibility(View.GONE);
-        final MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment();
 
-        connectHelper.setOnPlayingListener(new MediaPlaybackConnectHelper.OnPlayingListener() {
-            @Override
-            public void onPlayingListener(boolean isPlaying) {
-                Fragment fragment = getSupportFragmentManager().findFragmentByTag(MINI_PLAYER_TAG);
-
-                if (fragment == null) {
-                    if (isPlaying) {
-                        miniPlayer_frame.setVisibility(View.VISIBLE);
-
-                        Bundle bundle = new Bundle();
-                        bundle.putBoolean("isPlaying", true);
-                        miniPlayerFragment.setArguments(bundle);
-
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
-                    } else {
-                        getSupportFragmentManager().beginTransaction()
-                                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
-                    }
-                }
-            }
-        });
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.miniPlayer_frame, new MiniPlayerFragment(), MINI_PLAYER_TAG).commit();
     }
 
     private void addEvent() {
@@ -194,7 +166,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         updateTheme();
         EventBus.getDefault().post(new UpdateThemeEvent());
-        connectHelper.putInOnResume();
     }
 
     private void updateTheme() {
@@ -208,26 +179,20 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPlayAction(String action) {
-        switch (action) {
-            case SHOW_MINI_PLAYER_ACTION:
-                miniPlayer_frame.setVisibility(View.VISIBLE);
-                break;
-        }
+    @Subscribe
+    public void onPlayAction(ShowMiniplayerEvent action) {
+        miniPlayer_frame.setVisibility(View.VISIBLE);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        connectHelper.putInOnStart();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
-        connectHelper.putInOnStop();
     }
 }

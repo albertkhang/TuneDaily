@@ -180,6 +180,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:background="@drawable/lyric_hidden_bottom_gradient_dark"
-        app:layout_constraintBottom_toTopOf="@id/miniPlayer_frame"/>
+        app:layout_constraintBottom_toTopOf="@id/miniPlayer_frame"
+        android:visibility="gone"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
