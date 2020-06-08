@@ -176,6 +176,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         currentTrack = MediaPlaybackService.getCurrentTrack();
         updateFavourite();
         updateRotateAnimation();
+        seekbar.setMax(currentTrack.getDuration());
 
         // Register a Callback to stay in sync
         mediaController.registerCallback(controllerCallback);
@@ -302,11 +303,32 @@ public class FullPlayerFragment extends Fragment implements Serializable {
                 }
             }
         });
+
+        seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                Log.d(LOG_TAG, "progress: " + progress);
+                txtTimeStampStart.setText(TimeConverter.getInstance().getTimestamp(progress));
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReceiveTrack(UpdateCurrentTrackEvent updateCurrentTrackEvent) {
-        txtTimeStampEnd.setText(TimeConverter.getInstance().getTimestamp(updateCurrentTrackEvent.getTrack().getDuration()));
+        currentTrack = updateCurrentTrackEvent.getTrack();
+
+        seekbar.setMax(currentTrack.getDuration());
+        txtTimeStampEnd.setText(TimeConverter.getInstance().getTimestamp(currentTrack.getDuration()));
     }
 
     @Override

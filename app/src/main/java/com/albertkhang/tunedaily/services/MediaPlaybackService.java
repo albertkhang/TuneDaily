@@ -1,5 +1,6 @@
 package com.albertkhang.tunedaily.services;
 
+import android.annotation.SuppressLint;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,6 +10,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -34,6 +37,13 @@ import androidx.media.session.MediaButtonReceiver;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.broadcasts.BecomingNoisyReceiver;
 import com.albertkhang.tunedaily.utils.Track;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.target.Target;
+import com.bumptech.glide.request.transition.Transition;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -204,6 +214,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                 .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, track.getCover())
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.getTitle())
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, track.getArtist())
+                .putString(MediaMetadataCompat.METADATA_KEY_ART_URI, track.getCover())
                 .build();
         mediaSession.setMetadata(meta);
     }
@@ -233,6 +244,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         setSessionToken(mediaSession.getSessionToken());
     }
 
+    @SuppressLint("CheckResult")
     private void initialPlaybackNotification() {
         MediaControllerCompat controller = mediaSession.getController();
         MediaMetadataCompat mediaMetadata = controller.getMetadata();
@@ -241,15 +253,33 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         Log.d(LOG_TAG, "title: " + description.getTitle());
         Log.d(LOG_TAG, "subtitle: " + description.getSubtitle());
         Log.d(LOG_TAG, "description: " + description.getDescription());
+        Log.d(LOG_TAG, "cover: " + description.getIconUri());
 
         builder = new NotificationCompat.Builder(this, CHANNEL_ID);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.cover);
+        final Bitmap[] bitmap = new Bitmap[1];
+
+        Glide.with(this)
+                .asBitmap()
+                .load(description.getIconUri())
+                .placeholder(R.drawable.ic_playlist_cover)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        bitmap[0] = resource;
+                        Log.d(LOG_TAG, "onResourceReady");
+                    }
+
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
+                        Log.d(LOG_TAG, "onLoadCleared");
+                    }
+                });
 
         builder
                 .setContentTitle(description.getTitle())
                 .setContentText(description.getSubtitle())
                 .setSubText(description.getDescription())
-                .setLargeIcon(bitmap)
+                .setLargeIcon(bitmap[0])
 
                 // Enable launching the player by clicking the notification
                 .setContentIntent(controller.getSessionActivity())
@@ -272,7 +302,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                         .setShowCancelButton(true)
                         .setCancelButtonIntent(MediaButtonReceiver.buildMediaButtonPendingIntent(this,
                                 PlaybackStateCompat.ACTION_STOP)))
-                .setShowWhen(false);
+                .setShowWhen(true);
 
         initialPlaybackAction(controller);
     }
