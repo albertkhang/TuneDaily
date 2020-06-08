@@ -331,18 +331,18 @@ public class LibraryFragment extends Fragment {
         txtPlaylist.setText(getString(R.string.create_new_playlist));
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdatePlaylistLibrary updatePlaylistLibrary) {
         updatePlaylist();
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateThemeEvent updateThemeEvent) {
         updateTheme();
         libraryPlaylistAdapter.notifyDataSetChanged();
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateLanguageEvent updateLanguageEvent) {
         updateLanguage();
     }

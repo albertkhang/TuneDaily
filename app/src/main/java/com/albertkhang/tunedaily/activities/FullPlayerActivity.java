@@ -26,6 +26,7 @@ import com.rd.PageIndicatorView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 
@@ -171,7 +172,7 @@ public class FullPlayerActivity extends AppCompatActivity implements Serializabl
         trackMoreFragment.show(getSupportFragmentManager(), "FragmentTrackMore");
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateTitleArtist updateTitleArtist) {
         txtTitle.setText(updateTitleArtist.getTitle());
         txtArtist.setText(updateTitleArtist.getArtist());

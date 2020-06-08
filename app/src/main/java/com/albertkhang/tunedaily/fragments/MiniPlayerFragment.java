@@ -1,6 +1,7 @@
 package com.albertkhang.tunedaily.fragments;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -35,6 +36,7 @@ import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 
@@ -291,8 +293,9 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         miniPlayer_background.setBackground(drawable);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(Track track) {
+        Log.d(LOG_TAG, "onPlayAction: " + track.toString());
         MediaPlaybackService.addTrack(track);
         mediaController.getTransportControls().prepare();
         mediaController.getTransportControls().play();
@@ -306,6 +309,7 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         super.onStart();
         EventBus.getDefault().register(this);
         mediaBrowser.connect();
+        Log.d(LOG_TAG, "onStart");
     }
 
     @Override
@@ -316,5 +320,6 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
             MediaControllerCompat.getMediaController(getActivity()).unregisterCallback(controllerCallback);
         }
         mediaBrowser.disconnect();
+        Log.d(LOG_TAG, "onStop");
     }
 }

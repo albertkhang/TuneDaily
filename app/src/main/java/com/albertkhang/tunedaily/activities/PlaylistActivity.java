@@ -34,6 +34,7 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -268,7 +269,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         });
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(ShowMiniplayerEvent action) {
         miniPlayer_frame.setVisibility(View.VISIBLE);
     }

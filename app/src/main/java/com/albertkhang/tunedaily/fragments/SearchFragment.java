@@ -33,6 +33,7 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -231,12 +232,12 @@ public class SearchFragment extends Fragment implements Serializable {
         search_frame.setBackground(drawable);
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateThemeEvent updateThemeEvent) {
         updateTheme();
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateLanguageEvent updateLanguageEvent) {
         updateLanguage();
     }

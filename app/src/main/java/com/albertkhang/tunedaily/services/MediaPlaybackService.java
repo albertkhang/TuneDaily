@@ -174,7 +174,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
             try {
                 currentTrackPosition = tracks.size() - 1;
                 player.setDataSource(tracks.get(currentTrackPosition).getTrack());
-                addMetadata(tracks.get(tracks.size() - 1));
             } catch (IOException e) {
                 Log.d(LOG_TAG, "e: " + e.toString());
             }
@@ -183,25 +182,20 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
             try {
                 player.setDataSource(tracks.get(currentTrackPosition).getTrack());
-                addMetadata(tracks.get(currentTrackPosition));
             } catch (IOException e) {
                 Log.d(LOG_TAG, "e: " + e.toString());
             }
         }
 
         //set metadata
-        MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder()
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, tracks.get(currentTrackPosition).getCover())
-                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, tracks.get(currentTrackPosition).getTitle())
-                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, tracks.get(currentTrackPosition).getArtist());
-        mediaSession.setMetadata(metadataBuilder.build());
+        addMetadata(tracks.get(currentTrackPosition));
     }
 
     private static void addMetadata(Track track) {
         MediaMetadataCompat meta = new MediaMetadataCompat.Builder()
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM_ART_URI, track.getCover())
                 .putString(MediaMetadataCompat.METADATA_KEY_TITLE, track.getTitle())
                 .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, track.getArtist())
-                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, track.getTitle())
                 .build();
         mediaSession.setMetadata(meta);
     }

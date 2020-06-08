@@ -51,6 +51,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -385,12 +386,12 @@ public class DiscoverFragment extends Fragment {
         txtBestOfArtist.setText(getString(R.string.best_of_artists));
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateThemeEvent updateThemeEvent) {
         updateTheme();
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateLanguageEvent updateLanguageEvent) {
         Log.d("DiscoverFragment", "UpdateLanguageEvent");
         updateLanguage();
