@@ -96,12 +96,15 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Channel Name";
             String description = "Channel Description";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_LOW;
+
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
+            channel.setShowBadge(false);
+
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
-            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.createNotificationChannel(channel);
         }
     }
@@ -171,20 +174,13 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
             Track temp = new Track(track);
             tracks.add(temp);
 
-            try {
-                currentTrackPosition = tracks.size() - 1;
-                player.setDataSource(tracks.get(currentTrackPosition).getTrack());
-            } catch (IOException e) {
-                Log.d(LOG_TAG, "e: " + e.toString());
-            }
-        } else {
-            Log.d(LOG_TAG, "contains track " + track.toString());
+            currentTrackPosition = tracks.size() - 1;
+        }
 
-            try {
-                player.setDataSource(tracks.get(currentTrackPosition).getTrack());
-            } catch (IOException e) {
-                Log.d(LOG_TAG, "e: " + e.toString());
-            }
+        try {
+            player.setDataSource(tracks.get(currentTrackPosition).getTrack());
+        } catch (IOException e) {
+            Log.d(LOG_TAG, "e: " + e.toString());
         }
 
         //set metadata
@@ -212,7 +208,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
         // Set an initial PlaybackState with ACTION_PLAY, so media buttons can start the player
         playbackStateBuilder = new PlaybackStateCompat.Builder()
-                .setActions(PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS | PlaybackStateCompat.ACTION_SKIP_TO_NEXT);
+                .setState(PlaybackStateCompat.STATE_NONE, 0, 1f);
 
         mediaSession.setPlaybackState(playbackStateBuilder.build());
 

@@ -171,21 +171,21 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     }
 
     private void buildTransportControls() {
-        imgPlayPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int pbState = mediaController.getPlaybackState().getState();
-                if (pbState == PlaybackStateCompat.STATE_PLAYING) {
-                    Log.d(LOG_TAG, "STATE_PLAYING");
-                    mediaController.getTransportControls().pause();
-                    imgPlayPause.setImageResource(R.drawable.ic_play);
-                } else {
-                    Log.d(LOG_TAG, "STATE_PAUSED");
-                    mediaController.getTransportControls().play();
-                    imgPlayPause.setImageResource(R.drawable.ic_pause);
-                }
-            }
-        });
+//        imgPlayPause.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                int pbState = mediaController.getPlaybackState().getState();
+//                if (pbState == PlaybackStateCompat.STATE_PLAYING) {
+////                    Log.d(LOG_TAG, "STATE_PLAYING");
+//                    mediaController.getTransportControls().pause();
+//                    imgPlayPause.setImageResource(R.drawable.ic_play);
+//                } else {
+////                    Log.d(LOG_TAG, "STATE_PAUSED");
+//                    mediaController.getTransportControls().play();
+//                    imgPlayPause.setImageResource(R.drawable.ic_pause);
+//                }
+//            }
+//        });
 
         // Display the initial state
         Log.d(LOG_TAG, "Display the initial state");
@@ -248,6 +248,22 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
             public void onClick(View view) {
                 Intent intent = new Intent(getActivity(), FullPlayerActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        imgPlayPause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int pbState = mediaController.getPlaybackState().getState();
+                if (pbState == PlaybackStateCompat.STATE_PLAYING) {
+//                    Log.d(LOG_TAG, "STATE_PLAYING");
+                    mediaController.getTransportControls().pause();
+                    imgPlayPause.setImageResource(R.drawable.ic_play);
+                } else {
+//                    Log.d(LOG_TAG, "STATE_PAUSED");
+                    mediaController.getTransportControls().play();
+                    imgPlayPause.setImageResource(R.drawable.ic_pause);
+                }
             }
         });
     }

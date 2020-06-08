@@ -3,6 +3,7 @@ package com.albertkhang.tunedaily.activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
@@ -79,8 +80,15 @@ public class MainActivity extends AppCompatActivity {
     private void addMiniPlayer() {
         miniPlayer_frame.setVisibility(View.GONE);
 
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.miniPlayer_frame, new MiniPlayerFragment(), MINI_PLAYER_TAG).commit();
+        MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment();
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(MINI_PLAYER_TAG);
+        if (fragment == null) {
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
+        } else {
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
+        }
     }
 
     private void addEvent() {
@@ -181,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onPlayAction(ShowMiniplayerEvent action) {
+    public void onPlayAction(ShowMiniplayerEvent showMiniplayerEvent) {
         miniPlayer_frame.setVisibility(View.VISIBLE);
     }
 
