@@ -169,6 +169,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         // Register a Callback to stay in sync
         mediaController.registerCallback(controllerCallback);
     }
+    
     private void updateFavourite() {
         if (currentTrack != null) {
             if (PlaylistManager.getInstance().isContainInLikedSongs(currentTrack.getId())) {
@@ -184,7 +185,6 @@ public class FullPlayerFragment extends Fragment implements Serializable {
             }
         }
     }
-
 
     private void initialControllerCallback() {
         Log.d(LOG_TAG, "initialControllerCallback");

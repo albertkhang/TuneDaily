@@ -314,8 +314,6 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     public void onPlayAction(UpdateCurrentTrack updateCurrentTrack) {
         Log.d(LOG_TAG, "onPlayAction: " + updateCurrentTrack.getTrack().toString());
         MediaPlaybackService.addTrack(updateCurrentTrack.getTrack());
-//        mediaController.getTransportControls().prepare();
-//        mediaController.getTransportControls().play();
 
         updateMetadata(mediaController.getMetadata());
         updatePlaybackState(mediaController.getPlaybackState());

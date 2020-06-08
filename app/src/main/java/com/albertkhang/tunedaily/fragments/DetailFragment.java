@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrack;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -32,6 +34,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class DetailFragment extends Fragment implements Serializable {
+    private static final String LOG_TAG = "DetailFragment";
+
     private SettingManager settingManager;
     private FrameLayout top_gradient_frame;
     private ConstraintLayout detail_frame;
@@ -201,5 +205,27 @@ public class DetailFragment extends Fragment implements Serializable {
             txtGenre.setText(currentTrack.getGenre());
             txtComposer.setText("N/A");
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayAction(UpdateCurrentTrack updateCurrentTrack) {
+        Log.d(LOG_TAG, "onPlayAction: " + updateCurrentTrack.getTrack().toString());
+
+        txtSong.setText(updateCurrentTrack.getTrack().getTitle());
+        txtAlbum.setText(updateCurrentTrack.getTrack().getAlbum());
+        txtArtist.setText(updateCurrentTrack.getTrack().getArtist());
+        txtGenre.setText(updateCurrentTrack.getTrack().getGenre());
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }
