@@ -14,6 +14,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -23,6 +25,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.RotateAnimation;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -59,6 +62,8 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     private MediaBrowserCompat.ConnectionCallback connectionCallback;
     private MediaControllerCompat.Callback controllerCallback;
     private MediaControllerCompat mediaController;
+
+    private RotateAnimation rotateAnimation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -98,6 +103,8 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         imgSkipNext = view.findViewById(R.id.imgSkipNext);
         imgFavourite = view.findViewById(R.id.imgFavourite);
         imgRepeat = view.findViewById(R.id.imgRepeat);
+
+        rotateAnimation = new com.albertkhang.tunedaily.RotateAnimation(imgCover);
 
         initialControllerCallback();
         initialConnectionCallback();
@@ -151,10 +158,14 @@ public class FullPlayerFragment extends Fragment implements Serializable {
                     Log.d(LOG_TAG, "STATE_PLAYING");
                     mediaController.getTransportControls().pause();
                     imgPlayPause.setImageResource(R.drawable.ic_play);
+
+                    rotateAnimation.stop();
                 } else {
                     Log.d(LOG_TAG, "STATE_PAUSED");
                     mediaController.getTransportControls().play();
                     imgPlayPause.setImageResource(R.drawable.ic_pause);
+
+                    rotateAnimation.start();
                 }
             }
         });
@@ -165,11 +176,21 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         updatePlaybackState(mediaController.getPlaybackState());
         currentTrack = MediaPlaybackService.getCurrentTrack();
         updateFavourite();
+        updateRotateAnimation();
 
         // Register a Callback to stay in sync
         mediaController.registerCallback(controllerCallback);
     }
-    
+
+    private void updateRotateAnimation() {
+        int pbState = mediaController.getPlaybackState().getState();
+        if (pbState == PlaybackStateCompat.STATE_PLAYING) {
+            rotateAnimation.start();
+        } else {
+            rotateAnimation.stop();
+        }
+    }
+
     private void updateFavourite() {
         if (currentTrack != null) {
             if (PlaylistManager.getInstance().isContainInLikedSongs(currentTrack.getId())) {
@@ -228,7 +249,6 @@ public class FullPlayerFragment extends Fragment implements Serializable {
             txtArtist.setText(artist);
         }
     }
-
 
     private void updateTheme() {
         if (settingManager.isDarkTheme()) {

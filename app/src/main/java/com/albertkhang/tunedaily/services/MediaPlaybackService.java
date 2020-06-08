@@ -73,14 +73,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         initialBecomingNoisyReceiver();
         initialNotificationChannelId();
         initialSession();
-
-//        player.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//        player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//            @Override
-//            public void onPrepared(MediaPlayer mp) {
-//                mp.start();
-//            }
-//        });
     }
 
     public static Track getCurrentTrack() {
