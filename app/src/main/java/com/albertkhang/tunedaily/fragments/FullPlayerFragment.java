@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.services.MediaPlaybackConnectHelper;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.TimeConverter;
 import com.albertkhang.tunedaily.utils.Track;
@@ -164,10 +165,27 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         updateMetadata(mediaController.getMetadata());
         updatePlaybackState(mediaController.getPlaybackState());
         currentTrack = MediaPlaybackService.getCurrentTrack();
+        updateFavourite();
 
         // Register a Callback to stay in sync
         mediaController.registerCallback(controllerCallback);
     }
+    private void updateFavourite() {
+        if (currentTrack != null) {
+            if (PlaylistManager.getInstance().isContainInLikedSongs(currentTrack.getId())) {
+                imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
+                imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+            } else {
+                imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+                if (settingManager.isDarkTheme()) {
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+                } else {
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+                }
+            }
+        }
+    }
+
 
     private void initialControllerCallback() {
         Log.d(LOG_TAG, "initialControllerCallback");
@@ -246,6 +264,24 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     }
 
     private void addEvent() {
+        imgFavourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (PlaylistManager.getInstance().isContainInLikedSongs(currentTrack.getId())) {
+                    PlaylistManager.getInstance().removeFromLikedSongs(currentTrack.getId());
+                    imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+                    if (settingManager.isDarkTheme()) {
+                        imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+                    } else {
+                        imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+                    }
+                } else {
+                    PlaylistManager.getInstance().addToLikedSongs(currentTrack.getId());
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
+                    imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+                }
+            }
+        });
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

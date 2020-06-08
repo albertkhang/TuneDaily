@@ -190,9 +190,26 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         updateMetadata(mediaController.getMetadata());
         updatePlaybackState(mediaController.getPlaybackState());
         currentTrack = MediaPlaybackService.getCurrentTrack();
+        updateFavourite();
 
         // Register a Callback to stay in sync
         mediaController.registerCallback(controllerCallback);
+    }
+
+    private void updateFavourite() {
+        if (currentTrack != null) {
+            if (PlaylistManager.getInstance().isContainInLikedSongs(currentTrack.getId())) {
+                imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
+                imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+            } else {
+                imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+                if (settingManager.isDarkTheme()) {
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+                } else {
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+                }
+            }
+        }
     }
 
     private void initialMediaBrowser() {
