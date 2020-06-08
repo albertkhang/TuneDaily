@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
@@ -172,22 +173,6 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     }
 
     private void buildTransportControls() {
-//        imgPlayPause.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                int pbState = mediaController.getPlaybackState().getState();
-//                if (pbState == PlaybackStateCompat.STATE_PLAYING) {
-////                    Log.d(LOG_TAG, "STATE_PLAYING");
-//                    mediaController.getTransportControls().pause();
-//                    imgPlayPause.setImageResource(R.drawable.ic_play);
-//                } else {
-////                    Log.d(LOG_TAG, "STATE_PAUSED");
-//                    mediaController.getTransportControls().play();
-//                    imgPlayPause.setImageResource(R.drawable.ic_pause);
-//                }
-//            }
-//        });
-
         // Display the initial state
         Log.d(LOG_TAG, "Display the initial state");
         updateMetadata(mediaController.getMetadata());
@@ -236,10 +221,12 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
                     } else {
                         imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
                     }
+                    Toast.makeText(getContext(), "Removed \"" + currentTrack.getTitle() + "\" from liked songs", Toast.LENGTH_LONG).show();
                 } else {
                     PlaylistManager.getInstance().addToLikedSongs(currentTrack.getId());
                     imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
                     imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+                    Toast.makeText(getContext(), "Added \"" + currentTrack.getTitle() + "\" in liked songs", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -287,7 +274,6 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
             imgPlayPause.setColorFilter(getResources().getColor(R.color.colorLight1));
             imgSkipNext.setColorFilter(getResources().getColor(R.color.colorLight1));
 
-            imgCover.setImageResource(R.color.colorDark5);
             root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
         } else {
             setMiniPlayerBackground(R.color.colorLight2);
@@ -299,7 +285,6 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
             imgPlayPause.setColorFilter(getResources().getColor(R.color.colorDark2));
             imgSkipNext.setColorFilter(getResources().getColor(R.color.colorDark2));
 
-            imgCover.setImageResource(R.color.colorLight5);
             root_view.setBackgroundColor(getResources().getColor(R.color.colorLight1));
         }
     }

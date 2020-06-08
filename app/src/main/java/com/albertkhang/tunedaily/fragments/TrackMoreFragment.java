@@ -128,10 +128,10 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
             public void onClick(View v) {
                 if (PlaylistManager.getInstance().isContainInLikedSongs(track.getId())) {
                     PlaylistManager.getInstance().removeFromLikedSongs(track.getId());
-                    Toast.makeText(getContext(), "Removed from liked songs.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Removed \"" + track.getTitle() + "\" from liked songs", Toast.LENGTH_LONG).show();
                 } else {
                     PlaylistManager.getInstance().addToLikedSongs(track.getId());
-                    Toast.makeText(getContext(), "Added to liked songs.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Added \"" + track.getTitle() + "\" in liked songs", Toast.LENGTH_LONG).show();
                 }
 
                 closefragment();

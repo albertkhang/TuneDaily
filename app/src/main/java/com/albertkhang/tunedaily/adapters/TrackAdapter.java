@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -97,10 +98,12 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
                     } else {
                         holder.imgFavourite.setColorFilter(context.getResources().getColor(R.color.colorDark5));
                     }
+                    Toast.makeText(context, "Removed \"" + tracks.get(position).getTitle() + "\" from liked songs", Toast.LENGTH_LONG).show();
                 } else {
                     PlaylistManager.getInstance().addToLikedSongs(tracks.get(position).getId());
                     holder.imgFavourite.setColorFilter(context.getResources().getColor(R.color.colorMain3));
                     holder.imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+                    Toast.makeText(context, "Added \"" + tracks.get(position).getTitle() + "\" in liked songs", Toast.LENGTH_LONG).show();
                 }
             }
         });
