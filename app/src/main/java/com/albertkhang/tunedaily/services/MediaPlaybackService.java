@@ -76,6 +76,17 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
     private static int currentTrackPosition = -1;
 
+    public static int getCurrentPositionPlayer() {
+        if (player != null) {
+            return player.getCurrentPosition();
+        }
+        return 0;
+    }
+
+    public static void setCurrentPositionPlayer(int mSec) {
+        player.seekTo(mSec);
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -194,6 +205,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         addMetadata(tracks.get(currentTrackPosition));
     }
 
+    private static boolean isRewind = false;
+
     private static void initialPlayer() {
         if (player != null) {
             player = null;
@@ -207,6 +220,31 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                 mp.start();
             }
         });
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                Log.d(LOG_TAG, "onCompletion");
+                isRewind = true;
+                mediaSession.getController().getTransportControls().pause();
+                mediaSession.getController().getTransportControls().rewind();
+
+            }
+        });
+        player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+                return true;
+            }
+        });
+    }
+
+    public static boolean isRewind() {
+        if (isRewind) {
+            isRewind = false;
+            return true;
+        }
+
+        return false;
     }
 
     private static void addMetadata(Track track) {
@@ -537,6 +575,12 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
             public void onPrepare() {
                 super.onPrepare();
                 player.prepareAsync();
+            }
+
+            @Override
+            public void onRewind() {
+                super.onRewind();
+                player.seekTo(0);
             }
         };
     }

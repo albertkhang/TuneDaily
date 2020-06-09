@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.res.ColorStateList;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.RemoteException;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -63,6 +64,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     private MediaControllerCompat mediaController;
 
     private RotateAnimation rotateAnimation;
+    private Runnable runnable;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,6 +79,21 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         addControl(view);
         updateDataIntent();
         addEvent();
+    }
+
+    private Handler handler;
+
+    private void startUpdatingPlayerPosition() {
+        stopUpdatingPlayerPosition();
+        runnable.run();
+    }
+
+    private void stopUpdatingPlayerPosition() {
+        if (MediaPlaybackService.isRewind()) {
+            seekbar.setProgress(0);
+            txtTimeStampStart.setText(TimeConverter.getInstance().getTimestamp(0));
+        }
+        handler.removeCallbacks(runnable);
     }
 
     private void updateDataIntent() {
@@ -104,12 +121,28 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         imgRepeat = view.findViewById(R.id.imgRepeat);
 
         rotateAnimation = new RotateAnimation(imgCover);
+        handler = new Handler();
+        initialUpdatingSeekBarRunnable();
 
         initialControllerCallback();
         initialConnectionCallback();
         initialMediaBrowser();
 
         updateTheme();
+    }
+
+    private void initialUpdatingSeekBarRunnable() {
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+                    seekbar.setProgress(MediaPlaybackService.getCurrentPositionPlayer() / 1000);
+                    handler.postDelayed(this, 1000);
+                } else {
+                    stopUpdatingPlayerPosition();
+                }
+            }
+        };
     }
 
     private void initialMediaBrowser() {
@@ -231,9 +264,12 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
             Log.d(LOG_TAG, "controllerCallback STATE_PLAYING");
             imgPlayPause.setImageResource(R.drawable.ic_pause);
+            startUpdatingPlayerPosition();
+            rotateAnimation.start();
         } else {
             Log.d(LOG_TAG, "controllerCallback STATE_PAUSED");
             imgPlayPause.setImageResource(R.drawable.ic_play);
+            rotateAnimation.stop();
         }
     }
 
@@ -313,12 +349,17 @@ public class FullPlayerFragment extends Fragment implements Serializable {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
+                mediaController.getTransportControls().pause();
+                stopUpdatingPlayerPosition();
+                rotateAnimation.stop();
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
+                MediaPlaybackService.setCurrentPositionPlayer(seekBar.getProgress() * 1000);
+                mediaController.getTransportControls().play();
+                startUpdatingPlayerPosition();
+                rotateAnimation.start();
             }
         });
     }
@@ -343,6 +384,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         super.onResume();
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
         updateRotateAnimation();
+        seekbar.setProgress(MediaPlaybackService.getCurrentPositionPlayer() / 1000);
     }
 
     @Override
