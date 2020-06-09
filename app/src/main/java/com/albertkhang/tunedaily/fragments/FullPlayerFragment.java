@@ -343,7 +343,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d(LOG_TAG, "progress: " + progress);
+//                Log.d(LOG_TAG, "progress: " + progress);
                 txtTimeStampStart.setText(TimeConverter.getInstance().getTimestamp(progress));
             }
 
@@ -360,6 +360,22 @@ public class FullPlayerFragment extends Fragment implements Serializable {
                 mediaController.getTransportControls().play();
                 startUpdatingPlayerPosition();
                 rotateAnimation.start();
+            }
+        });
+
+        imgSkipNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(LOG_TAG, "imgSkipNext");
+                mediaController.getTransportControls().skipToNext();
+            }
+        });
+
+        imgSkipPrevious.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(LOG_TAG, "imgSkipPrevious");
+                mediaController.getTransportControls().skipToPrevious();
             }
         });
     }

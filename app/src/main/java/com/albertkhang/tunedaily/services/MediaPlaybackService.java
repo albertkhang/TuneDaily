@@ -26,6 +26,7 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +37,7 @@ import androidx.media.session.MediaButtonReceiver;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.broadcasts.BecomingNoisyReceiver;
+import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.utils.Track;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -44,6 +46,8 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.target.Target;
 import com.bumptech.glide.request.transition.Transition;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -582,7 +586,45 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                 super.onRewind();
                 player.seekTo(0);
             }
+
+            @Override
+            public void onSkipToNext() {
+                super.onSkipToNext();
+                if (!isOneItemInList()) {
+                    currentTrackPosition++;
+                    currentTrackPosition = currentTrackPosition % tracks.size();
+                    Log.d(LOG_TAG, "onSkipToNext position: " + currentTrackPosition);
+
+                    Track track = tracks.get(currentTrackPosition);
+                    addTrack(track);
+                    EventBus.getDefault().post(new UpdateTitleArtistEvent(track.getTitle(), track.getArtist()));
+                }
+            }
+
+            @Override
+            public void onSkipToPrevious() {
+                super.onSkipToPrevious();
+                if (!isOneItemInList()) {
+                    currentTrackPosition--;
+                    currentTrackPosition = currentTrackPosition + tracks.size();
+                    currentTrackPosition = currentTrackPosition % tracks.size();
+                    Log.d(LOG_TAG, "onSkipToPrevious position: " + currentTrackPosition);
+
+                    Track track = tracks.get(currentTrackPosition);
+                    addTrack(track);
+                    EventBus.getDefault().post(new UpdateTitleArtistEvent(track.getTitle(), track.getArtist()));
+                }
+            }
         };
+    }
+
+    private boolean isOneItemInList() {
+        if (tracks.size() == 1) {
+            Toast.makeText(this, "You have only 1 song in queue.", Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        return false;
     }
 
     @Nullable
