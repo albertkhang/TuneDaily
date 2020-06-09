@@ -1,42 +1,43 @@
 package com.albertkhang.tunedaily.fragments;
 
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
+        import android.content.Intent;
+        import android.graphics.drawable.Drawable;
+        import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+        import androidx.annotation.NonNull;
+        import androidx.annotation.Nullable;
+        import androidx.fragment.app.Fragment;
+        import androidx.recyclerview.widget.LinearLayoutManager;
+        import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.TextView;
+        import android.util.Log;
+        import android.view.LayoutInflater;
+        import android.view.View;
+        import android.view.ViewGroup;
+        import android.widget.FrameLayout;
+        import android.widget.ImageView;
+        import android.widget.TextView;
 
-import com.albertkhang.tunedaily.R;
-import com.albertkhang.tunedaily.activities.InSearchActivity;
-import com.albertkhang.tunedaily.activities.PlaylistActivity;
-import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
-import com.albertkhang.tunedaily.adapters.TrackAdapter;
-import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
-import com.albertkhang.tunedaily.utils.Playlist;
-import com.albertkhang.tunedaily.utils.FirebaseManager;
-import com.albertkhang.tunedaily.utils.SettingManager;
-import com.albertkhang.tunedaily.utils.Track;
-import com.albertkhang.tunedaily.events.UpdateThemeEvent;
-import com.facebook.shimmer.ShimmerFrameLayout;
+        import com.albertkhang.tunedaily.R;
+        import com.albertkhang.tunedaily.activities.InSearchActivity;
+        import com.albertkhang.tunedaily.activities.PlaylistActivity;
+        import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
+        import com.albertkhang.tunedaily.adapters.TrackAdapter;
+        import com.albertkhang.tunedaily.events.UpdateDownloadedTrack;
+        import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
+        import com.albertkhang.tunedaily.utils.Playlist;
+        import com.albertkhang.tunedaily.utils.FirebaseManager;
+        import com.albertkhang.tunedaily.utils.SettingManager;
+        import com.albertkhang.tunedaily.utils.Track;
+        import com.albertkhang.tunedaily.events.UpdateThemeEvent;
+        import com.facebook.shimmer.ShimmerFrameLayout;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
+        import org.greenrobot.eventbus.EventBus;
+        import org.greenrobot.eventbus.Subscribe;
+        import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.Serializable;
-import java.util.ArrayList;
+        import java.io.Serializable;
+        import java.util.ArrayList;
 
 public class SearchFragment extends Fragment implements Serializable {
     private FrameLayout search_frame;
@@ -85,6 +86,7 @@ public class SearchFragment extends Fragment implements Serializable {
     public void onResume() {
         super.onResume();
         updateTheme();
+        randomSongsAdapter.update();
     }
 
     private void addControl(View view) {
@@ -240,6 +242,11 @@ public class SearchFragment extends Fragment implements Serializable {
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateLanguageEvent updateLanguageEvent) {
         updateLanguage();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayAction(UpdateDownloadedTrack updateDownloadedTrack) {
+        randomSongsAdapter.update();
     }
 
     private void showMoreItem(Track track) {

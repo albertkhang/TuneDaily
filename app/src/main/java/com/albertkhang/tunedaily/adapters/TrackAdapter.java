@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
+import com.albertkhang.tunedaily.utils.DownloadTrackManager;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
@@ -37,6 +38,10 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
     public void update(ArrayList<Track> tracks) {
         this.tracks.clear();
         this.tracks.addAll(tracks);
+        notifyDataSetChanged();
+    }
+
+    public void update() {
         notifyDataSetChanged();
     }
 
@@ -77,6 +82,12 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
 
         handleMoreIconColor(holder.imgMore);
         handleFavouriteIconColor(holder.imgFavourite, position);
+        handleDownloadColor(holder.imgDownload);
+        holder.imgDownload.setVisibility(View.GONE);
+        DownloadTrackManager downloadTrackManager = new DownloadTrackManager(context);
+        if (downloadTrackManager.isFileExists(tracks.get(position))) {
+            holder.imgDownload.setVisibility(View.VISIBLE);
+        }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,6 +117,14 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
                 }
             }
         });
+    }
+
+    private void handleDownloadColor(ImageView imageView) {
+        if (settingManager.isDarkTheme()) {
+            imageView.setColorFilter(context.getResources().getColor(R.color.colorLight4));
+        } else {
+            imageView.setColorFilter(context.getResources().getColor(R.color.colorDark4));
+        }
     }
 
     private void handleMoreIconColor(ImageView imageView) {
@@ -166,6 +185,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
         private TextView txtArtist;
         private ImageView imgMore;
         private ImageView imgFavourite;
+        private ImageView imgDownload;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -175,6 +195,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
             txtArtist = itemView.findViewById(R.id.txtArtist);
             imgFavourite = itemView.findViewById(R.id.imgFavourite);
             imgMore = itemView.findViewById(R.id.imgMore);
+            imgDownload = itemView.findViewById(R.id.imgDownload);
         }
     }
 }

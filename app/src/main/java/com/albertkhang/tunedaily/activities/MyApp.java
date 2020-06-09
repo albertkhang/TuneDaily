@@ -2,6 +2,7 @@ package com.albertkhang.tunedaily.activities;
 
 import android.app.Application;
 
+import com.albertkhang.tunedaily.utils.DownloadTrackManager;
 import com.google.firebase.database.FirebaseDatabase;
 
 import io.paperdb.Paper;

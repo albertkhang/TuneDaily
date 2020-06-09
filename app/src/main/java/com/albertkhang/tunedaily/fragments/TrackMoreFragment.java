@@ -1,5 +1,6 @@
 package com.albertkhang.tunedaily.fragments;
 
+import android.Manifest;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,21 +10,28 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.networks.DownloadTrack;
+import com.albertkhang.tunedaily.utils.DownloadTrackManager;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.albertkhang.tunedaily.views.RoundImageView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.TedPermission;
+
+import java.util.List;
 
 public class TrackMoreFragment extends BottomSheetDialogFragment {
+    private static final String LOG_TAG = "TrackMoreFragment";
+
     private Track track;
     private SettingManager settingManager;
     private RoundImageView imgCover;
@@ -39,6 +47,7 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
     private TextView txtDownload;
     private TextView txtBroadcast;
     private ConstraintLayout add_to_library_frame;
+    private ConstraintLayout download_frame;
 
     public TrackMoreFragment(Track track) {
         this.track = track;
@@ -75,6 +84,7 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
         txtDownload = view.findViewById(R.id.txtDownload);
         txtBroadcast = view.findViewById(R.id.txtBroadcast);
         add_to_library_frame = view.findViewById(R.id.add_to_library_frame);
+        download_frame = view.findViewById(R.id.download_frame);
 
         handleCoverPlaceholderColor(imgCover);
         txtTitle.setText(track.getTitle());
@@ -133,10 +143,39 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
                     PlaylistManager.getInstance().addToLikedSongs(track.getId());
                     Toast.makeText(getContext(), "Added \"" + track.getTitle() + "\" in liked songs", Toast.LENGTH_LONG).show();
                 }
-
                 closefragment();
             }
         });
+
+        download_frame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!TedPermission.isGranted(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                    (new DownloadTrackManager(getContext())).requestPermission(initialRequestPermissionListener());
+                } else {
+                    DownloadTrackManager downloadTrackManager = new DownloadTrackManager(getContext());
+                    downloadTrackManager.downloadTrack(track);
+
+                    closefragment();
+                }
+            }
+        });
+    }
+
+    private PermissionListener initialRequestPermissionListener() {
+        return new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Toast.makeText(getContext(), "Permission Granted", Toast.LENGTH_SHORT).show();
+                download_frame.callOnClick();
+            }
+
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
+                Toast.makeText(getContext(), "Permission Denied\nYou can't download songs.", Toast.LENGTH_SHORT).show();
+                closefragment();
+            }
+        };
     }
 
     private void closefragment() {

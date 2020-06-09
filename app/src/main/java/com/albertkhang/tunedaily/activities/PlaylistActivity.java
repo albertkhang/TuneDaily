@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
+import com.albertkhang.tunedaily.events.UpdateDownloadedTrack;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.PlaylistMoreFragment;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
@@ -274,10 +275,16 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         miniPlayer_frame.setVisibility(View.VISIBLE);
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayAction(UpdateDownloadedTrack updateDownloadedTrack) {
+        trackAdapter.update();
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         updateTheme();
+        trackAdapter.update();
     }
 
     private void updateTheme() {

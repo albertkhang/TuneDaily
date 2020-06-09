@@ -25,6 +25,8 @@ import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.activities.SettingsActivity;
 import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
 import com.albertkhang.tunedaily.adapters.TopChartAdapter;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
+import com.albertkhang.tunedaily.events.UpdateDownloadedTrack;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.utils.Playlist;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
@@ -397,10 +399,17 @@ public class DiscoverFragment extends Fragment {
         updateLanguage();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayAction(UpdateDownloadedTrack updateDownloadedTrack) {
+        Log.d("DiscoverFragment", "UpdateDownloadedTrack");
+        topChartAdapter.update();
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         updateTheme();
+        topChartAdapter.update();
     }
 
     private void addEvent(View view) {
