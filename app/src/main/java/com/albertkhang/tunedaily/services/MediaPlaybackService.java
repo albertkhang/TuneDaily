@@ -80,6 +80,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
     private static int currentTrackPosition = -1;
 
+    public static ArrayList<Track> getCurrentPlaylist() {
+        return tracks;
+    }
+
     public static int getCurrentPositionPlayer() {
         if (player != null) {
             return player.getCurrentPosition();

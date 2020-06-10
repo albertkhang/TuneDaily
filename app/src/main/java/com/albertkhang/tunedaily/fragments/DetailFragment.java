@@ -107,13 +107,25 @@ public class DetailFragment extends Fragment implements Serializable {
         similarSongsAdapter = new TrackAdapter(getContext());
         rvSimilarSongs.setAdapter(similarSongsAdapter);
 
-        LinearLayoutManager managerSongs = new LinearLayoutManager(getContext());
+        LinearLayoutManager managerSongs = new LinearLayoutManager(getContext()) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
         managerSongs.setOrientation(LinearLayoutManager.VERTICAL);
         rvSimilarSongs.setLayoutManager(managerSongs);
         rvSimilarSongs.setNestedScrollingEnabled(false);
 
         updateTheme();
-        updateSimilarSongs();
+//        updateSimilarSongs();
+        updateCurrentPlaylist();
+    }
+
+    private void updateCurrentPlaylist() {
+        shimmer_similar_songs.setVisibility(View.GONE);
+        rvSimilarSongs.setVisibility(View.VISIBLE);
+        similarSongsAdapter.update(MediaPlaybackService.getCurrentPlaylist());
     }
 
     private void updateSimilarSongs() {

@@ -163,7 +163,7 @@ tools:context=".fragments.DetailFragment">
             android:id="@+id/txtSimilarSongs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/similar_songs"
+            android:text="CURRENT PLAYLIST"
             style="@style/ListHeader"
 
             app:layout_constraintLeft_toLeftOf="parent"
@@ -205,6 +205,7 @@ tools:context=".fragments.DetailFragment">
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
             android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+            android:visibility="gone"
 
             app:layout_constraintTop_toBottomOf="@id/txtSimilarSongs"
             app:layout_constraintLeft_toLeftOf="parent"
