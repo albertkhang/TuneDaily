@@ -143,6 +143,28 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         }
     }
 
+    private void updateFavouriteState() {
+        imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+        if (settingManager.isDarkTheme()) {
+            imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+        } else {
+            imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+        }
+        if (currentTrack != null) {
+            if (PlaylistManager.getInstance().isContainInLikedSongs(currentTrack.getId())) {
+                imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
+                imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+            } else {
+                imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+                if (settingManager.isDarkTheme()) {
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+                } else {
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+                }
+            }
+        }
+    }
+
     private void initialConnectionCallback() {
         connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
             @Override
@@ -228,6 +250,8 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
                     imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
                     Toast.makeText(getContext(), "Added \"" + currentTrack.getTitle() + "\" in liked songs", Toast.LENGTH_LONG).show();
                 }
+
+                EventBus.getDefault().post(new UpdateFavouriteTrack(currentTrack.getId()));
             }
         });
 
@@ -299,22 +323,26 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     public void onPlayAction(UpdateCurrentTrackEvent updateCurrentTrackEvent) {
         Log.d(LOG_TAG, "onPlayAction: " + updateCurrentTrackEvent.getTrack().toString());
         MediaPlaybackService.addTrack(updateCurrentTrackEvent.getTrack());
+        currentTrack = updateCurrentTrackEvent.getTrack();
 
         updateMetadata(mediaController.getMetadata());
         updatePlaybackState(mediaController.getPlaybackState());
+        updateFavouriteState();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateFavouriteTrack updateFavouriteTrack) {
-        if (PlaylistManager.getInstance().isContainInLikedSongs(updateFavouriteTrack.getId())) {
-            imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
-            imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
-        } else {
-            imgFavourite.setImageResource(R.drawable.ic_not_favourite);
-            if (settingManager.isDarkTheme()) {
-                imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+        if (updateFavouriteTrack.getId() == currentTrack.getId()) {
+            if (PlaylistManager.getInstance().isContainInLikedSongs(updateFavouriteTrack.getId())) {
+                imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
+                imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
             } else {
-                imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+                imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+                if (settingManager.isDarkTheme()) {
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+                } else {
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+                }
             }
         }
     }

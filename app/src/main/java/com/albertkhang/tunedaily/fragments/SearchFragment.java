@@ -24,6 +24,7 @@ package com.albertkhang.tunedaily.fragments;
         import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
         import com.albertkhang.tunedaily.adapters.TrackAdapter;
         import com.albertkhang.tunedaily.events.UpdateDownloadedTrack;
+        import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
         import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
         import com.albertkhang.tunedaily.utils.Playlist;
         import com.albertkhang.tunedaily.utils.FirebaseManager;
@@ -246,6 +247,11 @@ public class SearchFragment extends Fragment implements Serializable {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateDownloadedTrack updateDownloadedTrack) {
+        randomSongsAdapter.update();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayAction(UpdateFavouriteTrack updateFavouriteTrack) {
         randomSongsAdapter.update();
     }
 

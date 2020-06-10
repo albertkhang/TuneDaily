@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
+import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -57,7 +58,7 @@ public class DetailFragment extends Fragment implements Serializable {
 
     private ShimmerFrameLayout shimmer_similar_songs;
     private RecyclerView rvSimilarSongs;
-    private TrackAdapter similarSongsAdapter;
+    private TrackAdapter playlistsAdapter;
 
     private Track currentTrack;
 
@@ -104,8 +105,8 @@ public class DetailFragment extends Fragment implements Serializable {
         shimmer_similar_songs = view.findViewById(R.id.shimmer_similar_songs);
         rvSimilarSongs = view.findViewById(R.id.rvSimilarSongs);
 
-        similarSongsAdapter = new TrackAdapter(getContext());
-        rvSimilarSongs.setAdapter(similarSongsAdapter);
+        playlistsAdapter = new TrackAdapter(getContext());
+        rvSimilarSongs.setAdapter(playlistsAdapter);
 
         LinearLayoutManager managerSongs = new LinearLayoutManager(getContext()) {
             @Override
@@ -120,12 +121,20 @@ public class DetailFragment extends Fragment implements Serializable {
         updateTheme();
 //        updateSimilarSongs();
         updateCurrentPlaylist();
+
+        playlistsAdapter.setOnMoreListener(new TrackAdapter.OnMoreListener() {
+            @Override
+            public void onMoreListener(View view, int position) {
+                TrackMoreFragment trackMoreFragment = new TrackMoreFragment(MediaPlaybackService.getCurrentPlaylist().get(position));
+                trackMoreFragment.show(requireActivity().getSupportFragmentManager(), "FragmentTrackMore");
+            }
+        });
     }
 
     private void updateCurrentPlaylist() {
         shimmer_similar_songs.setVisibility(View.GONE);
         rvSimilarSongs.setVisibility(View.VISIBLE);
-        similarSongsAdapter.update(MediaPlaybackService.getCurrentPlaylist());
+        playlistsAdapter.update(MediaPlaybackService.getCurrentPlaylist());
     }
 
     private void updateSimilarSongs() {
@@ -140,14 +149,14 @@ public class DetailFragment extends Fragment implements Serializable {
                 shimmer_similar_songs.setVisibility(View.GONE);
                 rvSimilarSongs.setVisibility(View.VISIBLE);
 
-                similarSongsAdapter.setOnMoreListener(new TrackAdapter.OnMoreListener() {
+                playlistsAdapter.setOnMoreListener(new TrackAdapter.OnMoreListener() {
                     @Override
                     public void onMoreListener(View view, int position) {
                         showMoreItem(tracks.get(position));
                     }
                 });
 
-                similarSongsAdapter.update(tracks);
+                playlistsAdapter.update(tracks);
             }
         });
 
@@ -226,6 +235,11 @@ public class DetailFragment extends Fragment implements Serializable {
         txtAlbum.setText(updateCurrentTrackEvent.getTrack().getAlbum());
         txtArtist.setText(updateCurrentTrackEvent.getTrack().getArtist());
         txtGenre.setText(updateCurrentTrackEvent.getTrack().getGenre());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayAction(UpdateFavouriteTrack updateFavouriteTrack) {
+        playlistsAdapter.update();
     }
 
     @Override

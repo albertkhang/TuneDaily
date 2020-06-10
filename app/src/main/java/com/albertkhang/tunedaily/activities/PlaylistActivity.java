@@ -23,6 +23,7 @@ import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.events.UpdateDownloadedTrack;
+import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.PlaylistMoreFragment;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
@@ -277,6 +278,11 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onPlayAction(UpdateDownloadedTrack updateDownloadedTrack) {
+        trackAdapter.update();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayAction(UpdateFavouriteTrack updateFavouriteTrack) {
         trackAdapter.update();
     }
 

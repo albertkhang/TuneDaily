@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.animations.RotateAnimation;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
+import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -332,11 +334,15 @@ public class FullPlayerFragment extends Fragment implements Serializable {
                     } else {
                         imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
                     }
+                    Toast.makeText(getContext(), "Removed \"" + currentTrack.getTitle() + "\" from liked songs", Toast.LENGTH_LONG).show();
                 } else {
                     PlaylistManager.getInstance().addToLikedSongs(currentTrack.getId());
                     imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
                     imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+                    Toast.makeText(getContext(), "Added \"" + currentTrack.getTitle() + "\" in liked songs", Toast.LENGTH_LONG).show();
                 }
+
+                EventBus.getDefault().post(new UpdateFavouriteTrack(currentTrack.getId()));
             }
         });
 
@@ -380,6 +386,20 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         });
     }
 
+    private void updateFavouriteState() {
+        if (PlaylistManager.getInstance().isContainInLikedSongs(currentTrack.getId())) {
+            imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
+            imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+        } else {
+            imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+            if (settingManager.isDarkTheme()) {
+                imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+            } else {
+                imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+            }
+        }
+    }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onReceiveTrack(UpdateCurrentTrackEvent updateCurrentTrackEvent) {
         currentTrack = updateCurrentTrackEvent.getTrack();
@@ -401,6 +421,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         getActivity().setVolumeControlStream(AudioManager.STREAM_MUSIC);
         updateRotateAnimation();
         seekbar.setProgress(MediaPlaybackService.getCurrentPositionPlayer() / 1000);
+        updateFavouriteState();
     }
 
     @Override
