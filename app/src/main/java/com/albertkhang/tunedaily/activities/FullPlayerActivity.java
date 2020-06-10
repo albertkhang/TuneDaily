@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
+import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.fragments.DetailFragment;
 import com.albertkhang.tunedaily.fragments.FullPlayerFragment;
@@ -19,6 +20,7 @@ import com.albertkhang.tunedaily.fragments.LyricFragment;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.Track;
 import com.rd.PageIndicatorView;
@@ -156,7 +158,7 @@ public class FullPlayerActivity extends AppCompatActivity implements Serializabl
         imgMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showMoreItem(currentTrack);
+                showMoreItem();
             }
         });
     }
@@ -166,8 +168,9 @@ public class FullPlayerActivity extends AppCompatActivity implements Serializabl
                 .add(R.id.miniPlayer_frame, new MiniPlayerFragment()).commit();
     }
 
-    private void showMoreItem(Track track) {
-        TrackMoreFragment trackMoreFragment = new TrackMoreFragment(track);
+    private void showMoreItem() {
+        currentTrack = MediaPlaybackService.getCurrentTrack();
+        TrackMoreFragment trackMoreFragment = new TrackMoreFragment(currentTrack);
         trackMoreFragment.show(getSupportFragmentManager(), "FragmentTrackMore");
     }
 

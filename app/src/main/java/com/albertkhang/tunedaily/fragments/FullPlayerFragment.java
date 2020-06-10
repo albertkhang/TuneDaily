@@ -408,6 +408,23 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         txtTimeStampEnd.setText(TimeConverter.getInstance().getTimestamp(currentTrack.getDuration()));
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReceiveTrack(UpdateFavouriteTrack updateFavouriteTrack) {
+        if (updateFavouriteTrack.getId() == currentTrack.getId()) {
+            if (PlaylistManager.getInstance().isContainInLikedSongs(updateFavouriteTrack.getId())) {
+                imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
+                imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+            } else {
+                imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+                if (settingManager.isDarkTheme()) {
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+                } else {
+                    imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+                }
+            }
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
