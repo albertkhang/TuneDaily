@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.networks.DownloadTrack;
 import com.albertkhang.tunedaily.utils.DownloadTrackManager;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
@@ -26,6 +27,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -143,6 +146,7 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
                     PlaylistManager.getInstance().addToLikedSongs(track.getId());
                     Toast.makeText(getContext(), "Added \"" + track.getTitle() + "\" in liked songs", Toast.LENGTH_LONG).show();
                 }
+                EventBus.getDefault().post(new UpdateFavouriteTrack(track.getId()));
                 closefragment();
             }
         });

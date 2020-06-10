@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
+import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.utils.DownloadTrackManager;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
@@ -115,6 +116,8 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
                     holder.imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
                     Toast.makeText(context, "Added \"" + tracks.get(position).getTitle() + "\" in liked songs", Toast.LENGTH_LONG).show();
                 }
+
+                EventBus.getDefault().post(new UpdateFavouriteTrack(tracks.get(position).getId()));
             }
         });
     }

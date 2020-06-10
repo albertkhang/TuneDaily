@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.activities.FullPlayerActivity;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
+import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
@@ -301,6 +302,21 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
 
         updateMetadata(mediaController.getMetadata());
         updatePlaybackState(mediaController.getPlaybackState());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onPlayAction(UpdateFavouriteTrack updateFavouriteTrack) {
+        if (PlaylistManager.getInstance().isContainInLikedSongs(updateFavouriteTrack.getId())) {
+            imgFavourite.setColorFilter(getResources().getColor(R.color.colorMain3));
+            imgFavourite.setImageResource(R.drawable.ic_favourite_blue);
+        } else {
+            imgFavourite.setImageResource(R.drawable.ic_not_favourite);
+            if (settingManager.isDarkTheme()) {
+                imgFavourite.setColorFilter(getResources().getColor(R.color.colorLight5));
+            } else {
+                imgFavourite.setColorFilter(getResources().getColor(R.color.colorDark5));
+            }
+        }
     }
 
     @Override
