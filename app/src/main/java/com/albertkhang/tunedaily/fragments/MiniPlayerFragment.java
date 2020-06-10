@@ -278,6 +278,13 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
                 }
             }
         });
+
+        imgSkipNext.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mediaController.getTransportControls().skipToNext();
+            }
+        });
     }
 
     @Override
