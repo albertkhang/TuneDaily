@@ -37,6 +37,8 @@ import androidx.media.session.MediaButtonReceiver;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.broadcasts.BecomingNoisyReceiver;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrackStateEvent;
 import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.utils.Track;
 import com.bumptech.glide.Glide;
@@ -108,6 +110,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     }
 
     public static void setCurrentPositionPlayer(int mSec) {
+        Log.d(LOG_TAG, "mSec: " + mSec + ", player: " + player.getDuration());
+
         player.seekTo(mSec);
     }
 
@@ -245,27 +249,30 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
-                Log.d(LOG_TAG, "onCompletion");
-                if (currentTrackPosition == tracks.size() - 1) {
-                    switch (currentRepeat) {
-                        case REPEAT.NOT_REPEAT:
+                switch (currentRepeat) {
+                    case REPEAT.NOT_REPEAT:
+                        Log.d(LOG_TAG, "NOT_REPEAT");
+                        if (currentTrackPosition == tracks.size() - 1) {
                             mediaSession.getController().getTransportControls().pause();
-                            resetPlayer();
-                            break;
-
-                        case REPEAT.REPEAT_ALL:
+                        } else {
                             mediaSession.getController().getTransportControls().skipToNext();
-                            break;
+                        }
+                        resetPlayer();
 
-                        case REPEAT.REPEAT_ONE:
-                            player.stop();
-                            player.prepareAsync();
-                            player.start();
-                            resetPlayer();
-                            break;
-                    }
-                } else {
-                    mediaSession.getController().getTransportControls().skipToNext();
+                        break;
+
+                    case REPEAT.REPEAT_ALL:
+                        Log.d(LOG_TAG, "REPEAT_ALL");
+                        mediaSession.getController().getTransportControls().skipToNext();
+                        break;
+
+                    case REPEAT.REPEAT_ONE:
+                        Log.d(LOG_TAG, "REPEAT_ONE");
+                        player.stop();
+                        player.prepareAsync();
+                        player.start();
+                        resetPlayer();
+                        break;
                 }
             }
         });
@@ -628,6 +635,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                     Track track = tracks.get(currentTrackPosition);
                     addTrack(track);
                     EventBus.getDefault().post(new UpdateTitleArtistEvent(track.getTitle(), track.getArtist()));
+                    EventBus.getDefault().post(new UpdateCurrentTrackStateEvent(track));
                 }
             }
 
@@ -643,6 +651,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                     Track track = tracks.get(currentTrackPosition);
                     addTrack(track);
                     EventBus.getDefault().post(new UpdateTitleArtistEvent(track.getTitle(), track.getArtist()));
+                    EventBus.getDefault().post(new UpdateCurrentTrackStateEvent(track));
                 }
             }
         };

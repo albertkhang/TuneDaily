@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment;
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.animations.RotateAnimation;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
+import com.albertkhang.tunedaily.events.UpdateCurrentTrackStateEvent;
 import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
@@ -360,6 +361,8 @@ public class FullPlayerFragment extends Fragment implements Serializable {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                Log.d(LOG_TAG, "progress: " + seekBar.getProgress() + ", max: " + seekBar.getMax());
+
                 MediaPlaybackService.setCurrentPositionPlayer(seekBar.getProgress() * 1000);
                 mediaController.getTransportControls().play();
                 startUpdatingPlayerPosition();
@@ -451,6 +454,14 @@ public class FullPlayerFragment extends Fragment implements Serializable {
                 }
             }
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onReceiveTrack(UpdateCurrentTrackStateEvent updateCurrentTrackStateEvent) {
+        Track track = updateCurrentTrackStateEvent.getTrack();
+
+        seekbar.setMax(track.getDuration());
+        txtTimeStampEnd.setText(TimeConverter.getInstance().getTimestamp(track.getDuration()));
     }
 
     @Override

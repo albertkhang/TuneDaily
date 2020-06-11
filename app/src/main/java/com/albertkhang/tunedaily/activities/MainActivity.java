@@ -7,9 +7,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.RemoteException;
+import android.support.v4.media.MediaBrowserCompat;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.MediaSessionCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
@@ -24,6 +31,7 @@ import com.albertkhang.tunedaily.fragments.DiscoverFragment;
 import com.albertkhang.tunedaily.fragments.LibraryFragment;
 import com.albertkhang.tunedaily.fragments.MiniPlayerFragment;
 import com.albertkhang.tunedaily.fragments.SearchFragment;
+import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.events.UpdateThemeEvent;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -54,6 +62,10 @@ public class MainActivity extends AppCompatActivity {
     private FrameLayout bottom_gradient_frame;
     private FrameLayout miniPlayer_frame;
 
+    private MediaBrowserCompat mediaBrowser;
+    private MediaBrowserCompat.ConnectionCallback connectionCallback;
+    private MediaControllerCompat.Callback controllerCallback;
+    private MediaControllerCompat mediaController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,16 +89,81 @@ public class MainActivity extends AppCompatActivity {
 
         settingManager = SettingManager.getInstance(this);
 
+        initialControllerCallback();
+        initialConnectionCallback();
+        initialMediaBrowser();
+
         addMiniPlayer();
+    }
+
+    private void initialMediaBrowser() {
+        mediaBrowser = new MediaBrowserCompat(this,
+                new ComponentName(this, MediaPlaybackService.class),
+                connectionCallback,
+                null); // optional Bundle
+    }
+
+    private void initialConnectionCallback() {
+        connectionCallback = new MediaBrowserCompat.ConnectionCallback() {
+            @Override
+            public void onConnected() {
+                super.onConnected();
+                Log.d(LOG_TAG, "onConnected");
+
+                // Get the token for the MediaSession
+                MediaSessionCompat.Token token = mediaBrowser.getSessionToken();
+                Log.d(LOG_TAG, "token: " + token.toString());
+
+                // Create a MediaControllerCompat
+                try {
+                    mediaController =
+                            new MediaControllerCompat(MainActivity.this, // Context
+                                    token);
+
+                    // Save the controller
+                    MediaControllerCompat.setMediaController(MainActivity.this, mediaController);
+
+                    // Finish building the UI
+                    buildTransportControls();
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+    }
+
+    private void buildTransportControls() {
+        // Display the initial state
+        Log.d(LOG_TAG, "Display the initial state");
+        if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
+            miniPlayer_frame.setVisibility(View.VISIBLE);
+        }
+
+        // Register a Callback to stay in sync
+        mediaController.registerCallback(controllerCallback);
+    }
+
+    private void initialControllerCallback() {
+        Log.d(LOG_TAG, "initialControllerCallback");
+        controllerCallback = new MediaControllerCompat.Callback() {
+            @Override
+            public void onMetadataChanged(MediaMetadataCompat metadata) {
+                super.onMetadataChanged(metadata);
+            }
+
+            @Override
+            public void onPlaybackStateChanged(PlaybackStateCompat state) {
+                super.onPlaybackStateChanged(state);
+            }
+        };
     }
 
     private void addMiniPlayer() {
         miniPlayer_frame.setVisibility(View.GONE);
 
         MiniPlayerFragment miniPlayerFragment = new MiniPlayerFragment();
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(MINI_PLAYER_TAG);
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commitAllowingStateLoss();
+                .add(R.id.miniPlayer_frame, miniPlayerFragment, MINI_PLAYER_TAG).commit();
     }
 
     private void addEvent() {
@@ -195,11 +272,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        mediaBrowser.connect();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        mediaBrowser.disconnect();
     }
 }
