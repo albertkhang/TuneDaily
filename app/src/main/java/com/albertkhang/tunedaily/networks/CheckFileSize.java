@@ -41,12 +41,20 @@ public class CheckFileSize extends AsyncTask<Track, Integer, Boolean> {
         return false;
     }
 
+    public interface OnPostExecuteListener {
+        void onPostExecuteListener(boolean isSameSize);
+    }
+
+    private OnPostExecuteListener onPostExecuteListener;
+
+    public void setOnPostExecuteListener(OnPostExecuteListener onPostExecuteListener) {
+        this.onPostExecuteListener = onPostExecuteListener;
+    }
+
     @Override
     protected void onPostExecute(Boolean isSameSize) {
-        if (isSameSize) {
-            Toast.makeText(context, "This song was downloaded.", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(context, "This song is downloading.", Toast.LENGTH_SHORT).show();
+        if (onPostExecuteListener != null) {
+            onPostExecuteListener.onPostExecuteListener(isSameSize);
         }
     }
 }

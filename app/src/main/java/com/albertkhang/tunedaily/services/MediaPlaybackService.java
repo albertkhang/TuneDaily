@@ -38,6 +38,7 @@ import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackStateEvent;
 import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.models.Track;
+import com.albertkhang.tunedaily.networks.CheckFileSize;
 import com.albertkhang.tunedaily.utils.DownloadTrackManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
@@ -55,6 +56,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private static final String LOG_TAG = "MediaPlaybackService";
     private static final String CHANNEL_ID = "com.albertkhang.tunedaily.channelidplaybacknotification";
     private static final int NOTIFICATION_ID = 299;
+    private static Context context;
 
     private interface ACTION {
         String PLAY = "com.albertkhang.tunedaily.mediaplaybackservice.play";
@@ -118,6 +120,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         initialBecomingNoisyReceiver();
         initialNotificationChannelId();
         initialSession();
+
+        context = getApplicationContext();
     }
 
     public static Track getCurrentTrack() {
@@ -208,9 +212,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         if (!isContain) {
 //            Log.d(LOG_TAG, "not contains track " + track.toString());
 
-            Track temp = new Track(track);
-            tracks.add(temp);
-
+            tracks.add(track);
             currentTrackPosition = tracks.size() - 1;
         }
 
@@ -219,18 +221,41 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         try {
             //Handle load track
             if (DownloadTrackManager.isFileExists(tracks.get(currentTrackPosition))) {
-                Log.d(LOG_TAG, "play downloaded");
-                File file = DownloadTrackManager.getFile(tracks.get(currentTrackPosition));
-                player.setDataSource(file.getPath());
+                CheckFileSize checkFileSize = new CheckFileSize(context);
+                checkFileSize.setOnPostExecuteListener(new CheckFileSize.OnPostExecuteListener() {
+                    @Override
+                    public void onPostExecuteListener(boolean isSameSize) {
+                        if (isSameSize) {
+                            Log.d(LOG_TAG, "play downloaded");
+
+                            File file = DownloadTrackManager.getFile(tracks.get(currentTrackPosition));
+                            try {
+                                player.setDataSource(file.getPath());
+                                player.prepare();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        } else {
+                            Log.d(LOG_TAG, "play online");
+                            try {
+                                player.setDataSource(tracks.get(currentTrackPosition).getTrack());
+                                player.prepareAsync();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                });
+                checkFileSize.execute(track);
             } else {
                 Log.d(LOG_TAG, "play online");
                 player.setDataSource(tracks.get(currentTrackPosition).getTrack());
+                player.prepareAsync();
             }
         } catch (IOException e) {
             Log.d(LOG_TAG, "e: " + e.toString());
         }
 
-        mediaSession.getController().getTransportControls().prepare();
         mediaSession.getController().getTransportControls().play();
 
         //set metadata
@@ -653,12 +678,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
                 //Notifications
                 stopForeground(true);
-            }
-
-            @Override
-            public void onPrepare() {
-                super.onPrepare();
-                player.prepareAsync();
             }
 
             @Override

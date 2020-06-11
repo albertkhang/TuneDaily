@@ -3,6 +3,7 @@ package com.albertkhang.tunedaily.utils;
 import android.Manifest;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.albertkhang.tunedaily.models.Track;
 import com.albertkhang.tunedaily.networks.CheckFileSize;
@@ -22,33 +23,20 @@ public class DownloadTrackManager {
         this.context = context;
     }
 
-    public String createNewFile(Track track) {
-        File externalFile = context.getExternalFilesDir(null).getAbsoluteFile();
-
-        String filedescription = track.getTitle();
-        String filename = Hash.md5(track.getTrack());
-        File file = new File(externalFile, filename.concat(FILENAME_EXTENSION));
-
-        try {
-            FileWriter writer = new FileWriter(file);
-            writer.append(filedescription);
-            writer.flush();
-            writer.close();
-
-            Log.d(LOG_TAG, "file: " + file.getAbsolutePath());
-            return externalFile.getPath();
-        } catch (Exception e) {
-            Log.d(LOG_TAG, "e: " + e.toString());
-        }
-
-        Log.d(LOG_TAG, "file: " + file.getAbsolutePath());
-        return file.getAbsolutePath();
-    }
-
     public void downloadTrack(Track track) {
         if (isFileExists(track)) {
             //checkFileSize
             CheckFileSize checkFileSize = new CheckFileSize(context);
+            checkFileSize.setOnPostExecuteListener(new CheckFileSize.OnPostExecuteListener() {
+                @Override
+                public void onPostExecuteListener(boolean isSameSize) {
+                    if (isSameSize) {
+                        Toast.makeText(context, "This song was downloaded.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(context, "This song is downloading.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             checkFileSize.execute(track);
         } else {
             DownloadTrack downloadTrack = new DownloadTrack(context);
