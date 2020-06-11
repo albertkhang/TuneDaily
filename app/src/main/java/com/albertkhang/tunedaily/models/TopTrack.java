@@ -1,6 +1,4 @@
-package com.albertkhang.tunedaily.utils;
-
-import androidx.annotation.NonNull;
+package com.albertkhang.tunedaily.models;
 
 public class TopTrack implements Comparable<TopTrack> {
     private int id;

@@ -1,4 +1,4 @@
-package com.albertkhang.tunedaily.utils;
+package com.albertkhang.tunedaily.models;
 
 import java.util.List;
 import java.util.Map;

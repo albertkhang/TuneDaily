@@ -1,9 +1,6 @@
-package com.albertkhang.tunedaily.utils;
-
-import androidx.annotation.NonNull;
+package com.albertkhang.tunedaily.models;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Track implements Serializable {
     private int id;

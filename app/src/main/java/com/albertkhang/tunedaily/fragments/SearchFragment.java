@@ -20,16 +20,15 @@ package com.albertkhang.tunedaily.fragments;
 
         import com.albertkhang.tunedaily.R;
         import com.albertkhang.tunedaily.activities.InSearchActivity;
-        import com.albertkhang.tunedaily.activities.PlaylistActivity;
         import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
         import com.albertkhang.tunedaily.adapters.TrackAdapter;
         import com.albertkhang.tunedaily.events.UpdateDownloadedTrack;
         import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
         import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
-        import com.albertkhang.tunedaily.utils.Playlist;
+        import com.albertkhang.tunedaily.models.Playlist;
         import com.albertkhang.tunedaily.utils.FirebaseManager;
         import com.albertkhang.tunedaily.utils.SettingManager;
-        import com.albertkhang.tunedaily.utils.Track;
+        import com.albertkhang.tunedaily.models.Track;
         import com.albertkhang.tunedaily.events.UpdateThemeEvent;
         import com.facebook.shimmer.ShimmerFrameLayout;
 

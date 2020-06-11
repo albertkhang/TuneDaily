@@ -2,23 +2,16 @@ package com.albertkhang.tunedaily.utils;
 
 import android.Manifest;
 import android.content.Context;
-import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.albertkhang.tunedaily.activities.MainActivity;
+import com.albertkhang.tunedaily.models.Track;
 import com.albertkhang.tunedaily.networks.CheckFileSize;
 import com.albertkhang.tunedaily.networks.DownloadTrack;
-import com.google.common.base.Charsets;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.util.List;
 
 public class DownloadTrackManager {
     private static final String LOG_TAG = "DownloadTrackManager";

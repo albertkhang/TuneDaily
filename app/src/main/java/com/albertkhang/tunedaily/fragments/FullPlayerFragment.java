@@ -33,7 +33,7 @@ import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.TimeConverter;
-import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.models.Track;
 import com.albertkhang.tunedaily.views.CircleImageView;
 import com.bumptech.glide.Glide;
 

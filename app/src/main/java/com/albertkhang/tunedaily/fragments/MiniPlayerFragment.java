@@ -33,7 +33,7 @@ import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
-import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.models.Track;
 import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;

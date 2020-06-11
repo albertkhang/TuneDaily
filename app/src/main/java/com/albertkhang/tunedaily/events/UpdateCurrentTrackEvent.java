@@ -1,6 +1,6 @@
 package com.albertkhang.tunedaily.events;
 
-import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.models.Track;
 
 public class UpdateCurrentTrackEvent {
     private Track track;

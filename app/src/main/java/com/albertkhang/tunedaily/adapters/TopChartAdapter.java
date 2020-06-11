@@ -16,7 +16,7 @@ import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
 import com.albertkhang.tunedaily.utils.DownloadTrackManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
-import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.models.Track;
 import com.albertkhang.tunedaily.views.RoundImageView;
 import com.bumptech.glide.Glide;
 

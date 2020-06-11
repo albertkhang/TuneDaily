@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.events.UpdatePlaylistLibraryEvent;
-import com.albertkhang.tunedaily.utils.Playlist;
+import com.albertkhang.tunedaily.models.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.views.RoundImageView;

@@ -17,11 +17,10 @@ import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
-import com.albertkhang.tunedaily.networks.DownloadTrack;
 import com.albertkhang.tunedaily.utils.DownloadTrackManager;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
-import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.models.Track;
 import com.albertkhang.tunedaily.views.RoundImageView;
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;

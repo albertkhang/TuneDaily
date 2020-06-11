@@ -5,6 +5,10 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.albertkhang.tunedaily.models.Playlist;
+import com.albertkhang.tunedaily.models.TopTrack;
+import com.albertkhang.tunedaily.models.Track;
+import com.albertkhang.tunedaily.models.UserSettings;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;

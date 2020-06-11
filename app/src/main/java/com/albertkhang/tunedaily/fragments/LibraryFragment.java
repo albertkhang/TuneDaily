@@ -29,7 +29,7 @@ import com.albertkhang.tunedaily.activities.PlaylistActivity;
 import com.albertkhang.tunedaily.adapters.LibraryPlaylistAdapter;
 import com.albertkhang.tunedaily.events.UpdateLanguageEvent;
 import com.albertkhang.tunedaily.events.UpdatePlaylistLibraryEvent;
-import com.albertkhang.tunedaily.utils.Playlist;
+import com.albertkhang.tunedaily.models.Playlist;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.SoftKeyboardManager;

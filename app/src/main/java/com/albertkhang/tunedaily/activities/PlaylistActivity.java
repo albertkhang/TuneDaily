@@ -29,9 +29,9 @@ import com.albertkhang.tunedaily.fragments.PlaylistMoreFragment;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
-import com.albertkhang.tunedaily.utils.Playlist;
+import com.albertkhang.tunedaily.models.Playlist;
 import com.albertkhang.tunedaily.utils.SettingManager;
-import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.models.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
 
 import org.greenrobot.eventbus.EventBus;

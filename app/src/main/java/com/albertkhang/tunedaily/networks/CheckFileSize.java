@@ -6,11 +6,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.albertkhang.tunedaily.utils.DownloadTrackManager;
-import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.models.Track;
 
-import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 

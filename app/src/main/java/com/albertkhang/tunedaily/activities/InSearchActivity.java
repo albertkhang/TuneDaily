@@ -26,11 +26,11 @@ import com.albertkhang.tunedaily.adapters.PlaylistAdapter;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.events.UpdateDownloadedTrack;
 import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
-import com.albertkhang.tunedaily.utils.Playlist;
+import com.albertkhang.tunedaily.models.Playlist;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.utils.SoftKeyboardManager;
-import com.albertkhang.tunedaily.utils.Track;
+import com.albertkhang.tunedaily.models.Track;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;

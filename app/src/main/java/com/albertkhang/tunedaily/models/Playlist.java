@@ -1,4 +1,4 @@
-package com.albertkhang.tunedaily.utils;
+package com.albertkhang.tunedaily.models;
 
 import java.io.Serializable;
 import java.util.List;
