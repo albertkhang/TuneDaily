@@ -182,11 +182,13 @@ public class FullPlayerActivity extends AppCompatActivity implements Serializabl
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        MiniPlayerFragment.isOpenedFullPlayer = true;
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        MiniPlayerFragment.isOpenedFullPlayer = false;
     }
 }

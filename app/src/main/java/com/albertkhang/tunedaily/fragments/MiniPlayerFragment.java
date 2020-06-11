@@ -69,6 +69,8 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
     private MediaControllerCompat.Callback controllerCallback;
     private MediaControllerCompat mediaController;
 
+    public static boolean isOpenedFullPlayer = false;
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -258,8 +260,10 @@ public class MiniPlayerFragment extends Fragment implements Serializable {
         root_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), FullPlayerActivity.class);
-                startActivity(intent);
+                if (!isOpenedFullPlayer) {
+                    Intent intent = new Intent(getActivity(), FullPlayerActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
