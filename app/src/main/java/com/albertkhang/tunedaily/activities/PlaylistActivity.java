@@ -61,7 +61,8 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     private FrameLayout miniPlayer_frame;
     private FrameLayout shuffle_play_frame;
 
-    private ArrayList<Integer> tracks;
+    private ArrayList<Integer> trackIds;
+    private static ArrayList<Track> trackList;
     private Playlist currentPlaylist;
 
     private MediaBrowserCompat mediaBrowser;
@@ -197,7 +198,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         rvTracks.setVisibility(View.GONE);
         txtEmpty.setVisibility(View.GONE);
 
-        if (tracks.size() != 0) {
+        if (trackIds.size() != 0) {
             FirebaseManager firebaseManager = FirebaseManager.getInstance();
 
             firebaseManager.setReadTrackFromIdsListener(new FirebaseManager.ReadTrackFromIdsListener() {
@@ -215,10 +216,11 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
                     });
 
                     trackAdapter.update(tracks);
+                    trackList = tracks;
                 }
             });
 
-            firebaseManager.getTrackFromIds(tracks);
+            firebaseManager.getTrackFromIds(trackIds);
         } else {
             shimmer_random_songs.setVisibility(View.GONE);
             rvTracks.setVisibility(View.GONE);
@@ -241,20 +243,20 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
 
     private void updateIntentData() {
         Bundle bundle = getIntent().getBundleExtra("ids");
-        tracks = bundle.getIntegerArrayList("ids");
+        trackIds = bundle.getIntegerArrayList("ids");
         String title = getIntent().getStringExtra("title");
 
         String cover = getIntent().getStringExtra("cover");
         if (cover != null) {
-            currentPlaylist = new Playlist(-1, title, cover, tracks);
+            currentPlaylist = new Playlist(-1, title, cover, trackIds);
         } else {
-            currentPlaylist = new Playlist(-1, title, getString(R.string.liked_songs), tracks);
+            currentPlaylist = new Playlist(-1, title, getString(R.string.liked_songs), trackIds);
         }
 
         if (title != null) {
             txtTitle.setText(title);
         }
-        Log.d("PlaylistActivity", "tracks: " + tracks.toString());
+        Log.d("PlaylistActivity", "tracks: " + trackIds.toString());
     }
 
     private void addEvent() {
@@ -275,7 +277,10 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         shuffle_play_frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(LOG_TAG, "shuffle tracks: " + tracks.toString());
+//                Log.d(LOG_TAG, "shuffle tracks: " + tracks.toString());
+                if (trackList != null) {
+                    MediaPlaybackService.addShuffleTrack(trackList);
+                }
             }
         });
     }

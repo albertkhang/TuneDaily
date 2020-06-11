@@ -34,6 +34,7 @@ import androidx.media.session.MediaButtonReceiver;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.broadcasts.BecomingNoisyReceiver;
+import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackStateEvent;
 import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.models.Track;
@@ -46,6 +47,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private static final String LOG_TAG = "MediaPlaybackService";
@@ -223,6 +225,31 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
         //set metadata
         addMetadata(tracks.get(currentTrackPosition));
+    }
+
+    public static void addShuffleTrack(ArrayList<Track> shuffleTracks) {
+        tracks.clear();
+
+        int max = shuffleTracks.size() - 1;
+        int min = 0;
+
+        int x;
+        for (int i = 0; i < shuffleTracks.size(); i++) {
+            //select a random number different with i
+            x = (int) ((Math.random() * ((max - min) + 1)) + min);
+
+            Track tmpI = shuffleTracks.get(i);
+            Track tmpX = shuffleTracks.get(x);
+
+            shuffleTracks.set(i, tmpX);
+            shuffleTracks.set(x, tmpI);
+        }
+
+        tracks.addAll(shuffleTracks);
+        currentTrackPosition = 0;
+
+        addTrack(tracks.get(0));
+        EventBus.getDefault().post(new ShowMiniplayerEvent());
     }
 
     private static void initialPlayer() {
