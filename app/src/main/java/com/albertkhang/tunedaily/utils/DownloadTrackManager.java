@@ -16,7 +16,7 @@ import java.io.FileWriter;
 public class DownloadTrackManager {
     private static final String LOG_TAG = "DownloadTrackManager";
     private static final String FILENAME_EXTENSION = ".mp3";
-    private Context context;
+    private static Context context;
 
     public DownloadTrackManager(Context context) {
         this.context = context;
@@ -46,9 +46,6 @@ public class DownloadTrackManager {
     }
 
     public void downloadTrack(Track track) {
-//        DownloadTrack downloadTrack = new DownloadTrack(context);
-//        downloadTrack.execute(track);
-
         if (isFileExists(track)) {
             //checkFileSize
             CheckFileSize checkFileSize = new CheckFileSize(context);
@@ -59,7 +56,7 @@ public class DownloadTrackManager {
         }
     }
 
-    public File getFile(Track track) {
+    public static File getFile(Track track) {
         File externalFile = context.getExternalFilesDir(null).getAbsoluteFile();
         String filename = Hash.md5(track.getTrack());
         return new File(externalFile, filename.concat(FILENAME_EXTENSION));
@@ -73,7 +70,7 @@ public class DownloadTrackManager {
         return (int) file.length();
     }
 
-    public boolean isFileExists(Track track) {
+    public static boolean isFileExists(Track track) {
         return getFile(track).exists();
     }
 

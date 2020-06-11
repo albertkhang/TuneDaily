@@ -38,12 +38,14 @@ import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackStateEvent;
 import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.models.Track;
+import com.albertkhang.tunedaily.utils.DownloadTrackManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -215,7 +217,15 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         initialPlayer();
 
         try {
-            player.setDataSource(tracks.get(currentTrackPosition).getTrack());
+            //Handle load track
+            if (DownloadTrackManager.isFileExists(tracks.get(currentTrackPosition))) {
+                Log.d(LOG_TAG, "exist");
+                File file = DownloadTrackManager.getFile(tracks.get(currentTrackPosition));
+                player.setDataSource(file.getPath());
+            } else {
+                Log.d(LOG_TAG, "not exist");
+                player.setDataSource(tracks.get(currentTrackPosition).getTrack());
+            }
         } catch (IOException e) {
             Log.d(LOG_TAG, "e: " + e.toString());
         }
@@ -250,6 +260,16 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
         addTrack(tracks.get(0));
         EventBus.getDefault().post(new ShowMiniplayerEvent());
+    }
+
+    public interface OnPlayerCompletionListener {
+        void onPlayerCompletionListener();
+    }
+
+    private static OnPlayerCompletionListener onPlayerCompletionListener;
+
+    public static void setOnPlayerCompletionListener(OnPlayerCompletionListener onPlayerCompletionListener) {
+        MediaPlaybackService.onPlayerCompletionListener = onPlayerCompletionListener;
     }
 
     private static void initialPlayer() {
@@ -292,6 +312,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                         player.start();
                         resetPlayer();
                         break;
+                }
+
+                if (onPlayerCompletionListener != null) {
+                    onPlayerCompletionListener.onPlayerCompletionListener();
                 }
             }
         });
@@ -655,6 +679,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                     addTrack(track);
                     EventBus.getDefault().post(new UpdateTitleArtistEvent(track.getTitle(), track.getArtist()));
                     EventBus.getDefault().post(new UpdateCurrentTrackStateEvent(track));
+                } else {
+                    mediaSession.getController().getTransportControls().pause();
+                    if (onPlayerCompletionListener != null) {
+                        onPlayerCompletionListener.onPlayerCompletionListener();
+                    }
                 }
             }
 

@@ -92,8 +92,6 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     }
 
     private void stopUpdatingPlayerPosition() {
-        seekbar.setProgress(0);
-        txtTimeStampStart.setText(TimeConverter.getInstance().getTimestamp(0));
         handler.removeCallbacks(runnable);
     }
 
@@ -128,6 +126,14 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         initialControllerCallback();
         initialConnectionCallback();
         initialMediaBrowser();
+
+        MediaPlaybackService.setOnPlayerCompletionListener(new MediaPlaybackService.OnPlayerCompletionListener() {
+            @Override
+            public void onPlayerCompletionListener() {
+                seekbar.setProgress(0);
+                txtTimeStampStart.setText(TimeConverter.getInstance().getTimestamp(0));
+            }
+        });
 
         updateTheme();
     }
