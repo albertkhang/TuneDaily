@@ -106,7 +106,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     }
 
     public static void setCurrentPositionPlayer(int mSec) {
-        Log.d(LOG_TAG, "mSec: " + mSec + ", player: " + player.getDuration());
+//        Log.d(LOG_TAG, "mSec: " + mSec + ", player: " + player.getDuration());
 
         player.seekTo(mSec);
     }
@@ -164,7 +164,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
             @Override
             public void onAudioFocusChange(int focusChange) {
                 if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
-                    Log.d(LOG_TAG, "afChangeListener AUDIOFOCUS_LOSS");
+//                    Log.d(LOG_TAG, "afChangeListener AUDIOFOCUS_LOSS");
                     // Permanent loss of audio focus
                     // Pause playback immediately
                     mediaSession.getController().getTransportControls().pause();
@@ -173,14 +173,14 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 //                    handler.postDelayed(delayedStopRunnable,
 //                            TimeUnit.SECONDS.toMillis(30));
                 } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
-                    Log.d(LOG_TAG, "afChangeListener AUDIOFOCUS_LOSS_TRANSIENT");
+//                    Log.d(LOG_TAG, "afChangeListener AUDIOFOCUS_LOSS_TRANSIENT");
                     // Pause playback
                     mediaSession.getController().getTransportControls().pause();
                 } else if (focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK) {
-                    Log.d(LOG_TAG, "afChangeListener AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+//                    Log.d(LOG_TAG, "afChangeListener AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
                     // Lower the volume, keep playing
                 } else if (focusChange == AudioManager.AUDIOFOCUS_GAIN) {
-                    Log.d(LOG_TAG, "afChangeListener AUDIOFOCUS_GAIN");
+//                    Log.d(LOG_TAG, "afChangeListener AUDIOFOCUS_GAIN");
                     // Your app has been granted audio focus again
                     // Raise volume to normal, restart playback if necessary
                     mediaSession.getController().getTransportControls().play();
@@ -206,7 +206,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         }
 
         if (!isContain) {
-            Log.d(LOG_TAG, "not contains track " + track.toString());
+//            Log.d(LOG_TAG, "not contains track " + track.toString());
 
             Track temp = new Track(track);
             tracks.add(temp);
@@ -219,11 +219,11 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         try {
             //Handle load track
             if (DownloadTrackManager.isFileExists(tracks.get(currentTrackPosition))) {
-                Log.d(LOG_TAG, "exist");
+                Log.d(LOG_TAG, "play downloaded");
                 File file = DownloadTrackManager.getFile(tracks.get(currentTrackPosition));
                 player.setDataSource(file.getPath());
             } else {
-                Log.d(LOG_TAG, "not exist");
+                Log.d(LOG_TAG, "play online");
                 player.setDataSource(tracks.get(currentTrackPosition).getTrack());
             }
         } catch (IOException e) {
@@ -342,7 +342,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     }
 
     private void initialSession() {
-        Log.d(LOG_TAG, "initialSession");
+//        Log.d(LOG_TAG, "initialSession");
 
         // Create a MediaSessionCompat
         mediaSession = new MediaSessionCompat(this, LOG_TAG);
@@ -372,10 +372,10 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         MediaMetadataCompat mediaMetadata = controller.getMetadata();
         MediaDescriptionCompat description = mediaMetadata.getDescription();
 
-        Log.d(LOG_TAG, "title: " + description.getTitle());
-        Log.d(LOG_TAG, "subtitle: " + description.getSubtitle());
-        Log.d(LOG_TAG, "description: " + description.getDescription());
-        Log.d(LOG_TAG, "cover: " + description.getIconUri());
+//        Log.d(LOG_TAG, "title: " + description.getTitle());
+//        Log.d(LOG_TAG, "subtitle: " + description.getSubtitle());
+//        Log.d(LOG_TAG, "description: " + description.getDescription());
+//        Log.d(LOG_TAG, "cover: " + description.getIconUri());
 
         builder = new NotificationCompat.Builder(this, CHANNEL_ID);
         final Bitmap[] bitmap = new Bitmap[1];
@@ -388,12 +388,12 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                     @Override
                     public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                         bitmap[0] = resource;
-                        Log.d(LOG_TAG, "onResourceReady");
+//                        Log.d(LOG_TAG, "onResourceReady");
                     }
 
                     @Override
                     public void onLoadCleared(@Nullable Drawable placeholder) {
-                        Log.d(LOG_TAG, "onLoadCleared");
+//                        Log.d(LOG_TAG, "onLoadCleared");
                     }
                 });
 
@@ -553,7 +553,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     }
 
     private void initialSessionCallback() {
-        Log.d(LOG_TAG, "initialCallback");
+//        Log.d(LOG_TAG, "initialCallback");
 
         mediaSessionCallback = new MediaSessionCompat.Callback() {
             @Override
@@ -570,7 +570,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                         .build();
 
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                    Log.d(LOG_TAG, "run");
+//                    Log.d(LOG_TAG, "run");
                     audioFocusRequest = new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
                             .setOnAudioFocusChangeListener(afChangeListener)
                             .setAudioAttributes(attrs)
@@ -578,7 +578,7 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
                     int result = am.requestAudioFocus(audioFocusRequest);
 
                     if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                        Log.d(LOG_TAG, "AUDIOFOCUS_REQUEST_GRANTED");
+//                        Log.d(LOG_TAG, "AUDIOFOCUS_REQUEST_GRANTED");
 
                         //Service
                         startService(new Intent(getApplicationContext(), MediaPlaybackService.class));
