@@ -59,6 +59,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     private ShimmerFrameLayout shimmer_random_songs;
     private TextView txtEmpty;
     private FrameLayout miniPlayer_frame;
+    private FrameLayout shuffle_play_frame;
 
     private ArrayList<Integer> tracks;
     private Playlist currentPlaylist;
@@ -99,6 +100,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         shimmer_random_songs = findViewById(R.id.shimmer_random_songs);
         txtEmpty = findViewById(R.id.txtEmpty);
         miniPlayer_frame = findViewById(R.id.miniPlayer_frame);
+        shuffle_play_frame = findViewById(R.id.shuffle_play_frame);
 
         trackAdapter = new TrackAdapter(this);
         rvTracks.setAdapter(trackAdapter);
@@ -129,11 +131,11 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
             @Override
             public void onConnected() {
                 super.onConnected();
-                Log.d(LOG_TAG, "onConnected");
+//                Log.d(LOG_TAG, "onConnected");
 
                 // Get the token for the MediaSession
                 MediaSessionCompat.Token token = mediaBrowser.getSessionToken();
-                Log.d(LOG_TAG, "token: " + token.toString());
+//                Log.d(LOG_TAG, "token: " + token.toString());
 
                 // Create a MediaControllerCompat
                 try {
@@ -155,7 +157,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
 
     private void buildTransportControls() {
         // Display the initial state
-        Log.d(LOG_TAG, "Display the initial state");
+//        Log.d(LOG_TAG, "Display the initial state");
         if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
             miniPlayer_frame.setVisibility(View.VISIBLE);
         }
@@ -165,7 +167,7 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     }
 
     private void initialControllerCallback() {
-        Log.d(LOG_TAG, "initialControllerCallback");
+//        Log.d(LOG_TAG, "initialControllerCallback");
         controllerCallback = new MediaControllerCompat.Callback() {
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
@@ -267,6 +269,13 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
             @Override
             public void onClick(View v) {
                 showPlaylistMore(currentPlaylist);
+            }
+        });
+
+        shuffle_play_frame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(LOG_TAG, "shuffle tracks: " + tracks.toString());
             }
         });
     }
