@@ -91,10 +91,8 @@ public class FullPlayerFragment extends Fragment implements Serializable {
     }
 
     private void stopUpdatingPlayerPosition() {
-        if (MediaPlaybackService.isRewind()) {
-            seekbar.setProgress(0);
-            txtTimeStampStart.setText(TimeConverter.getInstance().getTimestamp(0));
-        }
+        seekbar.setProgress(0);
+        txtTimeStampStart.setText(TimeConverter.getInstance().getTimestamp(0));
         handler.removeCallbacks(runnable);
     }
 
@@ -300,7 +298,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
             txtTimeStampStart.setTextColor(getResources().getColor(R.color.colorLight5));
             txtTimeStampEnd.setTextColor(getResources().getColor(R.color.colorLight5));
 
-            imgRepeat.setColorFilter(getResources().getColor(R.color.colorLight5));
+//            imgRepeat.setColorFilter(getResources().getColor(R.color.colorLight5));
             imgSkipPrevious.setColorFilter(getResources().getColor(R.color.colorLight1));
             imgPlayPause.setColorFilter(getResources().getColor(R.color.colorLight1));
             imgSkipNext.setColorFilter(getResources().getColor(R.color.colorLight1));
@@ -314,7 +312,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
             txtTimeStampStart.setTextColor(getResources().getColor(R.color.colorDark5));
             txtTimeStampEnd.setTextColor(getResources().getColor(R.color.colorDark5));
 
-            imgRepeat.setColorFilter(getResources().getColor(R.color.colorDark5));
+//            imgRepeat.setColorFilter(getResources().getColor(R.color.colorDark5));
             imgSkipPrevious.setColorFilter(getResources().getColor(R.color.colorDark2));
             imgPlayPause.setColorFilter(getResources().getColor(R.color.colorDark2));
             imgSkipNext.setColorFilter(getResources().getColor(R.color.colorDark2));
@@ -384,6 +382,36 @@ public class FullPlayerFragment extends Fragment implements Serializable {
                 mediaController.getTransportControls().skipToPrevious();
             }
         });
+
+        imgRepeat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentRepeat = MediaPlaybackService.getCurrentRepeat();
+                currentRepeat++;
+
+                MediaPlaybackService.setCurrentRepeat(currentRepeat);
+                updateRepeatState(MediaPlaybackService.getCurrentRepeat());
+            }
+        });
+    }
+
+    private void updateRepeatState(int currentRepeat) {
+        switch (currentRepeat) {
+            case MediaPlaybackService.REPEAT.NOT_REPEAT:
+                imgRepeat.setImageResource(R.drawable.ic_not_repeat);
+                imgRepeat.setColorFilter(getResources().getColor(R.color.colorLight5));
+                break;
+
+            case MediaPlaybackService.REPEAT.REPEAT_ALL:
+                imgRepeat.setImageResource(R.drawable.ic_repeat_all);
+                imgRepeat.setColorFilter(getResources().getColor(R.color.colorLight1));
+                break;
+
+            case MediaPlaybackService.REPEAT.REPEAT_ONE:
+                imgRepeat.setImageResource(R.drawable.ic_repeat_1);
+                imgRepeat.setColorFilter(getResources().getColor(R.color.colorLight1));
+                break;
+        }
     }
 
     private void updateFavouriteState() {
@@ -439,6 +467,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
         updateRotateAnimation();
         seekbar.setProgress(MediaPlaybackService.getCurrentPositionPlayer() / 1000);
         updateFavouriteState();
+        updateRepeatState(MediaPlaybackService.getCurrentRepeat());
     }
 
     @Override

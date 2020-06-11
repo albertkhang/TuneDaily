@@ -66,6 +66,22 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         String CLOSE = "com.albertkhang.tunedaily.mediaplaybackservice.close";
     }
 
+    public interface REPEAT {
+        int NOT_REPEAT = 0;
+        int REPEAT_ALL = 1;
+        int REPEAT_ONE = 2;
+    }
+
+    private static int currentRepeat = 0;
+
+    public static int getCurrentRepeat() {
+        return currentRepeat;
+    }
+
+    public static void setCurrentRepeat(int state) {
+        currentRepeat = state % 3;
+    }
+
     private static MediaSessionCompat mediaSession;
     private MediaSessionCompat.Callback mediaSessionCallback;
     private PlaybackStateCompat.Builder playbackStateBuilder;
@@ -213,8 +229,6 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         addMetadata(tracks.get(currentTrackPosition));
     }
 
-    private static boolean isRewind = false;
-
     private static void initialPlayer() {
         if (player != null) {
             player = null;
@@ -232,10 +246,27 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
             @Override
             public void onCompletion(MediaPlayer mp) {
                 Log.d(LOG_TAG, "onCompletion");
-                isRewind = true;
-                mediaSession.getController().getTransportControls().pause();
-                mediaSession.getController().getTransportControls().rewind();
+                if (currentTrackPosition == tracks.size() - 1) {
+                    switch (currentRepeat) {
+                        case REPEAT.NOT_REPEAT:
+                            mediaSession.getController().getTransportControls().pause();
+                            resetPlayer();
+                            break;
 
+                        case REPEAT.REPEAT_ALL:
+                            mediaSession.getController().getTransportControls().skipToNext();
+                            break;
+
+                        case REPEAT.REPEAT_ONE:
+                            player.stop();
+                            player.prepareAsync();
+                            player.start();
+                            resetPlayer();
+                            break;
+                    }
+                } else {
+                    mediaSession.getController().getTransportControls().skipToNext();
+                }
             }
         });
         player.setOnErrorListener(new MediaPlayer.OnErrorListener() {
@@ -246,13 +277,8 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         });
     }
 
-    public static boolean isRewind() {
-        if (isRewind) {
-            isRewind = false;
-            return true;
-        }
-
-        return false;
+    private static void resetPlayer() {
+        player.seekTo(1);
     }
 
     private static void addMetadata(Track track) {
