@@ -25,6 +25,7 @@ android {
 }
 
 dependencies {
+    implementation 'com.github.NodeMedia:NodeMediaClient-Android:2.7.4'
     implementation 'gun0912.ted:tedpermission:2.2.3'
     implementation 'com.google.firebase:firebase-auth:19.3.1'
     implementation 'com.google.android.gms:play-services-auth:18.0.0'

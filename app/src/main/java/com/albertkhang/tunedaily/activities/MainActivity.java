@@ -4,24 +4,28 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.ComponentName;
-import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.ViewPagerAdapter;
@@ -39,6 +43,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import cn.nodemedia.NodePlayer;
+import cn.nodemedia.NodePlayerDelegate;
 
 public class MainActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
@@ -67,6 +74,9 @@ public class MainActivity extends AppCompatActivity {
     private MediaControllerCompat.Callback controllerCallback;
     private MediaControllerCompat mediaController;
 
+    private NodePlayer nodePlayer;
+    private static final String STREAMING_URL = "rtmp://45.76.150.28/live/android";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,6 +88,68 @@ public class MainActivity extends AppCompatActivity {
         //updateLanguage
         settingManager.updateLanguageConfiguration();
         EventBus.getDefault().post(new UpdateLanguageEvent());
+    }
+
+    private void initialNodePlayer() {
+        nodePlayer = new NodePlayer(this);
+        nodePlayer.setInputUrl(STREAMING_URL);
+        nodePlayer.setAudioEnable(false);
+        nodePlayer.setVideoEnable(false);
+        nodePlayer.setNodePlayerDelegate(new NodePlayerDelegate() {
+            @Override
+            public void onEventCallback(NodePlayer player, int event, String msg) {
+                Log.d(LOG_TAG, "event: " + event + ", msg: " + msg);
+
+                switch (event) {
+                    case 1001://NetConnection.Connect.Success
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        showStreamDialog();
+                                    }
+                                });
+                            }
+                        });
+
+                        break;
+
+                    case 1003://NetConnection.Connect.Reconnection
+                        if (streamDialog != null) {
+                            streamDialog.cancel();
+                        }
+                        break;
+                }
+            }
+        });
+    }
+
+    private Dialog streamDialog;
+
+    private void showStreamDialog() {
+        streamDialog = new Dialog(this, R.style.RoundCornerDialogFragment);
+        streamDialog.setContentView(R.layout.broadcast_dialog);
+
+        Button btnJoinStream = streamDialog.findViewById(R.id.btnJoinStream);
+        btnJoinStream.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, StreamingActivity.class));
+                streamDialog.dismiss();
+            }
+        });
+
+        TextView txtCancel = streamDialog.findViewById(R.id.txtCancel);
+        txtCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                streamDialog.cancel();
+            }
+        });
+
+        streamDialog.show();
     }
 
     private void addControl() {
@@ -112,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
 
                 // Get the token for the MediaSession
                 MediaSessionCompat.Token token = mediaBrowser.getSessionToken();
-                Log.d(LOG_TAG, "token: " + token.toString());
+//                Log.d(LOG_TAG, "token: " + token.toString());
 
                 // Create a MediaControllerCompat
                 try {
@@ -134,7 +206,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void buildTransportControls() {
         // Display the initial state
-        Log.d(LOG_TAG, "Display the initial state");
+//        Log.d(LOG_TAG, "Display the initial state");
         if (mediaController.getPlaybackState().getState() == PlaybackStateCompat.STATE_PLAYING) {
             miniPlayer_frame.setVisibility(View.VISIBLE);
         }
@@ -144,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initialControllerCallback() {
-        Log.d(LOG_TAG, "initialControllerCallback");
+//        Log.d(LOG_TAG, "initialControllerCallback");
         controllerCallback = new MediaControllerCompat.Callback() {
             @Override
             public void onMetadataChanged(MediaMetadataCompat metadata) {
@@ -215,18 +287,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void runSplashScreen() {
-        Log.d("runSplashScreen", "openMainActivity");
+//        Log.d("runSplashScreen", "openMainActivity");
 
         splash_screen.setVisibility(View.VISIBLE);
         bottomNavigationView.setVisibility(View.GONE);
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Log.d("runSplashScreen", "run");
+//                Log.d("runSplashScreen", "run");
 
                 bottomNavigationView.setVisibility(View.VISIBLE);
                 splash_screen.setVisibility(View.GONE);
-
             }
         }, SHOWING_INTERVAL);
     }
@@ -273,6 +344,11 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
         EventBus.getDefault().register(this);
         mediaBrowser.connect();
+
+        if (nodePlayer == null) {
+            initialNodePlayer();
+        }
+        nodePlayer.start();
     }
 
     @Override
@@ -280,5 +356,8 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         EventBus.getDefault().unregister(this);
         mediaBrowser.disconnect();
+
+        nodePlayer.release();
+        nodePlayer = null;
     }
 }
