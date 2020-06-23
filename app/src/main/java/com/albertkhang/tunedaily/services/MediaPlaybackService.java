@@ -96,6 +96,9 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
 
     private static int currentTrackPosition = -1;
 
+    private static int lastPressSkipToPrevious = 0;
+    private static final int SKIP_TO_PREVIOUS_INTERVAL = 10000;
+
     public static ArrayList<Track> getCurrentPlaylist() {
         return tracks;
     }
@@ -709,16 +712,20 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
             @Override
             public void onSkipToPrevious() {
                 super.onSkipToPrevious();
-                if (!isOneItemInList()) {
-                    currentTrackPosition--;
-                    currentTrackPosition = currentTrackPosition + tracks.size();
-                    currentTrackPosition = currentTrackPosition % tracks.size();
-                    Log.d(LOG_TAG, "onSkipToPrevious position: " + currentTrackPosition);
+                if (player.getCurrentPosition() - lastPressSkipToPrevious >= SKIP_TO_PREVIOUS_INTERVAL) {
+                    player.seekTo(0);
+                } else {
+                    if (!isOneItemInList()) {
+                        currentTrackPosition--;
+                        currentTrackPosition = currentTrackPosition + tracks.size();
+                        currentTrackPosition = currentTrackPosition % tracks.size();
+                        Log.d(LOG_TAG, "onSkipToPrevious position: " + currentTrackPosition);
 
-                    Track track = tracks.get(currentTrackPosition);
-                    addTrack(track);
-                    EventBus.getDefault().post(new UpdateTitleArtistEvent(track.getTitle(), track.getArtist()));
-                    EventBus.getDefault().post(new UpdateCurrentTrackStateEvent(track));
+                        Track track = tracks.get(currentTrackPosition);
+                        addTrack(track);
+                        EventBus.getDefault().post(new UpdateTitleArtistEvent(track.getTitle(), track.getArtist()));
+                        EventBus.getDefault().post(new UpdateCurrentTrackStateEvent(track));
+                    }
                 }
             }
         };
