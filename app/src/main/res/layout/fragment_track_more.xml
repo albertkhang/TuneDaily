@@ -93,6 +93,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/add_to_playlist_frame"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="7dp"

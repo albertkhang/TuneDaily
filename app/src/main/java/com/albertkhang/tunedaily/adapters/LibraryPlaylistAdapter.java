@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,6 +29,11 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<LibraryPlaylist
     private Context context;
     private PlaylistManager playlistManager;
     private SettingManager settingManager;
+    private boolean hidePlaylistMore = false;
+
+    public void hidePlaylistMore() {
+        hidePlaylistMore = true;
+    }
 
     public LibraryPlaylistAdapter(Context context) {
         this.context = context;
@@ -60,6 +66,16 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<LibraryPlaylist
         return new ViewHolder(view);
     }
 
+    public interface OnAddLibraryItemClickListener {
+        void onAddLibraryItemClickListener(View view, int position);
+    }
+
+    private OnAddLibraryItemClickListener onAddLibraryItemClickListener;
+
+    public void setOnAddLibraryItemClickListener(OnAddLibraryItemClickListener onAddLibraryItemClickListener) {
+        this.onAddLibraryItemClickListener = onAddLibraryItemClickListener;
+    }
+
     @Override
     public void onBindViewHolder(@NonNull LibraryPlaylistAdapter.ViewHolder holder, final int position) {
         Log.d("PlaylistAdapter", playlists.get(position).getTitle() + ": " + playlists.get(position));
@@ -77,22 +93,29 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<LibraryPlaylist
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(context, PlaylistActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
-                intent.putExtra("ids", bundle);
-                intent.putExtra("title", playlists.get(position).getTitle());
-                intent.putExtra("cover", playlists.get(position).getCover());
-                context.startActivity(intent);
+                if (onAddLibraryItemClickListener != null) {
+                    onAddLibraryItemClickListener.onAddLibraryItemClickListener(view, position);
+                } else {
+                    Intent intent = new Intent(context, PlaylistActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putIntegerArrayList("ids", (ArrayList<Integer>) playlists.get(position).getTracks());
+                    intent.putExtra("ids", bundle);
+                    intent.putExtra("title", playlists.get(position).getTitle());
+                    intent.putExtra("cover", playlists.get(position).getCover());
+                    context.startActivity(intent);
+                }
             }
         });
-
-        holder.imgMore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onMoreListener.onMoreListener(view, position);
-            }
-        });
+        if (!hidePlaylistMore) {
+            holder.imgMore.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onMoreListener.onMoreListener(view, position);
+                }
+            });
+        } else {
+            holder.imgMore.setVisibility(View.GONE);
+        }
 
         updateTheme(holder);
     }

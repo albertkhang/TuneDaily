@@ -1,6 +1,7 @@
 package com.albertkhang.tunedaily.fragments;
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
+import com.albertkhang.tunedaily.activities.SelectPlaylistToAddActivity;
 import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.utils.DownloadTrackManager;
 import com.albertkhang.tunedaily.utils.PlaylistManager;
@@ -50,6 +52,7 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
     private TextView txtBroadcast;
     private ConstraintLayout add_to_library_frame;
     private ConstraintLayout download_frame;
+    private ConstraintLayout add_to_playlist_frame;
 
     public TrackMoreFragment(Track track) {
         this.track = track;
@@ -87,6 +90,7 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
         txtBroadcast = view.findViewById(R.id.txtBroadcast);
         add_to_library_frame = view.findViewById(R.id.add_to_library_frame);
         download_frame = view.findViewById(R.id.download_frame);
+        add_to_playlist_frame = view.findViewById(R.id.add_to_playlist_frame);
 
         handleCoverPlaceholderColor(imgCover);
         txtTitle.setText(track.getTitle());
@@ -135,6 +139,21 @@ public class TrackMoreFragment extends BottomSheetDialogFragment {
     }
 
     private void addEvent() {
+        add_to_playlist_frame.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (PlaylistManager.getInstance().getAllPlaylist().size() != 0) {
+                    Intent intent = new Intent(getActivity(), SelectPlaylistToAddActivity.class);
+                    intent.putExtra("title", track.getTitle());
+                    intent.putExtra("id", track.getId());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "You have no playlist!", Toast.LENGTH_LONG).show();
+                }
+                closefragment();
+            }
+        });
+
         add_to_library_frame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

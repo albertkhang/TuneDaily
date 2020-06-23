@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_app_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.StreamingActivity"></activity>
+        <activity android:name=".activities.SelectPlaylistToAddActivity"></activity>
+        <activity android:name=".activities.StreamingActivity" />
 
         <service android:name=".services.MediaPlaybackService">
             <intent-filter>

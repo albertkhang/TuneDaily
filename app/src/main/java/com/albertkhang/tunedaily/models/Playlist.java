@@ -9,9 +9,9 @@ public class Playlist implements Serializable {
     private String cover;
     private List<Integer> tracks;
 
-    public Playlist(int id, String titile, String cover, List<Integer> tracks) {
+    public Playlist(int id, String title, String cover, List<Integer> tracks) {
         this.id = id;
-        this.title = titile;
+        this.title = title;
         this.cover = cover;
         this.tracks = tracks;
     }

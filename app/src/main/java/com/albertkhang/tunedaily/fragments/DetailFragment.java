@@ -137,37 +137,6 @@ public class DetailFragment extends Fragment implements Serializable {
         playlistsAdapter.update(MediaPlaybackService.getCurrentPlaylist());
     }
 
-    private void updateSimilarSongs() {
-        shimmer_similar_songs.setVisibility(View.VISIBLE);
-        rvSimilarSongs.setVisibility(View.GONE);
-
-        FirebaseManager firebaseManager = FirebaseManager.getInstance();
-
-        firebaseManager.setReadRandomSongsListener(new FirebaseManager.ReadRandomSongsListener() {
-            @Override
-            public void readRandomSongsListener(final ArrayList<Track> tracks) {
-                shimmer_similar_songs.setVisibility(View.GONE);
-                rvSimilarSongs.setVisibility(View.VISIBLE);
-
-                playlistsAdapter.setOnMoreListener(new TrackAdapter.OnMoreListener() {
-                    @Override
-                    public void onMoreListener(View view, int position) {
-                        showMoreItem(tracks.get(position));
-                    }
-                });
-
-                playlistsAdapter.update(tracks);
-            }
-        });
-
-        firebaseManager.getRandomSongs();
-    }
-
-    private void showMoreItem(Track track) {
-        TrackMoreFragment trackMoreFragment = new TrackMoreFragment(track);
-        trackMoreFragment.show(requireActivity().getSupportFragmentManager(), "FragmentTrackMore");
-    }
-
     private void addEvent() {
     }
 

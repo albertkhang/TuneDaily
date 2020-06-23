@@ -169,6 +169,10 @@ public class PlaylistManager {
         return Paper.book("liked_songs").read(PLAYLIST.TRACKS, new ArrayList<Integer>());
     }
 
+    public List<Integer> getPlaylistIds(String title) {
+        return Paper.book(title).read(PLAYLIST.TRACKS, new ArrayList<Integer>());
+    }
+
     public int getLikedSongsSize() {
         return Paper.book("liked_songs").read(PLAYLIST.TRACKS, new ArrayList<Integer>()).size();
     }
@@ -246,7 +250,9 @@ public class PlaylistManager {
 
                 String cover = tracks.get(0).getCover();
                 setPlaylistCover(name, cover);
-                onCompletePlaylistCoverListener.onCompletePlaylistCoverListener(cover);
+                if (onCompletePlaylistCoverListener != null) {
+                    onCompletePlaylistCoverListener.onCompletePlaylistCoverListener(cover);
+                }
             }
         });
 
