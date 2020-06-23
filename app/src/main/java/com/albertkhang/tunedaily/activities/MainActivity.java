@@ -77,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
     private NodePlayer nodePlayer;
     private static final String STREAMING_URL = "rtmp://45.76.150.28/live/android";
 
+    private static boolean isJoinStream = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,17 +104,19 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (event) {
                     case 1001://NetConnection.Connect.Success
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        showStreamDialog();
-                                    }
-                                });
-                            }
-                        });
+                        if (isJoinStream) {
+                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            showStreamDialog();
+                                        }
+                                    });
+                                }
+                            });
+                        }
 
                         break;
 
@@ -138,6 +142,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, StreamingActivity.class));
                 streamDialog.dismiss();
+                isJoinStream = true;
             }
         });
 
@@ -146,6 +151,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 streamDialog.cancel();
+                isJoinStream = false;
             }
         });
 

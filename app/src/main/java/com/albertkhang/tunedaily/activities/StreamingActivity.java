@@ -4,23 +4,23 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.res.Configuration;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.MediaController;
+import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
-import com.albertkhang.tunedaily.utils.TimeConverter;
 
 import cn.nodemedia.NodePlayer;
 import cn.nodemedia.NodePlayerDelegate;
@@ -34,19 +34,19 @@ public class StreamingActivity extends AppCompatActivity {
     private static final String STREAMING_URL = "rtmp://45.76.150.28/live/android";
 
     private ConstraintLayout video_controller_frame;
-    private ImageView imgPlayPause;
     private ImageView imgVolume;
     private SeekBar seekbar;
     private TextView txtVolumePercent;
-    private ImageView imgFullscreen;
+    private ProgressBar progressBar;
     private ImageView imgBack;
 
     private static boolean isEnableVolume = true;
-    private boolean isFullscreen = false;
 
     private Handler handler;
     private Runnable controllerRunnable;
     private final long CONTROLLER_INTERVAL = 3000;
+
+    private SensorEventListener sensorEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,21 +60,49 @@ public class StreamingActivity extends AppCompatActivity {
     private void addControl() {
         npvPlayerView = findViewById(R.id.npvPlayerView);
         npvPlayerView.setRenderType(NodePlayerView.RenderType.SURFACEVIEW);
-        npvPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+        npvPlayerView.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleAspectFit);
+
         video_controller_frame = findViewById(R.id.video_controller_frame);
-        imgPlayPause = findViewById(R.id.imgPlayPause);
         imgVolume = findViewById(R.id.imgVolume);
         seekbar = findViewById(R.id.seekbar);
         seekbar = findViewById(R.id.seekbar);
         seekbar.setMax(100);
         seekbar.setProgress(80);
         txtVolumePercent = findViewById(R.id.txtVolumePercent);
-        imgFullscreen = findViewById(R.id.imgFullscreen);
+        progressBar = findViewById(R.id.progressBar);
         imgBack = findViewById(R.id.imgBack);
 
         handler = new Handler();
         initialControllerRunnable();
         controllerRunnable.run();
+
+        initialLandscapeRotateListener();
+    }
+
+    private void initialLandscapeRotateListener() {
+        sensorEventListener = new SensorEventListener() {
+            @Override
+            public void onSensorChanged(SensorEvent event) {
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                    getWindow().getDecorView().setSystemUiVisibility(
+                            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                            View.SYSTEM_UI_FLAG_FULLSCREEN);
+                    npvPlayerView.setUIViewContentMode(NodePlayerView.UIViewContentMode.ScaleAspectFill);
+
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) imgBack.getLayoutParams();
+                    params.topMargin = 30;
+                    imgBack.setLayoutParams(params);
+                }
+            }
+
+            @Override
+            public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+            }
+        };
+        SensorManager sm = (SensorManager)getSystemService(SENSOR_SERVICE);
+        sm.registerListener(sensorEventListener, sm.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR), SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     private void initialControllerRunnable() {
@@ -104,11 +132,34 @@ public class StreamingActivity extends AppCompatActivity {
                 Log.d(LOG_TAG, "event: " + event + ", msg: " + msg);
 
                 switch (event) {
-                    case 1001://NetConnection.Connect.Success
+                    case 1000://Connecting to rtmp://45.76.150.28/live/android
+                    case 1100://NetConnection.Connect.Success
+                    case 1001://NetStream.Buffer.Empty
+                    case 1101://NetStream.Buffer.Buffering
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressBar.setVisibility(View.VISIBLE);
+                            }
+                        });
                         break;
 
+                    case 1102://NetStream.Buffer.Full
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progressBar.setVisibility(View.GONE);
+                            }
+                        });
+                        break;
+
+                    case 1004://NetConnection.Connect.Closed
                     case 1003://NetConnection.Connect.Reconnection
                         finish();
+                        break;
+
+                    case 1104://852x480
+                        npvPlayerView.setVideoSize(Integer.parseInt(msg.split("x")[0]), Integer.parseInt(msg.split("x")[1]));
                         break;
                 }
             }
@@ -121,19 +172,6 @@ public class StreamingActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-            }
-        });
-
-        imgFullscreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isFullscreen) {
-                    imgFullscreen.setImageResource(R.drawable.ic_fullscreen_exit);
-                    isFullscreen = true;
-                } else {
-                    isFullscreen = false;
-                    imgFullscreen.setImageResource(R.drawable.ic_fullscreen);
-                }
             }
         });
 
@@ -155,38 +193,6 @@ public class StreamingActivity extends AppCompatActivity {
         });
 
         imgVolume.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_UP:
-//                        Log.d(LOG_TAG, "ACTION_UP");
-                        controllerRunnable.run();
-                        break;
-
-                    case MotionEvent.ACTION_DOWN:
-//                        Log.d(LOG_TAG, "ACTION_DOWN");
-                        handler.removeCallbacksAndMessages(null);
-                        break;
-                }
-                return false;
-            }
-        });
-
-        imgPlayPause.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (nodePlayer.isPlaying()) {
-                    nodePlayer.pause();
-                    imgPlayPause.setImageResource(R.drawable.ic_play);
-                } else {
-//                    Log.d(LOG_TAG, "duration: " + nodePlayer.get());
-                    nodePlayer.start();
-                    imgPlayPause.setImageResource(R.drawable.ic_pause);
-                }
-            }
-        });
-
-        imgPlayPause.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
