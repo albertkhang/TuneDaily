@@ -1,12 +1,10 @@
 package com.albertkhang.tunedaily.activities;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.viewpager.widget.ViewPager;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -44,6 +42,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Calendar;
+
 import cn.nodemedia.NodePlayer;
 import cn.nodemedia.NodePlayerDelegate;
 
@@ -78,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
     private static final String STREAMING_URL = "rtmp://45.76.150.28/live/android";
 
     private static boolean isJoinStream = true;
+
+    private static long lastBackPress = 0;
+    private static final long BACK_PRESS_INTERVAL = 3000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -365,5 +368,15 @@ public class MainActivity extends AppCompatActivity {
 
         nodePlayer.release();
         nodePlayer = null;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (Calendar.getInstance().getTimeInMillis() - lastBackPress <= BACK_PRESS_INTERVAL) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(this, "Press back again to exit.", Toast.LENGTH_LONG).show();
+            lastBackPress = Calendar.getInstance().getTimeInMillis();
+        }
     }
 }
