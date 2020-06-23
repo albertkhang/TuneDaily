@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +32,15 @@ public class PlaylistMoreFragment extends BottomSheetDialogFragment {
     private RoundImageView imgCover;
     private TextView txtTitle;
     private ConstraintLayout delete_playlist_frame;
+    private LinearLayout root_view;
+    private TextView txtLibrary;
+    private TextView txtPlaylist;
+    private TextView txtDownload;
+    private TextView txtDeletePlaylist;
+    private ImageView imgLibrary;
+    private ImageView imgPlaylist;
+    private ImageView imgDownload;
+    private ImageView imgDeletePlaylist;
     private SettingManager settingManager = SettingManager.getInstance(getContext());
 
     public PlaylistMoreFragment(Playlist playlist) {
@@ -72,6 +83,54 @@ public class PlaylistMoreFragment extends BottomSheetDialogFragment {
         imgCover = view.findViewById(R.id.imgCover);
         txtTitle = view.findViewById(R.id.txtTitle);
         delete_playlist_frame = view.findViewById(R.id.delete_playlist_frame);
+        root_view = view.findViewById(R.id.root_view);
+        txtLibrary = view.findViewById(R.id.txtLibrary);
+        txtPlaylist = view.findViewById(R.id.txtPlaylist);
+        txtDownload = view.findViewById(R.id.txtDownload);
+        txtDeletePlaylist = view.findViewById(R.id.txtDeletePlaylist);
+        imgLibrary = view.findViewById(R.id.imgLibrary);
+        imgPlaylist = view.findViewById(R.id.imgPlaylist);
+        imgDownload = view.findViewById(R.id.imgDownload);
+        imgDeletePlaylist = view.findViewById(R.id.imgDeletePlaylist);
+
+        updateTheme();
+    }
+
+    private void updateTheme() {
+        SettingManager settingManager = SettingManager.getInstance(getContext());
+        if (settingManager.isDarkTheme()) {
+            root_view.setBackgroundColor(getResources().getColor(R.color.colorDark1));
+
+            txtTitle.setTextColor(getResources().getColor(R.color.colorLight1));
+
+            imgLibrary.setColorFilter(getResources().getColor(R.color.colorLight5));
+            txtLibrary.setTextColor(getResources().getColor(R.color.colorLight1));
+
+            imgPlaylist.setColorFilter(getResources().getColor(R.color.colorLight5));
+            txtPlaylist.setTextColor(getResources().getColor(R.color.colorLight1));
+
+            imgDownload.setColorFilter(getResources().getColor(R.color.colorLight5));
+            txtDownload.setTextColor(getResources().getColor(R.color.colorLight1));
+
+            imgDeletePlaylist.setColorFilter(getResources().getColor(R.color.colorLight5));
+            txtDeletePlaylist.setTextColor(getResources().getColor(R.color.colorLight1));
+        } else {
+            root_view.setBackgroundColor(getResources().getColor(R.color.colorLight1));
+
+            txtTitle.setTextColor(getResources().getColor(R.color.colorDark1));
+
+            imgLibrary.setColorFilter(getResources().getColor(R.color.colorDark5));
+            txtLibrary.setTextColor(getResources().getColor(R.color.colorDark1));
+
+            imgPlaylist.setColorFilter(getResources().getColor(R.color.colorDark5));
+            txtPlaylist.setTextColor(getResources().getColor(R.color.colorDark1));
+
+            imgDownload.setColorFilter(getResources().getColor(R.color.colorDark5));
+            txtDownload.setTextColor(getResources().getColor(R.color.colorDark1));
+
+            imgDeletePlaylist.setColorFilter(getResources().getColor(R.color.colorDark5));
+            txtDeletePlaylist.setTextColor(getResources().getColor(R.color.colorDark1));
+        }
     }
 
     private void addEvent() {
