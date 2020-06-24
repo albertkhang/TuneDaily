@@ -99,11 +99,17 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
     private static int lastPressSkipToPrevious = 0;
     private static final int SKIP_TO_PREVIOUS_INTERVAL = 10000;
 
+    private static Track mRecentlyDeletedItem;
+    private static int mRecentlyDeletedItemPosition;
+
     public static ArrayList<Track> getCurrentPlaylist() {
         return tracks;
     }
 
     public static int removeFromCurrentPlaylist(int position) {
+        mRecentlyDeletedItemPosition = position;
+        mRecentlyDeletedItem = getCurrentPlaylist().get(position);
+
         if (currentTrackPosition > position) {
             currentTrackPosition--;
             tracks.remove(position);
@@ -116,6 +122,14 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         }
 
         return -1;//equal
+    }
+
+    public static void undoDeleteFromCurrentPlaylist() {
+        tracks.add(mRecentlyDeletedItemPosition, mRecentlyDeletedItem);
+
+        if (currentTrackPosition >= mRecentlyDeletedItemPosition) {
+            currentTrackPosition++;
+        }
     }
 
     public static int getCurrentPositionPlayer() {

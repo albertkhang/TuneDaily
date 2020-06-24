@@ -46,6 +46,10 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
         notifyDataSetChanged();
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public interface OnMoreListener {
         void onMoreListener(View view, int position);
     }
@@ -54,16 +58,6 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
 
     public void setOnMoreListener(OnMoreListener onMoreListener) {
         this.onMoreListener = onMoreListener;
-    }
-
-    public interface OnRemoveIdFromPlaylist {
-        void onRemoveIdFromPlaylist(View view, int position);
-    }
-
-    private OnRemoveIdFromPlaylist onRemoveIdFromPlaylist;
-
-    public void setOnRemoveIdFromPlaylist(OnRemoveIdFromPlaylist onRemoveIdFromPlaylist) {
-        this.onRemoveIdFromPlaylist = onRemoveIdFromPlaylist;
     }
 
     @NonNull
@@ -87,10 +81,7 @@ public class TrackAdapter extends RecyclerView.Adapter<TrackAdapter.ViewHolder> 
         holder.imgMore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                onMoreListener.onMoreListener(holder.itemView, position);
-                if (onRemoveIdFromPlaylist != null) {
-                    onRemoveIdFromPlaylist.onRemoveIdFromPlaylist(view, position);
-                }
+                onMoreListener.onMoreListener(holder.itemView, position);
             }
         });
 

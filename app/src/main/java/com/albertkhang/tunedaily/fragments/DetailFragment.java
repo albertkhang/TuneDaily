@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -15,17 +16,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.callbacks.SwipeToDeleteCallback;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
 import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
-import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.models.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,7 +58,7 @@ public class DetailFragment extends Fragment implements Serializable {
     private FrameLayout bottom_gradient_frame;
 
     private ShimmerFrameLayout shimmer_similar_songs;
-    private RecyclerView rvSimilarSongs;
+    private RecyclerView rvCurrentPlaylist;
     private TrackAdapter playlistsAdapter;
 
     private Track currentTrack;
@@ -103,10 +104,10 @@ public class DetailFragment extends Fragment implements Serializable {
         bottom_gradient_frame = view.findViewById(R.id.bottom_gradient_frame);
 
         shimmer_similar_songs = view.findViewById(R.id.shimmer_similar_songs);
-        rvSimilarSongs = view.findViewById(R.id.rvSimilarSongs);
+        rvCurrentPlaylist = view.findViewById(R.id.rvSimilarSongs);
 
         playlistsAdapter = new TrackAdapter(getContext());
-        rvSimilarSongs.setAdapter(playlistsAdapter);
+        rvCurrentPlaylist.setAdapter(playlistsAdapter);
 
         LinearLayoutManager managerSongs = new LinearLayoutManager(getContext()) {
             @Override
@@ -115,8 +116,8 @@ public class DetailFragment extends Fragment implements Serializable {
             }
         };
         managerSongs.setOrientation(LinearLayoutManager.VERTICAL);
-        rvSimilarSongs.setLayoutManager(managerSongs);
-        rvSimilarSongs.setNestedScrollingEnabled(false);
+        rvCurrentPlaylist.setLayoutManager(managerSongs);
+        rvCurrentPlaylist.setNestedScrollingEnabled(false);
 
         updateTheme();
 //        updateSimilarSongs();
@@ -133,27 +134,34 @@ public class DetailFragment extends Fragment implements Serializable {
 
     private void updateCurrentPlaylist() {
         shimmer_similar_songs.setVisibility(View.GONE);
-        rvSimilarSongs.setVisibility(View.VISIBLE);
+        rvCurrentPlaylist.setVisibility(View.VISIBLE);
         playlistsAdapter.update(MediaPlaybackService.getCurrentPlaylist());
     }
 
     private void addEvent() {
-        playlistsAdapter.setOnRemoveIdFromPlaylist(new TrackAdapter.OnRemoveIdFromPlaylist() {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(playlistsAdapter);
+        swipeToDeleteCallback.setOnRemoveCompleteListener(new SwipeToDeleteCallback.OnRemoveCompleteListener() {
             @Override
-            public void onRemoveIdFromPlaylist(View view, int position) {
-                switch (MediaPlaybackService.removeFromCurrentPlaylist(position)) {
-                    case -1://equal
-                        Toast.makeText(getContext(), "Can't remove playing song", Toast.LENGTH_LONG).show();
-                        break;
+            public void onRemoveCompleteListener(String trackName) {
+                showUndoSnackbar(trackName);
+            }
+        });
 
-                    case 0://No change currentTrackPosition
-                    case 1://currentTrackPosition -1
-                        Toast.makeText(getContext(), "Removed", Toast.LENGTH_LONG).show();
-                        break;
-                }
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchHelper.attachToRecyclerView(rvCurrentPlaylist);
+    }
+
+    private void showUndoSnackbar(String trackName) {
+        Snackbar snackbar = Snackbar.make(getView(), "Deleted \"" + trackName + "\"", Snackbar.LENGTH_LONG);
+        snackbar.setAction("undo delete", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MediaPlaybackService.undoDeleteFromCurrentPlaylist();
                 playlistsAdapter.update(MediaPlaybackService.getCurrentPlaylist());
             }
         });
+        snackbar.show();
     }
 
     private void updateTheme() {
