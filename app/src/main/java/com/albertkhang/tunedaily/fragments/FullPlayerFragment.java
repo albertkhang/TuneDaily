@@ -42,6 +42,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class FullPlayerFragment extends Fragment implements Serializable {
     private static final String LOG_TAG = "FullPlayerFragment";
@@ -289,7 +290,7 @@ public class FullPlayerFragment extends Fragment implements Serializable {
             Log.d(LOG_TAG, "title: " + title);
             Log.d(LOG_TAG, "artist: " + artist);
 
-            Glide.with(getActivity()).load(cover).placeholder(R.color.colorLight5).into(imgCover);
+            Glide.with(requireActivity()).load(cover).placeholder(R.color.colorLight5).into(imgCover);
             txtTitle.setText(title);
             txtArtist.setText(artist);
         }

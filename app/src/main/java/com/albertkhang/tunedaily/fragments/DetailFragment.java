@@ -143,7 +143,9 @@ public class DetailFragment extends Fragment implements Serializable {
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(playlistsAdapter);
         swipeToDeleteCallback.setOnSwipedListener(new SwipeToDeleteCallback.OnSwipedListener() {
             @Override
-            public void onSwipedListener(String trackName, int position) {
+            public void onSwipedListener(int position) {
+                String trackName = MediaPlaybackService.getCurrentPlaylist().get(position).getTitle();
+
                 switch (MediaPlaybackService.removeFromCurrentPlaylist(position)) {
                     case -1://equal
                         Toast.makeText(getContext(), "Can't remove playing song", Toast.LENGTH_LONG).show();

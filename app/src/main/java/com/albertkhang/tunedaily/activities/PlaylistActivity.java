@@ -33,6 +33,7 @@ import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.models.Playlist;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.models.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -73,6 +74,10 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     private MediaBrowserCompat.ConnectionCallback connectionCallback;
     private MediaControllerCompat.Callback controllerCallback;
     private MediaControllerCompat mediaController;
+
+    private Track mRecentlyDeletedTrack;
+    private int mRecentlyDeletedTrackPosition;
+    private int mRecentlyDeletedIdPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -295,18 +300,25 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(trackAdapter);
         swipeToDeleteCallback.setOnSwipedListener(new SwipeToDeleteCallback.OnSwipedListener() {
             @Override
-            public void onSwipedListener(String trackName, int position) {
-                switch (MediaPlaybackService.removeFromCurrentPlaylist(position)) {
-                    case -1://equal
-                        Toast.makeText(PlaylistActivity.this, "Can't remove playing song", Toast.LENGTH_LONG).show();
-                        break;
+            public void onSwipedListener(int position) {
+                //position: position of track swiped
+                mRecentlyDeletedTrackPosition = position;
+                mRecentlyDeletedTrack = trackList.get(position);
+                mRecentlyDeletedIdPosition = trackList.get(position).getId();
 
-                    case 0://No change currentTrackPosition
-                    case 1://currentTrackPosition -1
-                        showUndoSnackbar(trackName);
-                        break;
-                }
-                trackAdapter.update(MediaPlaybackService.getCurrentPlaylist());
+                String trackName = trackList.get(position).getTitle();
+                String playlistName = currentPlaylist.getTitle();
+
+//                Log.d("testdelete", "playlistName: " + playlistName
+//                        + ", trackName: " + trackName
+//                        + ", position: " + position + ", size: " + trackList.size());
+
+                trackList.remove(position);
+                trackIds.remove(position);
+                trackAdapter.update(trackList);
+                PlaylistManager.getInstance().removeFromPlaylistTracks(playlistName, position);
+
+                showUndoSnackbar(playlistName);
             }
         });
 
@@ -315,13 +327,15 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
         itemTouchHelper.attachToRecyclerView(rvTracks);
     }
 
-    private void showUndoSnackbar(String trackName) {
-        Snackbar snackbar = Snackbar.make(getCurrentFocus(), "Deleted \"" + trackName + "\"", Snackbar.LENGTH_LONG);
+    private void showUndoSnackbar(final String trackName) {
+        Snackbar snackbar = Snackbar.make(root_view, "Deleted \"" + trackName + "\"", Snackbar.LENGTH_LONG);
         snackbar.setAction("undo delete", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                MediaPlaybackService.undoDeleteFromCurrentPlaylist();
-                trackAdapter.update(MediaPlaybackService.getCurrentPlaylist());
+                trackList.add(mRecentlyDeletedTrackPosition, mRecentlyDeletedTrack);
+                trackIds.add(mRecentlyDeletedTrackPosition, mRecentlyDeletedIdPosition);
+                PlaylistManager.getInstance().setPlaylistTracks(trackName, trackIds);
+                trackAdapter.update(trackList);
             }
         });
         snackbar.show();

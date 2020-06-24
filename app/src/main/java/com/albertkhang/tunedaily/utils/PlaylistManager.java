@@ -280,4 +280,15 @@ public class PlaylistManager {
     public ArrayList<Integer> getPlaylistTracks(String name) {
         return Paper.book(name).read(PLAYLIST.TRACKS, new ArrayList<Integer>());
     }
+
+    public void removeFromPlaylistTracks(String playlistName, int deletePosition) {
+        ArrayList<Integer> integers = getPlaylistTracks(playlistName);
+        integers.remove(deletePosition);
+
+        Paper.book(playlistName).write(PLAYLIST.TRACKS, integers);
+    }
+
+    public void setPlaylistTracks(String playlistName, ArrayList<Integer> tracks) {
+        Paper.book(playlistName).write(PLAYLIST.TRACKS, tracks);
+    }
 }

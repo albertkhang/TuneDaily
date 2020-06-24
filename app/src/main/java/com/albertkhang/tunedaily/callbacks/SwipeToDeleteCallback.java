@@ -67,12 +67,12 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     @Override
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getAdapterPosition();
-        String trackName = MediaPlaybackService.getCurrentPlaylist().get(position).getTitle();
-        onSwipedListener.onSwipedListener(trackName, position);
+
+        onSwipedListener.onSwipedListener(position);
     }
 
     public interface OnSwipedListener {
-        void onSwipedListener(String trackName, int position);
+        void onSwipedListener(int position);
     }
 
     private OnSwipedListener onSwipedListener;
