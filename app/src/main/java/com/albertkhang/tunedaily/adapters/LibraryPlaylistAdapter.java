@@ -102,6 +102,7 @@ public class LibraryPlaylistAdapter extends RecyclerView.Adapter<LibraryPlaylist
                     intent.putExtra("ids", bundle);
                     intent.putExtra("title", playlists.get(position).getTitle());
                     intent.putExtra("cover", playlists.get(position).getCover());
+                    intent.putExtra("useSwipeToDelete", true);
                     context.startActivity(intent);
                 }
             }

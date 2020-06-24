@@ -269,7 +269,9 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     }
 
     private void addEvent() {
-        initialSwipeToDelete();
+        if (getIntent().getBooleanExtra("useSwipeToDelete", false)) {
+            initialSwipeToDelete();
+        }
 
         imgCollapse.setOnClickListener(new View.OnClickListener() {
             @Override
