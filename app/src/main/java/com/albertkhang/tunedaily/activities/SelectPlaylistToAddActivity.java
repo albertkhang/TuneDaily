@@ -77,10 +77,13 @@ public class SelectPlaylistToAddActivity extends AppCompatActivity {
                     ArrayList list = PlaylistManager.getInstance().getPlaylistTracks(playlistname);
                     if (list != null) {
 //                        Log.d("playlisttest", "run");
-                        PlaylistManager.getInstance().addToFirstPlaylist(playlistname, id);
+                        if (!PlaylistManager.getInstance().isContainIPlaylist(id, playlistname)) {
+                            PlaylistManager.getInstance().addToFirstPlaylist(playlistname, id);
+                            Toast.makeText(SelectPlaylistToAddActivity.this, "Added \"" + songName + "\" into \"" + playlistNames.get(position) + "\"", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(SelectPlaylistToAddActivity.this, "\"" + songName + "\" existed into \"" + playlistname + "\"", Toast.LENGTH_LONG).show();
+                        }
                     }
-
-                    Toast.makeText(SelectPlaylistToAddActivity.this, "Added \"" + songName + "\" into \"" + playlistNames.get(position) + "\"", Toast.LENGTH_LONG).show();
                 }
                 finish();
             }

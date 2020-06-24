@@ -165,6 +165,12 @@ public class PlaylistManager {
         return tracks.contains(id);
     }
 
+    public boolean isContainIPlaylist(int id, String playlistName) {
+        List<Integer> tracks = getPlaylistTracks(playlistName);
+//        Log.d(playlistName, "tracks: " + tracks.toString());
+        return tracks.contains(id);
+    }
+
     public List<Integer> getLikedSongsIds() {
         return Paper.book("liked_songs").read(PLAYLIST.TRACKS, new ArrayList<Integer>());
     }
