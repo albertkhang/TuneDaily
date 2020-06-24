@@ -2,6 +2,7 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,9 +19,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.callbacks.SwipeToDeleteCallback;
 import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.events.UpdateDownloadedTrack;
 import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
@@ -30,9 +33,11 @@ import com.albertkhang.tunedaily.fragments.TrackMoreFragment;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
 import com.albertkhang.tunedaily.utils.FirebaseManager;
 import com.albertkhang.tunedaily.models.Playlist;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.models.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -69,6 +74,10 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     private MediaBrowserCompat.ConnectionCallback connectionCallback;
     private MediaControllerCompat.Callback controllerCallback;
     private MediaControllerCompat mediaController;
+
+    private Track mRecentlyDeletedTrack;
+    private int mRecentlyDeletedTrackPosition;
+    private int mRecentlyDeletedIdPosition;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -260,6 +269,8 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     }
 
     private void addEvent() {
+        initialSwipeToDelete();
+
         imgCollapse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -283,6 +294,51 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
                 }
             }
         });
+    }
+
+    private void initialSwipeToDelete() {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(trackAdapter);
+        swipeToDeleteCallback.setOnSwipedListener(new SwipeToDeleteCallback.OnSwipedListener() {
+            @Override
+            public void onSwipedListener(int position) {
+                //position: position of track swiped
+                mRecentlyDeletedTrackPosition = position;
+                mRecentlyDeletedTrack = trackList.get(position);
+                mRecentlyDeletedIdPosition = trackList.get(position).getId();
+
+                String trackName = trackList.get(position).getTitle();
+                String playlistName = currentPlaylist.getTitle();
+
+//                Log.d("testdelete", "playlistName: " + playlistName
+//                        + ", trackName: " + trackName
+//                        + ", position: " + position + ", size: " + trackList.size());
+
+                trackList.remove(position);
+                trackIds.remove(position);
+                trackAdapter.update(trackList);
+                PlaylistManager.getInstance().removeFromPlaylistTracks(playlistName, position);
+
+                showUndoSnackbar(playlistName);
+            }
+        });
+
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchHelper.attachToRecyclerView(rvTracks);
+    }
+
+    private void showUndoSnackbar(final String trackName) {
+        Snackbar snackbar = Snackbar.make(root_view, "Deleted \"" + trackName + "\"", Snackbar.LENGTH_LONG);
+        snackbar.setAction("undo delete", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trackList.add(mRecentlyDeletedTrackPosition, mRecentlyDeletedTrack);
+                trackIds.add(mRecentlyDeletedTrackPosition, mRecentlyDeletedIdPosition);
+                PlaylistManager.getInstance().setPlaylistTracks(trackName, trackIds);
+                trackAdapter.update(trackList);
+            }
+        });
+        snackbar.show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

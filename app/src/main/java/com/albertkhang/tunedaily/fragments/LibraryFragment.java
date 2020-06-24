@@ -271,9 +271,9 @@ public class LibraryFragment extends Fragment {
             String cover = playlistManager.getPlaylistCover(allPlaylist.get(i));
             ArrayList<Integer> tracks = playlistManager.getPlaylistTracks(allPlaylist.get(i));
 
-            Log.d(LOG_TAG, "[" + i + "] title: " + title);
-            Log.d(LOG_TAG, "[" + i + "] cover: " + cover);
-            Log.d(LOG_TAG, "[" + i + "] tracks: " + tracks);
+//            Log.d(LOG_TAG, "[" + i + "] title: " + title);
+//            Log.d(LOG_TAG, "[" + i + "] cover: " + cover);
+//            Log.d(LOG_TAG, "[" + i + "] tracks: " + tracks);
 
             playlists.add(new Playlist(-1, title, cover, tracks));
         }
