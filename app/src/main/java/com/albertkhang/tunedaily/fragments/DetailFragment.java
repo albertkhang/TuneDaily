@@ -15,13 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
 import com.albertkhang.tunedaily.events.UpdateCurrentTrackEvent;
 import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
 import com.albertkhang.tunedaily.services.MediaPlaybackService;
-import com.albertkhang.tunedaily.utils.FirebaseManager;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.models.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -31,7 +32,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class DetailFragment extends Fragment implements Serializable {
     private static final String LOG_TAG = "DetailFragment";
@@ -138,6 +138,22 @@ public class DetailFragment extends Fragment implements Serializable {
     }
 
     private void addEvent() {
+        playlistsAdapter.setOnRemoveIdFromPlaylist(new TrackAdapter.OnRemoveIdFromPlaylist() {
+            @Override
+            public void onRemoveIdFromPlaylist(View view, int position) {
+                switch (MediaPlaybackService.removeFromCurrentPlaylist(position)) {
+                    case -1://equal
+                        Toast.makeText(getContext(), "Can't remove playing song", Toast.LENGTH_LONG).show();
+                        break;
+
+                    case 0://No change currentTrackPosition
+                    case 1://currentTrackPosition -1
+                        Toast.makeText(getContext(), "Removed", Toast.LENGTH_LONG).show();
+                        break;
+                }
+                playlistsAdapter.update(MediaPlaybackService.getCurrentPlaylist());
+            }
+        });
     }
 
     private void updateTheme() {

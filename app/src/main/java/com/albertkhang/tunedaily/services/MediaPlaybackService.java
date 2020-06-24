@@ -103,6 +103,21 @@ public class MediaPlaybackService extends MediaBrowserServiceCompat {
         return tracks;
     }
 
+    public static int removeFromCurrentPlaylist(int position) {
+        if (currentTrackPosition > position) {
+            currentTrackPosition--;
+            tracks.remove(position);
+            return 1;//currentTrackPosition -1
+        }
+
+        if (currentTrackPosition < position) {
+            tracks.remove(position);
+            return 0;//No change currentTrackPosition
+        }
+
+        return -1;//equal
+    }
+
     public static int getCurrentPositionPlayer() {
         if (player != null) {
             return player.getCurrentPosition();
