@@ -40,6 +40,7 @@ import com.albertkhang.tunedaily.events.UpdateTitleArtistEvent;
 import com.albertkhang.tunedaily.models.Track;
 import com.albertkhang.tunedaily.networks.CheckFileSize;
 import com.albertkhang.tunedaily.utils.DownloadTrackManager;
+import com.albertkhang.tunedaily.utils.PlaylistManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;

@@ -2,6 +2,7 @@ package com.albertkhang.tunedaily.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,9 +19,11 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
+import com.albertkhang.tunedaily.callbacks.SwipeToDeleteCallback;
 import com.albertkhang.tunedaily.events.ShowMiniplayerEvent;
 import com.albertkhang.tunedaily.events.UpdateDownloadedTrack;
 import com.albertkhang.tunedaily.events.UpdateFavouriteTrack;
@@ -33,6 +36,7 @@ import com.albertkhang.tunedaily.models.Playlist;
 import com.albertkhang.tunedaily.utils.SettingManager;
 import com.albertkhang.tunedaily.models.Track;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -260,6 +264,8 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
     }
 
     private void addEvent() {
+        initialSwipeToDelete();
+
         imgCollapse.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -283,6 +289,42 @@ public class PlaylistActivity extends AppCompatActivity implements Serializable 
                 }
             }
         });
+    }
+
+    private void initialSwipeToDelete() {
+        SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(trackAdapter);
+        swipeToDeleteCallback.setOnSwipedListener(new SwipeToDeleteCallback.OnSwipedListener() {
+            @Override
+            public void onSwipedListener(String trackName, int position) {
+                switch (MediaPlaybackService.removeFromCurrentPlaylist(position)) {
+                    case -1://equal
+                        Toast.makeText(PlaylistActivity.this, "Can't remove playing song", Toast.LENGTH_LONG).show();
+                        break;
+
+                    case 0://No change currentTrackPosition
+                    case 1://currentTrackPosition -1
+                        showUndoSnackbar(trackName);
+                        break;
+                }
+                trackAdapter.update(MediaPlaybackService.getCurrentPlaylist());
+            }
+        });
+
+        ItemTouchHelper itemTouchHelper = new
+                ItemTouchHelper(swipeToDeleteCallback);
+        itemTouchHelper.attachToRecyclerView(rvTracks);
+    }
+
+    private void showUndoSnackbar(String trackName) {
+        Snackbar snackbar = Snackbar.make(getCurrentFocus(), "Deleted \"" + trackName + "\"", Snackbar.LENGTH_LONG);
+        snackbar.setAction("undo delete", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                MediaPlaybackService.undoDeleteFromCurrentPlaylist();
+                trackAdapter.update(MediaPlaybackService.getCurrentPlaylist());
+            }
+        });
+        snackbar.show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

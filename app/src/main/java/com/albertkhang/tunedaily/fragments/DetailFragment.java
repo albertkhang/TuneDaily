@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.albertkhang.tunedaily.R;
 import com.albertkhang.tunedaily.adapters.TrackAdapter;
@@ -140,10 +141,20 @@ public class DetailFragment extends Fragment implements Serializable {
 
     private void addEvent() {
         SwipeToDeleteCallback swipeToDeleteCallback = new SwipeToDeleteCallback(playlistsAdapter);
-        swipeToDeleteCallback.setOnRemoveCompleteListener(new SwipeToDeleteCallback.OnRemoveCompleteListener() {
+        swipeToDeleteCallback.setOnSwipedListener(new SwipeToDeleteCallback.OnSwipedListener() {
             @Override
-            public void onRemoveCompleteListener(String trackName) {
-                showUndoSnackbar(trackName);
+            public void onSwipedListener(String trackName, int position) {
+                switch (MediaPlaybackService.removeFromCurrentPlaylist(position)) {
+                    case -1://equal
+                        Toast.makeText(getContext(), "Can't remove playing song", Toast.LENGTH_LONG).show();
+                        break;
+
+                    case 0://No change currentTrackPosition
+                    case 1://currentTrackPosition -1
+                        showUndoSnackbar(trackName);
+                        break;
+                }
+                playlistsAdapter.update(MediaPlaybackService.getCurrentPlaylist());
             }
         });
 

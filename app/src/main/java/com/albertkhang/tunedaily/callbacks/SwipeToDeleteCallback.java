@@ -68,27 +68,16 @@ public class SwipeToDeleteCallback extends ItemTouchHelper.SimpleCallback {
     public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
         int position = viewHolder.getAdapterPosition();
         String trackName = MediaPlaybackService.getCurrentPlaylist().get(position).getTitle();
-
-        switch (MediaPlaybackService.removeFromCurrentPlaylist(position)) {
-            case -1://equal
-                Toast.makeText(mAdapter.getContext(), "Can't remove playing song", Toast.LENGTH_LONG).show();
-                break;
-
-            case 0://No change currentTrackPosition
-            case 1://currentTrackPosition -1
-                onRemoveCompleteListener.onRemoveCompleteListener(trackName);
-                break;
-        }
-        mAdapter.update(MediaPlaybackService.getCurrentPlaylist());
+        onSwipedListener.onSwipedListener(trackName, position);
     }
 
-    public interface OnRemoveCompleteListener {
-        void onRemoveCompleteListener(String trackName);
+    public interface OnSwipedListener {
+        void onSwipedListener(String trackName, int position);
     }
 
-    private OnRemoveCompleteListener onRemoveCompleteListener;
+    private OnSwipedListener onSwipedListener;
 
-    public void setOnRemoveCompleteListener(OnRemoveCompleteListener onRemoveCompleteListener) {
-        this.onRemoveCompleteListener = onRemoveCompleteListener;
+    public void setOnSwipedListener(OnSwipedListener onSwipedListener) {
+        this.onSwipedListener = onSwipedListener;
     }
 }
