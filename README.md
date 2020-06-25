@@ -72,7 +72,10 @@ Về cách sử dụng, TuneDaily cũng có cách sử dụng giống như các 
    URL: rtmp://45.76.150.28/live
    Stream key: android
 ```
-* URL để lắng nghe stream: rtmp://45.76.150.28/live/android
+* URL để lắng nghe stream
+```
+   rtmp://45.76.150.28/live/android
+```
 
 ## Thư viện ##
 1. [shimmer-android](https://github.com/facebook/shimmer-android): tạo animation trong lúc download dữ liệu.
