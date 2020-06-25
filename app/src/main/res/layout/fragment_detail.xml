@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+tools:context=".fragments.DetailFragment">
+
+<androidx.core.widget.NestedScrollView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dimenPaddingBottomEnd">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/detail_frame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/round_dark_background"
+
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <TextView
+                android:id="@+id/txtSongTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/song_detail"
+                style="@style/DetailTitleStyle"
+
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"/>
+
+            <TextView
+                android:id="@+id/txtAlbumTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/album_detail"
+                style="@style/DetailTitleStyle"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtSongTitle"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/txtArtistTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/artist_detail"
+                style="@style/DetailTitleStyle"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtAlbumTitle"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/txtGenreTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/genre_detail"
+                style="@style/DetailTitleStyle"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtArtistTitle"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/txtComposerTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/composer_detail"
+                style="@style/DetailTitleStyle"
+
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/txtGenreTitle"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/txtSong"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="songName"
+                style="@style/DetailValueStyle"
+
+                app:layout_constraintTop_toTopOf="@id/txtSongTitle"
+                app:layout_constraintBottom_toBottomOf="@id/txtSongTitle"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="100dp"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/txtAlbum"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="playlist"
+                style="@style/DetailValueStyle"
+
+                app:layout_constraintTop_toTopOf="@id/txtAlbumTitle"
+                app:layout_constraintBottom_toBottomOf="@id/txtAlbumTitle"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="100dp"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/txtArtist"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="artist"
+                style="@style/DetailValueStyle"
+
+                app:layout_constraintTop_toTopOf="@id/txtArtistTitle"
+                app:layout_constraintBottom_toBottomOf="@id/txtArtistTitle"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="100dp"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/txtGenre"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="genre"
+                style="@style/DetailValueStyle"
+
+                app:layout_constraintTop_toTopOf="@id/txtGenreTitle"
+                app:layout_constraintBottom_toBottomOf="@id/txtGenreTitle"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="100dp"
+                app:layout_constraintRight_toRightOf="parent"/>
+
+            <TextView
+                android:id="@+id/txtComposer"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="composer"
+                style="@style/DetailValueStyle"
+
+                app:layout_constraintTop_toTopOf="@id/txtComposerTitle"
+                app:layout_constraintBottom_toBottomOf="@id/txtComposerTitle"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginLeft="100dp"
+                app:layout_constraintRight_toRightOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/txtSimilarSongs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="CURRENT PLAYLIST"
+            style="@style/ListHeader"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/detail_frame"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"/>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_similar_songs"
+            shimmer_duration="@integer/integerShimmerDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+            app:layout_constraintTop_toBottomOf="@id/txtSimilarSongs"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <include layout="@layout/item_shimmer_list" />
+                <include layout="@layout/item_shimmer_list" />
+                <include layout="@layout/item_shimmer_list" />
+                <include layout="@layout/item_shimmer_list" />
+                <include layout="@layout/item_shimmer_list" />
+            </LinearLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSimilarSongs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+            android:visibility="gone"
+
+            app:layout_constraintTop_toBottomOf="@id/txtSimilarSongs"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
+
+<FrameLayout
+    android:id="@+id/bottom_gradient_frame"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:background="@drawable/lyric_hidden_bottom_gradient_dark"
+
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"/>
+
+<FrameLayout
+    android:id="@+id/top_gradient_frame"
+    android:layout_width="match_parent"
+    android:layout_height="30dp"
+    android:layout_alignParentTop="true"
+    android:background="@drawable/lyric_hidden_top_gradient_dark"
+
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintLeft_toLeftOf="parent"
+    app:layout_constraintRight_toRightOf="parent"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

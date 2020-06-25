@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.SearchFragment"
+    android:background="@color/colorDark1"
+    android:id="@+id/root_view">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="@dimen/dimenPaddingBottomEnd">
+
+            <TextView
+                android:id="@+id/txtSearchTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/search"
+                android:textSize="40sp"
+                android:textColor="@color/colorLight1"
+                android:textStyle="bold"
+
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="110dp"/>
+            
+            <FrameLayout
+                android:id="@+id/search_frame"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+
+                android:background="@drawable/search_background"
+
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="28dp">
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:id="@+id/imgSearch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:src="@drawable/ic_search_in_searchbox"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="10dp"/>
+
+                    <TextView
+                        android:id="@+id/txtSearchText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:text="@string/artist_songs_or_album"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/colorDark1"/>
+                </LinearLayout>
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/txtRandomArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/random_artists"
+                style="@style/ListHeader"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="40dp"/>
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_random_artists"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                shimmer_duration="@integer/integerShimmerDuration"
+                android:layout_marginLeft="10dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <include layout="@layout/item_shimmer_album"/>
+                    <include layout="@layout/item_shimmer_album"/>
+                    <include layout="@layout/item_shimmer_album"/>
+                    <include layout="@layout/item_shimmer_album"/>
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRandomArtists"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                android:layout_marginLeft="10dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/txtRandomTracks"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:text="@string/random_songs"
+                style="@style/ListHeader"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="@dimen/dimenPaddingBetweenFrame"/>
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_random_songs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                shimmer_duration="@integer/integerShimmerDuration"
+                android:layout_marginLeft="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include layout="@layout/item_shimmer_list"/>
+                    <include layout="@layout/item_shimmer_list"/>
+                    <include layout="@layout/item_shimmer_list"/>
+                    <include layout="@layout/item_shimmer_list"/>
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvRandomSongs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                android:layout_marginLeft="20dp"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</FrameLayout>

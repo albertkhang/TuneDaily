@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TuneDaily</string>
+    <string name="vietnamese">Tiếng Việt</string>
+    <string name="english">Tiếng Anh</string>
+    <string name="language">Ngôn Ngữ</string>
+    <string name="theme">Giao Diện</string>
+    <string name="popular_albums">NHỮNG ALBUM PHỔ BIẾN</string>
+    <string name="best_of_artists">NHỮNG NGHỆ SỸ NỔI TIẾNG</string>
+    <string name="settings">CÀI ĐẶT</string>
+    <string name="top_chart">NHỮNG BÀI HÁT HÀNG ĐẦU</string>
+    <string name="search">Tìm Kiếm</string>
+    <string name="artist_songs_or_album">Nghệ sỹ, bài hát hoặc playlist</string>
+    <string name="random_artists">NHỮNG NGHỆ SỸ NGẪU NHIÊN</string>
+    <string name="random_songs">NHỮNG BÀI HÁT NGẪU NHIÊN</string>
+    <string name="library_header">THƯ VIỆN</string>
+    <string name="liked_songs">Những bài hát đã thích</string>
+    <string name="songs_library"> bài hát</string>
+    <string name="create_new_playlist">Tạo danh sách phát mới</string>
+    <string name="add_all_to_library">Thêm tất cả vào thư viện </string>
+    <string name="add_all_to_playlist">Thêm tất cả vào danh sách</string>
+    <string name="add_to_liked_songs">Thêm vào bài hát đã thích</string>
+    <string name="add_to_playlist">Thêm vào danh sách</string>
+    <string name="artist">Nghệ sỹ:</string>
+    <string name="artist_detail">Nghệ sỹ</string>
+    <string name="artists">NGHỆ SỸ</string>
+    <string name="composer_detail">Sáng tác</string>
+    <string name="download">Tải về</string>
+    <string name="download_playlist">Chọn những bài hát để tải</string>
+    <string name="found_0_result">Tìm thấy 0 kết quả.</string>
+    <string name="genre_detail">Thể loại</string>
+    <string name="liked_songs_uppercase">NHỮNG BÀI HÁT ĐÃ THÍCH</string>
+    <string name="name_here">Tên ở đây</string>
+    <string name="search_here">Tìm ở đây</string>
+    <string name="search_menu">Tìm kiếm</string>
+    <string name="shuffle_play">PLAY NGẪU NHIÊN</string>
+    <string name="similar_songs">NHỮNG BÀI HÁT TƯƠNG TỰ</string>
+    <string name="song_detail">Bài hát</string>
+    <string name="song_lyric">Bài hát:</string>
+    <string name="songs">BÀI HÁT</string>
+    <string name="songs_playlist">những bài hát</string>
+    <string name="this_playlist_is_empty">Danh sách này rỗng,</string>
+    <string name="your_results_will_be_shown_here">Kết quả sẽ được hiển thị ở đây.</string>
+    <string name="playlist_name">Tên danh sách phát</string>
+    <string name="create">Tạo</string>
+    <string name="cancel">Hủy</string>
+</resources>

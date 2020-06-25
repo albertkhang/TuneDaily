@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="10dp">
+
+    <com.albertkhang.tunedaily.views.RoundImageView
+        android:id="@+id/imgCover"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:src="@color/colorLight5"
+        android:scaleType="fitCenter"
+
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/imgCover"
+        app:layout_constraintLeft_toRightOf="@id/imgCover"
+        app:layout_constraintTop_toTopOf="@id/imgCover">
+
+        <com.albertkhang.tunedaily.views.ShimmerRoundImageView
+            android:id="@+id/txtAlbum"
+            android:layout_width="160dp"
+            android:layout_height="16dp"
+            android:src="@color/colorLight4"
+
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgCover" />
+
+        <com.albertkhang.tunedaily.views.ShimmerRoundImageView
+            android:layout_width="120dp"
+            android:layout_height="14dp"
+            android:layout_marginTop="6dp"
+
+            android:src="@color/colorLight5"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtAlbum" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

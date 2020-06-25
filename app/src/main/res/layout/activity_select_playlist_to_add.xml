@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.SelectPlaylistToAddActivity"
+    android:background="@color/colorDark1">
+
+    <RelativeLayout
+        android:id="@+id/top_frame"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimenTopBackgroundHeight"
+        android:background="@color/colorDark2">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="1dp"
+            android:layout_marginBottom="3dp"
+            android:src="@drawable/ic_collapse" />
+
+        <TextView
+            android:id="@+id/txtTopBarHeader"
+            style="@style/ListHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_toRightOf="@id/imgBack"
+            android:text="Select a playlist to add" />
+
+    </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"/>
+</LinearLayout>

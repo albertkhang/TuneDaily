@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
+    android:background="@drawable/round_dark_dialog_background"
+    android:paddingTop="30dp"
+    android:paddingBottom="20dp">
+
+    <ImageView
+        android:id="@+id/imgImg"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:src="@drawable/ic_broadcast_dialog"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/txtTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Server is streaming"
+        style="@style/TitleText"
+        android:textSize="18sp"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgImg"
+        android:layout_marginTop="10dp"/>
+
+    <Button
+        android:id="@+id/btnJoinStream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_play_background"
+        android:paddingLeft="60dp"
+        android:paddingRight="60dp"
+        android:text="Join Stream"
+        android:textSize="18sp"
+        android:textColor="@color/colorLight1"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtTitle"
+        android:layout_marginTop="40dp"/>
+
+    <TextView
+        android:id="@+id/txtCancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Listen on my phone"
+        style="@style/TitleText"
+        android:padding="10dp"
+        android:textColor="@color/colorLight3"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnJoinStream"
+        android:layout_marginTop="14dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

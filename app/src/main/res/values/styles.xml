@@ -1,0 +1,127 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="bottomSheetDialogTheme">@style/AppBottomSheetDialogTheme</item>
+    </style>
+    
+    <style name="ListHeader">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TitlePlaylistMore">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="HeaderPlaylist">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="TitleText">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="AlbumTitleText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="DescriptionText">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/colorLight5</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="AlbumDescriptionText">
+        <item name="android:textSize">10sp</item>
+        <item name="android:textColor">@color/colorLight5</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="SettingsTitleText">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="PlaylistName">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="CoverImage">
+        <item name="android:scaleType">fitCenter</item>
+        <item name="android:src">@color/colorLight5</item>
+    </style>
+
+    <style name="tallerBarStyle" parent="@android:style/Widget.SeekBar">
+        <item name="android:indeterminateOnly">false</item>
+        <item name="android:progressDrawable">@android:drawable/progress_horizontal</item>
+        <item name="android:indeterminateDrawable">@android:drawable/progress_horizontal</item>
+        <item name="android:minHeight">8dip</item>
+        <item name="android:maxHeight">20dip</item>
+    </style>
+
+    <style name="LyricTitle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorLight2</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="LyricStyle">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/colorLight2</item>
+    </style>
+
+    <style name="DetailTitleStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorLight4</item>
+    </style>
+
+    <style name="DetailValueStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/colorLight1</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+
+    <style name="RoundCornerDialogFragment" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowBackground">@drawable/round_dark_dialog_background</item>
+    </style>
+
+    <style name="editText" parent="@android:style/Widget.Holo.Light.EditText">
+        <item name="android:textCursorDrawable">@drawable/cursor_edittext_color</item>
+    </style>
+
+    <style name="AppBottomSheetDialogTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/AppModalStyle</item>
+    </style>
+
+    <style name="AppModalStyle"
+        parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/rounded_bottom_sheet_dialog_fragment_dark_background</item>
+    </style>
+</resources>

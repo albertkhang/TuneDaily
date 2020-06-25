@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "898973170527",
+    "firebase_url": "https://dynamic-density-271310.firebaseio.com",
+    "project_id": "dynamic-density-271310",
+    "storage_bucket": "dynamic-density-271310.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:898973170527:android:5c5d7b5edd87a8669fd4ea",
+        "android_client_info": {
+          "package_name": "com.albertkhang.testfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "898973170527-kmqjqaainrts2bdnuule6lejmj5mecib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGBJPVc8kU0_NGQLf30yr4A8cB79p9fmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "898973170527-kmqjqaainrts2bdnuule6lejmj5mecib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:898973170527:android:141ca47136df2a349fd4ea",
+        "android_client_info": {
+          "package_name": "com.albertkhang.tunedaily"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "898973170527-kmqjqaainrts2bdnuule6lejmj5mecib.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDGBJPVc8kU0_NGQLf30yr4A8cB79p9fmE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "898973170527-kmqjqaainrts2bdnuule6lejmj5mecib.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

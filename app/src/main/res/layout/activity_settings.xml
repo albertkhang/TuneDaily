@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.SettingsActivity"
+    android:background="@color/colorDark1"
+    android:id="@+id/root_view">
+
+    <RelativeLayout
+        android:id="@+id/top_frame"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimenTopBackgroundHeight"
+        android:background="@color/colorDark2">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back"
+            android:layout_marginLeft="1dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="3dp"/>
+
+        <TextView
+            android:id="@+id/txtTopBarHeader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            style="@style/ListHeader"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_toRightOf="@id/imgBack"/>
+
+    </RelativeLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:id="@+id/txtThemeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/theme"
+            style="@style/SettingsTitleText"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+        
+        <com.albertkhang.tunedaily.views.RoundImageView
+            android:id="@+id/imgLightTheme"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:src="@color/colorLight1"
+
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <com.albertkhang.tunedaily.views.RoundImageView
+            android:id="@+id/imgDarkTheme"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:src="@color/colorDark3"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/imgLightTheme"
+            android:layout_marginRight="20dp"/>
+
+        <ImageView
+            android:id="@+id/imgDarkChecked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_checked"
+
+            app:layout_constraintTop_toTopOf="@id/imgDarkTheme"
+            app:layout_constraintBottom_toBottomOf="@id/imgDarkTheme"
+            app:layout_constraintLeft_toLeftOf="@id/imgDarkTheme"
+            app:layout_constraintRight_toRightOf="@id/imgDarkTheme"/>
+
+        <ImageView
+            android:id="@+id/imgLightChecked"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_checked"
+
+            android:visibility="invisible"
+
+            app:layout_constraintTop_toTopOf="@id/imgLightTheme"
+            app:layout_constraintBottom_toBottomOf="@id/imgLightTheme"
+            app:layout_constraintLeft_toLeftOf="@id/imgLightTheme"
+            app:layout_constraintRight_toRightOf="@id/imgLightTheme"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp">
+        <TextView
+            android:id="@+id/txtLanguageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/language"
+            style="@style/SettingsTitleText"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtVietnamese"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/vietnamese"
+            style="@style/SettingsTitleText"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="@color/colorDark5"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtEnglish"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/english"
+            style="@style/SettingsTitleText"
+            android:textColor="@color/colorMain3"
+            android:gravity="center"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toLeftOf="@id/txtVietnamese"
+            android:layout_marginRight="20dp"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/sign_out_frame"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp">
+
+        <com.albertkhang.tunedaily.views.RoundImageView
+            android:id="@+id/imgSignOutBackground"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@color/colorDark2"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/SettingsTitleText"
+            android:text="Sign Out"
+            android:textColor="@color/colorSt3"
+            android:layout_gravity="center"/>
+
+    </FrameLayout>
+
+</LinearLayout>

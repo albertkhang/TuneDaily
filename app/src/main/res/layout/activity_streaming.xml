@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.StreamingActivity"
+    android:background="@color/colorDark1">
+
+
+    <cn.nodemedia.NodePlayerView
+        android:id="@+id/npvPlayerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorDark1"
+
+        app:layout_constraintTop_toBottomOf="@+id/top_frame"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:indeterminate="true"
+        android:indeterminateTintMode="src_atop"
+        android:indeterminateTint="@color/colorMain1"
+        style="?android:attr/progressBarStyleLarge"
+        android:visibility="gone"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/video_controller_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+
+        app:layout_constraintTop_toTopOf="@id/npvPlayerView"
+        app:layout_constraintBottom_toBottomOf="@id/npvPlayerView"
+        app:layout_constraintLeft_toLeftOf="@id/npvPlayerView"
+        app:layout_constraintRight_toRightOf="@id/npvPlayerView">
+
+        <ImageView
+            android:id="@+id/imgVolume"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:src="@drawable/ic_volume_up"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginBottom="4dp"/>
+
+        <SeekBar
+            android:id="@+id/seekbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:progress="13"
+            android:progressTint="@color/colorMain3"
+            android:thumbTint="@color/colorMain3"
+            android:progressBackgroundTint="#99353535"
+            android:indeterminateOnly="false"
+            android:progressDrawable="@android:drawable/progress_horizontal"
+            android:indeterminateDrawable="@android:drawable/progress_horizontal"
+            android:minHeight="4dp"
+            android:maxHeight="4dp"
+            android:max="100"
+
+            app:layout_constraintTop_toTopOf="@id/imgVolume"
+            app:layout_constraintBottom_toBottomOf="@id/imgVolume"
+            app:layout_constraintLeft_toRightOf="@id/imgVolume"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtVolumePercent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="80%"
+            android:textSize="10sp"
+            android:textColor="@color/colorLight1"
+
+            app:layout_constraintLeft_toLeftOf="@id/imgVolume"
+            app:layout_constraintRight_toRightOf="@id/imgVolume"
+            app:layout_constraintBottom_toTopOf="@id/imgVolume"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imgBack"
+        android:layout_width="34dp"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1:1"
+        android:background="@drawable/back_button_broadcast_background"
+        android:src="@drawable/ic_back"
+        android:paddingRight="1dp"
+
+        app:layout_constraintTop_toTopOf="@id/npvPlayerView"
+        app:layout_constraintLeft_toLeftOf="@id/npvPlayerView"
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="10dp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

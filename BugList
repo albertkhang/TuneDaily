@@ -1,0 +1,4 @@
+Khi mở một bài hát, PlaybackNotification không hiển thị cover, khi tương tác với PlaybackNotification thì mới hiện cover.
+Khi player complete không quay về ngay mà bị delay một giây
+Do sử dụng url để download ảnh, nên không thể hiển thị ảnh ở PlaybackNotification và lockscreen
+Nếu player trong broadcast đang pause mà sever dừng stream ==> crash

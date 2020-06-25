@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fragments.LibraryFragment"
+    android:orientation="vertical"
+    android:id="@+id/root_view">
+
+    <RelativeLayout
+        android:id="@+id/top_frame"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimenTopBackgroundHeight"
+        android:background="@color/colorDark2">
+        <TextView
+            android:id="@+id/txtLibrary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/library_header"
+            style="@style/ListHeader"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="20dp"/>
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingBottom="40dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/liked_songs_frame"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+                <com.albertkhang.tunedaily.views.RoundImageView
+                    android:id="@+id/liked_background_frame"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:src="@color/colorMain8"
+                    app:layout_constraintBottom_toBottomOf="parent"
+
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_favourite_red"
+                    app:layout_constraintBottom_toBottomOf="parent"
+
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/liked_background_frame"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:id="@+id/txtLikedSongs"
+                        style="@style/TitleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/liked_songs"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/imgMusicNote"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_music_note"
+
+                        app:layout_constraintBottom_toBottomOf="@id/txtSongsAmount"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="@id/txtSongsAmount" />
+
+                    <TextView
+                        android:id="@+id/txtTotal"
+                        style="@style/DescriptionText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="4dp"
+
+                        android:text="13"
+                        app:layout_constraintLeft_toRightOf="@id/imgMusicNote"
+                        app:layout_constraintTop_toBottomOf="@id/txtLikedSongs" />
+
+                    <TextView
+                        android:id="@+id/txtSongsAmount"
+                        style="@style/DescriptionText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        android:text="@string/songs_library"
+                        app:layout_constraintLeft_toRightOf="@id/txtTotal"
+                        app:layout_constraintTop_toBottomOf="@id/txtLikedSongs" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/create_new_playlist_frame"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="20dp"
+                android:orientation="horizontal">
+
+                <com.albertkhang.tunedaily.views.RoundImageView
+                    android:id="@+id/playlist_background_frame"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:src="@color/colorDark3"
+                    app:layout_constraintBottom_toBottomOf="parent"
+
+                    app:layout_constraintDimensionRatio="1:1"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_add"
+
+                    app:layout_constraintBottom_toBottomOf="@id/playlist_background_frame"
+                    app:layout_constraintLeft_toLeftOf="@id/playlist_background_frame"
+                    app:layout_constraintRight_toRightOf="@id/playlist_background_frame"
+                    app:layout_constraintTop_toTopOf="@id/playlist_background_frame" />
+
+                <TextView
+                    android:id="@+id/txtPlaylist"
+                    style="@style/PlaylistName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+
+                    android:text="@string/create_new_playlist"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintLeft_toRightOf="@id/playlist_background_frame"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shimmer_playlist"
+                shimmer_duration="@integer/integerShimmerDuration"
+                android:layout_width="match_parent"
+                android:visibility="gone"
+
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"
+                android:layout_marginRight="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    
+                    <include layout="@layout/item_shimmer_list" />
+                    <include layout="@layout/item_shimmer_list" />
+                    <include layout="@layout/item_shimmer_list" />
+                    <include layout="@layout/item_shimmer_list" />
+                    <include layout="@layout/item_shimmer_list" />
+                </LinearLayout>
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvPlaylist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dimenMarginUnderListHeader"/>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

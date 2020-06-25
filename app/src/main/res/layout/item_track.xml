@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="10dp">
+
+    <com.albertkhang.tunedaily.views.RoundImageView
+        android:id="@+id/imgCover"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        style="@style/CoverImage"
+
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@id/imgCover"
+        app:layout_constraintLeft_toRightOf="@id/imgCover"
+        app:layout_constraintRight_toLeftOf="@id/imgFavourite"
+        app:layout_constraintTop_toTopOf="@id/imgCover">
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="songName"
+            style="@style/TitleText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+
+        <ImageView
+            android:id="@+id/imgDownload"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1:1"
+            android:src="@drawable/ic_download"
+            app:layout_constraintTop_toTopOf="@id/txtArtist"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/txtArtist"/>
+
+        <TextView
+            android:id="@+id/txtArtist"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="singerName"
+            style="@style/DescriptionText"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/imgDownload"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtTitle"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imgFavourite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_not_favourite"
+
+        app:layout_constraintBottom_toBottomOf="@id/imgCover"
+        app:layout_constraintRight_toLeftOf="@id/imgMore"
+        app:layout_constraintTop_toTopOf="@id/imgCover"/>
+
+    <ImageView
+        android:id="@+id/imgMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_more"
+
+        app:layout_constraintBottom_toBottomOf="@id/imgCover"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/imgCover"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
