@@ -1,4 +1,4 @@
-# TuneDaily
+# ![Image](https://github.com/albertkhang/TuneDaily/blob/develop/WorkInProgress/Logo/icon.png) TuneDaily
 
 ## Design ##
 1. Logo Idea
