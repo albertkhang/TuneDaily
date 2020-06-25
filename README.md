@@ -13,7 +13,8 @@
    Light Palette: #FBFBFB, #E2E2E2, #C9C9C9, #B0B0B0, #979797.
 ```
 3. Logo Font: Futura
-4. UI: phần UI của app được xây dựng dựa trên 2 app chính là Zing MP3 và Spotify.
+4. UI Idea: xem tại [đây](https://github.com/albertkhang/TuneDaily/tree/develop/WorkInProgress/Idea).
+5. UI: phần UI của app được xây dựng dựa trên 2 app chính là Zing MP3 và Spotify. Xem tại [đây](https://github.com/albertkhang/TuneDaily/tree/develop/WorkInProgress/UI).
 
 ## Tính năng ##
 Tính năng được xây dựng dựa trên những tính năng của những app nghe nhạc phổ biến như Zing MP3, Spotify, NhacCuaTui.
