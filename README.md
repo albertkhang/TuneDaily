@@ -55,6 +55,25 @@ Về cách sử dụng, TuneDaily cũng có cách sử dụng giống như các 
 2. Bài hát: được download ngẫu nhiên trên trang https://chiasenhac.vn. Số lượng bài hát: 100.
 3. Album: được tạo ngẫu nhiên từ 100 bài hát trên với số lượng bài ở mỗi album khoảng 10 bài. Số lượng album: 30.
 
+## Streaming Server ##
+* Nhà cung cấp VPS: [Vultr](https://www.vultr.com/)
+* Thông tin server
+```
+   Location: Singapore
+   IP Address: 45.76.150.28
+   RAM: 1024 MB
+   Storage: 25 GB SSD
+   Max Bandwidth: 1000 GB
+   OS: Win7_Ult_SP1_x64
+```
+* Công cụ tạo server: [Node-Media-Server](https://www.npmjs.com/package/node-media-server)
+* URL để phát stream: sử dụng OBS để phát stream
+```
+   URL: rtmp://45.76.150.28/live
+   Stream key: android
+```
+* URL để lắng nghe stream: rtmp://45.76.150.28/live/android
+
 ## Thư viện ##
 1. [shimmer-android](https://github.com/facebook/shimmer-android): tạo animation trong lúc download dữ liệu.
 2. [PageIndicatorView](https://github.com/romandanylyk/PageIndicatorView): animation để chỉ ra fragment nào được chọn trong ViewPager.
