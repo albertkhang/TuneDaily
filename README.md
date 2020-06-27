@@ -37,7 +37,7 @@ Tính năng được xây dựng dựa trên những tính năng của những a
 5. Nếu nhạc đang phát, thì nhạc vẫn sẽ tiếp tục phát và hiển thị playback kể cả khi người dùng mở ứng dụng khác, clear app hoặc khóa máy.
 6. Dừng phát nếu một trình phát nhạc khác bắt đầu phát nhạc.
 7. Tùy chỉnh giao diện sáng/tối.
-8. **Join vào một stream của server**
+8. **Join vào một stream của server.**
 
 **Tính năng bổ sung**
 
