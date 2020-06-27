@@ -37,14 +37,15 @@ Tính năng được xây dựng dựa trên những tính năng của những a
 5. Nếu nhạc đang phát, thì nhạc vẫn sẽ tiếp tục phát và hiển thị playback kể cả khi người dùng mở ứng dụng khác, clear app hoặc khóa máy.
 6. Dừng phát nếu một trình phát nhạc khác bắt đầu phát nhạc.
 7. Tùy chỉnh giao diện sáng/tối.
+8. **Join vào một stream của server**
 
 **Tính năng bổ sung**
 
-8. Tùy chỉnh ngôn ngữ app.
-9. Tìm kiếm album/track.
-10. Download nhạc.
-11. Thêm nhạc vào playlist hiện tại và reset nếu kill app.
-12. Nhấn hai lần để thoát.
+9. Tùy chỉnh ngôn ngữ app.
+10. Tìm kiếm album/track.
+11. Download nhạc.
+12. Thêm nhạc vào playlist hiện tại và reset nếu kill app.
+13. Nhấn hai lần để thoát.
 
 ## Cách sử dụng ##
 Về cách sử dụng, TuneDaily cũng có cách sử dụng giống như các app nghe nhạc phổ biến hiện nay.
