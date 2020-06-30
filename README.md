@@ -45,7 +45,7 @@ Tính năng được xây dựng dựa trên những tính năng của những a
 10. Tìm kiếm album/track.
 11. Download nhạc.
 12. Thêm nhạc vào playlist hiện tại và reset nếu kill app.
-13. Nhấn hai lần để thoát.
+13. Nhấn back hai lần để thoát.
 
 ## Cách sử dụng ##
 Về cách sử dụng, TuneDaily cũng có cách sử dụng giống như các app nghe nhạc phổ biến hiện nay.
