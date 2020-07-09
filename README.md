@@ -46,6 +46,7 @@ Tính năng được xây dựng dựa trên những tính năng của những a
 11. Download nhạc.
 12. Thêm nhạc vào playlist hiện tại và reset nếu kill app.
 13. Nhấn back hai lần để thoát.
+14. Thêm một bài vào playlist.
 
 ## Cách sử dụng ##
 Về cách sử dụng, TuneDaily cũng có cách sử dụng giống như các app nghe nhạc phổ biến hiện nay.
