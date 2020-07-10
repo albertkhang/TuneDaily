@@ -78,7 +78,7 @@ Về cách sử dụng, TuneDaily cũng có cách sử dụng giống như các 
    rtmp://45.76.150.28/live/android
 ```
 
-## Tài nguyên thiết kế app ##
+## Tài nguyên trong quá trình làm ##
 [WorkInProgress](https://github.com/albertkhang/TuneDaily/tree/develop/WorkInProgress)
 **Nội Dung**
 1. Idea: chứa những hỉnh để lên ý tưởng thiết kế giao UI cho app. Bên cạnh đó cũng dựa trên UI của Zing MP3, Nhaccuatui, Spotify.
