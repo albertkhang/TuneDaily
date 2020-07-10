@@ -78,6 +78,15 @@ Về cách sử dụng, TuneDaily cũng có cách sử dụng giống như các 
    rtmp://45.76.150.28/live/android
 ```
 
+## Tài nguyên thiết kế app ##
+[WorkInProgress](https://github.com/albertkhang/TuneDaily/tree/develop/WorkInProgress)
+**Nội Dung**
+1. Idea: chứa những hỉnh để lên ý tưởng thiết kế giao UI cho app. Bên cạnh đó cũng dựa trên UI của Zing MP3, Nhaccuatui, Spotify.
+2. Logo:  chứa file thiết kế logo app.
+3. UI: chứa hình ảnh đã thiết kế của app trước khi bắt đầu code UI.
+4. FeaturesTest.xlsx: chứa những test case đã test thành công.
+5. Report.pptx: slide báo cáo.
+
 ## Thư viện ##
 1. [shimmer-android](https://github.com/facebook/shimmer-android): tạo animation trong lúc download dữ liệu.
 2. [PageIndicatorView](https://github.com/romandanylyk/PageIndicatorView): animation để chỉ ra fragment nào được chọn trong ViewPager.
