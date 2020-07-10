@@ -37,13 +37,13 @@ Tính năng được xây dựng dựa trên những tính năng của những a
 5. Nếu nhạc đang phát, thì nhạc vẫn sẽ tiếp tục phát và hiển thị playback kể cả khi người dùng mở ứng dụng khác, clear app hoặc khóa máy.
 6. Dừng phát nếu một trình phát nhạc khác bắt đầu phát nhạc.
 7. Tùy chỉnh giao diện sáng/tối.
-8. **Join vào một stream của server.**
+8. **Join vào một stream của server**: khi server mở stream, ở màn hình chính của ứng dụng sẽ tự hiển thị dialog để thông báo và sẽ tự ẩn đi nếu dùng stream.
 
 **Tính năng bổ sung**
 
 9. Tùy chỉnh ngôn ngữ app.
-10. Tìm kiếm album/track.
-11. Download nhạc.
+10. Tìm kiếm album/track: trong khi người dùng gõ thì sẽ không search, khi dừng gõ khoảng một giây mới thực hiện search.
+11. Download nhạc: chưa thể play được offline do thiết kế api/logic bị lỗi. Nhưng vẫn có thể dùng file đã download để play nếu có kết nối.
 12. Thêm nhạc vào playlist hiện tại và reset nếu kill app.
 13. Nhấn back hai lần để thoát.
 14. Thêm một bài vào playlist.
@@ -80,6 +80,7 @@ Về cách sử dụng, TuneDaily cũng có cách sử dụng giống như các 
 
 ## Tài nguyên trong quá trình làm ##
 [WorkInProgress](https://github.com/albertkhang/TuneDaily/tree/develop/WorkInProgress)
+
 **Nội Dung**
 1. Idea: chứa những hỉnh để lên ý tưởng thiết kế giao UI cho app. Bên cạnh đó cũng dựa trên UI của Zing MP3, Nhaccuatui, Spotify.
 2. Logo:  chứa file thiết kế logo app.
