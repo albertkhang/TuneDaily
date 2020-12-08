@@ -39,14 +39,16 @@ Tính năng được xây dựng dựa trên những tính năng của những a
 7. Tùy chỉnh giao diện sáng/tối.
 8. **Join vào một stream của server**: khi server mở stream, ở màn hình chính của ứng dụng sẽ tự hiển thị dialog để thông báo và sẽ tự ẩn đi nếu dùng stream.
 
+**[Video Demo](/WorkInProgress/video-demo.mp4)**
+
 **Tính năng bổ sung**
 
-9. Tùy chỉnh ngôn ngữ app.
-10. Tìm kiếm album/track: trong khi người dùng gõ thì sẽ không search, khi dừng gõ khoảng một giây mới thực hiện search.
-11. Download nhạc: chưa thể play được offline do thiết kế api/logic bị lỗi. Nhưng vẫn có thể dùng file đã download để play nếu có kết nối.
-12. Thêm nhạc vào playlist hiện tại và reset nếu kill app.
-13. Nhấn back hai lần để thoát.
-14. Thêm một bài vào playlist.
+1. Tùy chỉnh ngôn ngữ app.
+2.  Tìm kiếm album/track: trong khi người dùng gõ thì sẽ không search, khi dừng gõ khoảng một giây mới thực hiện search.
+3.  Download nhạc: chưa thể play được offline do thiết kế api/logic bị lỗi. Nhưng vẫn có thể dùng file đã download để play nếu có kết nối.
+4.  Thêm nhạc vào playlist hiện tại và reset nếu kill app.
+5.  Nhấn back hai lần để thoát.
+6.  Thêm một bài vào playlist.
 
 ## Cách sử dụng ##
 Về cách sử dụng, TuneDaily cũng có cách sử dụng giống như các app nghe nhạc phổ biến hiện nay.
