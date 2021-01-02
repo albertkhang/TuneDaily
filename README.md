@@ -5,7 +5,7 @@
 2. [Kho dữ liệu](#2-kho-dữ-liệu)
 3. [Video Demo](#3-video-demo)
 4. [Design](#4-design)
-5. [yêu cầu thiết bị](#5-yêu-cầu-thiết-bị)
+5. [Yêu cầu thiết bị](#5-yêu-cầu-thiết-bị)
 6. [Thư viện](#6-thư-viện)
 7. [Backend/Database](#7-backenddatabase)
 8. [Tác giả](#8-tác-giả)
